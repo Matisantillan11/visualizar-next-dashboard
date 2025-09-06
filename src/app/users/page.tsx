@@ -1,6 +1,6 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { UsersTable } from "@/components/Tables/users";
-import { TopChannelsSkeleton } from "@/components/Tables/users/skeleton";
+import { UsersSkeleton } from "@/components/Tables/users/skeleton";
 
 import { Metadata } from "next";
 import { Suspense } from "react";
@@ -17,7 +17,7 @@ export default async function Page() {
       <Breadcrumb pageName="Users" />
 
       <div className="space-y-10">
-        <Suspense fallback={<TopChannelsSkeleton />}>
+        <Suspense fallback={<UsersSkeleton />}>
           <UsersTable users={users} />
         </Suspense>
       </div>

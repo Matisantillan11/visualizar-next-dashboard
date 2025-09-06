@@ -42,9 +42,17 @@ export const NAV_DATA = [
       },
       {
         title: "Users",
-        url: "/users",
         icon: Icons.Table,
-        items: [],
+        items: [
+          {
+            title: "All users",
+            url: "/users",
+          },
+          {
+            title: "Authors",
+            url: "/users/authors",
+          },
+        ],
       },
       {
         title: "Pages",
