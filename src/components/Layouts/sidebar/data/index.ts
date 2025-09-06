@@ -41,15 +41,10 @@ export const NAV_DATA = [
         ],
       },
       {
-        title: "Tables",
-        url: "/tables",
+        title: "Users",
+        url: "/users",
         icon: Icons.Table,
-        items: [
-          {
-            title: "Tables",
-            url: "/tables",
-          },
-        ],
+        items: [],
       },
       {
         title: "Pages",

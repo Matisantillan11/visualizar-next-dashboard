@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import * as React from "react";
 
-export function Table({
+export function TableRoot({
   className,
   ...props
 }: React.HTMLAttributes<HTMLTableElement>) {
