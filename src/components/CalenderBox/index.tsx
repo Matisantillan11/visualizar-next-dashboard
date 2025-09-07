@@ -6,32 +6,32 @@ const CalendarBox = () => {
           <thead>
             <tr className="grid grid-cols-7 rounded-t-[10px] bg-primary text-white">
               <th className="flex h-15 items-center justify-center rounded-tl-[10px] p-1 text-body-xs font-medium sm:text-base xl:p-5">
-                <span className="hidden lg:block"> Sunday </span>
-                <span className="block lg:hidden"> Sun </span>
+                <span className="hidden xl:block"> Sunday </span>
+                <span className="block xl:hidden"> Sun </span>
               </th>
               <th className="flex h-15 items-center justify-center p-1 text-body-xs font-medium sm:text-base xl:p-5">
-                <span className="hidden lg:block"> Monday </span>
-                <span className="block lg:hidden"> Mon </span>
+                <span className="hidden xl:block"> Monday </span>
+                <span className="block xl:hidden"> Mon </span>
               </th>
               <th className="flex h-15 items-center justify-center p-1 text-body-xs font-medium sm:text-base xl:p-5">
-                <span className="hidden lg:block"> Tuesday </span>
-                <span className="block lg:hidden"> Tue </span>
+                <span className="hidden xl:block"> Tuesday </span>
+                <span className="block xl:hidden"> Tue </span>
               </th>
               <th className="flex h-15 items-center justify-center p-1 text-body-xs font-medium sm:text-base xl:p-5">
-                <span className="hidden lg:block"> Wednesday </span>
-                <span className="block lg:hidden"> Wed </span>
+                <span className="hidden xl:block"> Wednesday </span>
+                <span className="block xl:hidden"> Wed </span>
               </th>
               <th className="flex h-15 items-center justify-center p-1 text-body-xs font-medium sm:text-base xl:p-5">
-                <span className="hidden lg:block"> Thursday </span>
-                <span className="block lg:hidden"> Thur </span>
+                <span className="hidden xl:block"> Thursday </span>
+                <span className="block xl:hidden"> Thur </span>
               </th>
               <th className="flex h-15 items-center justify-center p-1 text-body-xs font-medium sm:text-base xl:p-5">
-                <span className="hidden lg:block"> Friday </span>
-                <span className="block lg:hidden"> Fri </span>
+                <span className="hidden xl:block"> Friday </span>
+                <span className="block xl:hidden"> Fri </span>
               </th>
               <th className="flex h-15 items-center justify-center rounded-tr-[10px] p-1 text-body-xs font-medium sm:text-base xl:p-5">
-                <span className="hidden lg:block"> Saturday </span>
-                <span className="block lg:hidden"> Sat </span>
+                <span className="hidden xl:block"> Saturday </span>
+                <span className="block xl:hidden"> Sat </span>
               </th>
             </tr>
           </thead>

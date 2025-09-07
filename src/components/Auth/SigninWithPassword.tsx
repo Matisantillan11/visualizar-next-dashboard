@@ -1,11 +1,13 @@
 "use client";
 import { EmailIcon, PasswordIcon } from "@/assets/icons";
+import { useAuth } from "@/contexts/auth-context";
 import Link from "next/link";
 import React, { useState } from "react";
 import InputGroup from "../FormElements/InputGroup";
 import { Checkbox } from "../FormElements/checkbox";
 
 export default function SigninWithPassword() {
+  const { signIn } = useAuth();
   const [data, setData] = useState({
     email: process.env.NEXT_PUBLIC_DEMO_USER_MAIL || "",
     password: process.env.NEXT_PUBLIC_DEMO_USER_PASS || "",
@@ -13,27 +15,40 @@ export default function SigninWithPassword() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setData({
       ...data,
       [e.target.name]: e.target.value,
     });
+    // Clear error when user starts typing
+    if (error) setError(null);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // You can remove this code block
     setLoading(true);
+    setError(null);
 
-    setTimeout(() => {
+    try {
+      await signIn(data.email, data.password);
+      // Redirect is handled by the AuthContext
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Sign in failed");
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit}>
+      {error && (
+        <div className="mb-4 rounded-lg bg-red-50 p-4 text-sm text-red-700 dark:bg-red-900/20 dark:text-red-400">
+          {error}
+        </div>
+      )}
+
       <InputGroup
         type="email"
         label="Email"
