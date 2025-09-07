@@ -1,8 +1,10 @@
 "use client";
-import { User } from "@/types/user";
+import { Role, User } from "@/types/user";
 import { ColumnDef } from "@tanstack/react-table";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatDate } from "@/utils/date-utils";
+import { Badge } from "@/components/ui/badge";
+import getRoleBadge from "./utils";
 
 const EMPTY_PLACEHOLDER = "-";
 
@@ -39,7 +41,7 @@ export const columns: Array<ColumnDef<User>> = [
     accessorKey: "role",
     id: "role",
     cell: ({ getValue }) => {
-      return getValue() ?? EMPTY_PLACEHOLDER;
+      return getValue() ? getRoleBadge(getValue() as Role) : EMPTY_PLACEHOLDER;
     },
     header: "Role",
   },
