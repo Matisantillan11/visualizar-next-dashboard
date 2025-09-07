@@ -58,29 +58,12 @@ export const isAuthenticated = (): boolean => {
   return getSession() !== null;
 };
 
-// Mock authentication - replace with your actual authentication logic
 export const signIn = async (
   email: string,
   password: string,
 ): Promise<AuthSession> => {
   // Simulate API call delay
   await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  // Mock validation - replace with actual authentication
-  if (email && password) {
-    const session: AuthSession = {
-      user: {
-        id: "1",
-        email,
-        name: email.split("@")[0],
-      },
-      token: "mock_jwt_token_" + Date.now(),
-      expiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
-    };
-
-    setSession(session);
-    return session;
-  }
 
   throw new Error("Invalid credentials");
 };
