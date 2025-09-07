@@ -4,7 +4,7 @@ import { AuthorsSkeleton } from "@/components/Tables/authors/skeleton";
 import { Suspense } from "react";
 import getAuthors from "./action";
 
-export default async function Page() {
+export default async function AuthorsPage() {
   const authors = await getAuthors();
 
   return (

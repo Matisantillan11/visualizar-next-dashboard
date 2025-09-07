@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "Users",
 };
 
-export default async function Page() {
+export default async function UsersPage() {
   const users = await getUsers();
   return (
     <>
