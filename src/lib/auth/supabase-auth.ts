@@ -8,7 +8,7 @@ export const sendOTP = async (email: string): Promise<void> => {
     init: {
       method: "POST",
       body: JSON.stringify({
-        email: "matias1.santillan@gmail.com",
+        email,
       }),
       headers: {
         "Content-Type": "application/json",
