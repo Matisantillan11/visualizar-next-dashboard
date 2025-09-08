@@ -87,7 +87,9 @@ export default function SigninWithPassword() {
       </div>
 
       <div className="text-center text-sm text-gray-600 dark:text-gray-400">
-        <p>We'll send you a secure 6-digit code to verify your identity.</p>
+        <p>
+          We&apos;ll send you a secure 6-digit code to verify your identity.
+        </p>
       </div>
     </form>
   );
