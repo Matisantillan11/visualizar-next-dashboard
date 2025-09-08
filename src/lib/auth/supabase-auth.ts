@@ -10,6 +10,9 @@ export const sendOTP = async (email: string): Promise<void> => {
       body: JSON.stringify({
         email: "matias1.santillan@gmail.com",
       }),
+      headers: {
+        "Content-Type": "application/json",
+      },
     },
   });
 
