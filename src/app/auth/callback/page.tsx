@@ -1,12 +1,11 @@
 "use client";
 
 import { supabase } from "@/lib/auth/supabase";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function AuthCallback() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -37,7 +36,7 @@ export default function AuthCallback() {
     };
 
     handleAuthCallback();
-  }, [router, searchParams]);
+  }, []);
 
   if (loading) {
     return (

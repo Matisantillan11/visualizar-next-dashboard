@@ -1,5 +1,4 @@
 "use client";
-
 import { useAuth } from "@/contexts/auth-context";
 import React, { useState, useRef, useEffect } from "react";
 
@@ -117,7 +116,9 @@ export default function OTPVerification({
           {otp.map((digit, index) => (
             <input
               key={index}
-              ref={(el) => (inputRefs.current[index] = el)}
+              ref={(el) => {
+                if (el) inputRefs.current[index] = el;
+              }}
               type="text"
               inputMode="numeric"
               pattern="[0-9]*"
