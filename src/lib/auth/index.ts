@@ -2,6 +2,12 @@ import { redirect } from "next/navigation";
 import { SESSION_KEY, TOKEN_KEY } from "./constants";
 import { AuthSession } from "./types";
 import { setCookie, deleteCookie } from "cookies-next/client";
+import {
+  getCurrentSession,
+  sendOTP,
+  supabaseSignOut,
+  verifyOTP,
+} from "./supabase-auth";
 
 export const setSession = (session: AuthSession): void => {
   if (typeof window === "undefined") return;
@@ -17,9 +23,22 @@ export const setSession = (session: AuthSession): void => {
   });
 };
 
-export const getSession = (): AuthSession | null => {
+export const getSession = async (): Promise<AuthSession | null> => {
   if (typeof window === "undefined") return null;
 
+  // First try to get session from Supabase
+  try {
+    const supabaseSession = await getCurrentSession();
+    if (supabaseSession) {
+      // Update local storage with fresh session
+      setSession(supabaseSession);
+      return supabaseSession;
+    }
+  } catch (error) {
+    console.error("Error getting Supabase session:", error);
+  }
+
+  // Fallback to local storage
   const sessionData = localStorage.getItem(SESSION_KEY);
   if (!sessionData) return null;
 
@@ -44,8 +63,15 @@ export const getToken = (): string | null => {
   return localStorage.getItem(TOKEN_KEY);
 };
 
-export const clearSession = (): void => {
+export const clearSession = async (): Promise<void> => {
   if (typeof window === "undefined") return;
+
+  // Sign out from Supabase
+  try {
+    await supabaseSignOut();
+  } catch (error) {
+    console.error("Error signing out from Supabase:", error);
+  }
 
   localStorage.removeItem(SESSION_KEY);
   localStorage.removeItem(TOKEN_KEY);
@@ -58,18 +84,25 @@ export const isAuthenticated = (): boolean => {
   return getSession() !== null;
 };
 
-export const signIn = async (
+// Verify OTP code
+export const onVerifyOTP = async (
   email: string,
-  password: string,
+  token: string,
 ): Promise<AuthSession> => {
-  // Simulate API call delay
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  throw new Error("Invalid credentials");
+  const session = await verifyOTP(email, token);
+  setSession(session);
+  return session;
 };
 
-export const signOut = (): void => {
-  clearSession();
+// Legacy signIn function for compatibility (now sends OTP)
+export const signIn = async (email: string): Promise<void> => {
+  return sendOTP(email);
+};
+
+export const signOut = async (): Promise<void> => {
+  await clearSession();
   // Redirect to sign-in page
   redirect("/auth/sign-in");
 };
+
+export { onAuthStateChange, sendOTP } from "./supabase-auth";

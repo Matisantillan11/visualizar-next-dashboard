@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { TOKEN_KEY } from "@/lib/auth/constants";
 
-const publicRoutes = ["/auth/sign-in", "/auth/forgot-password"];
+const publicRoutes = [
+  "/auth/sign-in",
+  "/auth/forgot-password",
+  "/auth/callback",
+];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -18,8 +22,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(signInUrl);
   }
 
-  // If user is authenticated and trying to access auth pages, redirect to dashboard
-  if (isPublicRoute && token) {
+  // If user is authenticated and trying to access auth pages (except callback), redirect to dashboard
+  if (isPublicRoute && token && !pathname.startsWith("/auth/callback")) {
     const dashboardUrl = new URL("/", request.url);
     return NextResponse.redirect(dashboardUrl);
   }
