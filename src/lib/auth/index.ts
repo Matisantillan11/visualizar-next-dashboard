@@ -88,9 +88,11 @@ export const isAuthenticated = (): boolean => {
 export const onVerifyOTP = async (
   email: string,
   token: string,
-): Promise<AuthSession> => {
+): Promise<AuthSession | undefined> => {
   const session = await verifyOTP(email, token);
-  setSession(session);
+  if (session) {
+    setSession(session);
+  }
   return session;
 };
 

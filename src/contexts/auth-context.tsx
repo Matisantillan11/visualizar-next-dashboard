@@ -70,8 +70,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const handleVerifyOTP = async (email: string, token: string) => {
     try {
       const session = await onVerifyOTP(email, token);
-      setUser(session.user);
-      router.push("/");
+      if (session) {
+        setUser(session.user);
+        router.push("/");
+      }
     } catch (error) {
       throw error;
     }

@@ -21,8 +21,8 @@ export const fetcher = async <T>({
 
   const headers = await getHeaders({ isExternalApi, withAuthentication, init });
   const request = new Request(endpoint, {
-    ...init,
     headers,
+    ...init,
   });
 
   try {

@@ -7,12 +7,12 @@ export async function getHeaders({
   withAuthentication: boolean;
   init?: RequestInit | undefined;
 }) {
-  /* const authorization =
-    !isExternalApi && withAuthentication ? await getAuthorizationHeader() : {}; */
+  const authorization =
+    !isExternalApi && withAuthentication ? await getAuthorizationHeader() : {};
 
   const headers = {
     ...init?.headers,
-    /*    ...(isExternalApi ? {} : { ...authorization }), */
+    /*  ...(isExternalApi ? {} : { ...authorization }), */
   };
 
   return headers;
