@@ -5,6 +5,12 @@ export const NAV_DATA = [
     label: "MAIN MENU",
     items: [
       {
+        title: "Authors",
+        url: "/authors",
+        icon: Icons.Table,
+        items: [],
+      },
+      {
         title: "Profile",
         url: "/profile",
         icon: Icons.User,
@@ -25,16 +31,18 @@ export const NAV_DATA = [
         ],
       },
       {
+        title: "Institutions",
+        icon: Icons.Table,
+        url: "/institutions",
+        items: [],
+      },
+      {
         title: "Users",
         icon: Icons.Table,
         items: [
           {
             title: "All users",
             url: "/users",
-          },
-          {
-            title: "Authors",
-            url: "/users/authors",
           },
           {
             title: "Students",

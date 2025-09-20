@@ -10,7 +10,7 @@ export function AppContent({ children }: PropsWithChildren) {
   const pathname = usePathname();
 
   // Check if current route is an auth route
-  const isAuthRoute = pathname.startsWith("/auth");
+  const isAuthRoute = pathname.startsWith("/auth/");
 
   // For auth routes, render without sidebar and header
   if (isAuthRoute) {
