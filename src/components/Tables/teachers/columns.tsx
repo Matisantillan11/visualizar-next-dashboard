@@ -1,13 +1,12 @@
 "use client";
-import { Role, User } from "@/types/user";
 import { ColumnDef } from "@tanstack/react-table";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatDate } from "@/utils/date-utils";
-import { Student } from "@/types/student";
+import { Teacher } from "@/types/teacher";
 
 const EMPTY_PLACEHOLDER = "-";
 
-export const columns: Array<ColumnDef<Student>> = [
+export const columns: Array<ColumnDef<Teacher>> = [
   {
     enableSorting: true,
     accessorKey: "user.name",
@@ -46,7 +45,7 @@ export const columns: Array<ColumnDef<Student>> = [
   },
 ];
 
-export const skeletonColumns: Array<ColumnDef<Student>> = [
+export const skeletonColumns: Array<ColumnDef<Teacher>> = [
   {
     enableSorting: true,
     accessorKey: "user.name",

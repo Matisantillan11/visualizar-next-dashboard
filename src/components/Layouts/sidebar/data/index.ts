@@ -40,6 +40,10 @@ export const NAV_DATA = [
             title: "Students",
             url: "/users/students",
           },
+          {
+            title: "Teachers",
+            url: "/users/teachers",
+          },
         ],
       },
     ],
