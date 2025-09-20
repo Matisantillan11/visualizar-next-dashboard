@@ -11,6 +11,12 @@ export const NAV_DATA = [
         items: [],
       },
       {
+        title: "Books",
+        url: "/books",
+        icon: Icons.Table,
+        items: [],
+      },
+      {
         title: "Categories",
         url: "/categories",
         icon: Icons.Table,
