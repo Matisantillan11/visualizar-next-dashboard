@@ -12,19 +12,26 @@ export async function getHeaders({
 
   const headers = {
     ...init?.headers,
-    /*  ...(isExternalApi ? {} : { ...authorization }), */
+    ...(isExternalApi ? {} : { ...authorization }),
   };
 
   return headers;
 }
 
-async function getAuthorizationHeader() {
+async function getAuthorizationHeader(): Promise<Record<string, string>> {
   let token = "";
   try {
-    token = localStorage.getItem("token") || "";
+    // Import the cookie utility
+    const { getAccessToken } = await import("@/lib/auth/cookies");
+    token = (await getAccessToken()) || "";
+
+    if (!token) {
+      console.warn("No access token found in cookies");
+      return {};
+    }
   } catch (error) {
     console.error({ error: `Failed to retrieve token: ${error}` });
-    throw new Error("Authentication failed");
+    return {}; // Return empty object instead of throwing to prevent build errors
   }
 
   return { Authorization: `Bearer ${token}` };

@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 
 export default async function UsersPage() {
   const users = await getUsers();
+
   return (
     <>
       <Breadcrumb pageName="Users" />

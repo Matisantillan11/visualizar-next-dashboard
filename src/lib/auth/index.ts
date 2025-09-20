@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { SESSION_KEY, TOKEN_KEY } from "./constants";
 import { AuthSession } from "./types";
 import { setCookie, deleteCookie } from "cookies-next/client";
+import { clientCookies, getAccessToken } from "./cookies";
 import {
   getCurrentSession,
   sendOTP,
@@ -12,34 +13,52 @@ import {
 export const setSession = (session: AuthSession): void => {
   if (typeof window === "undefined") return;
 
-  localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-  localStorage.setItem(TOKEN_KEY, session.token);
-
-  // Also set cookie for middleware
-  setCookie(TOKEN_KEY, session.token, {
+  // Store session data in cookies instead of localStorage
+  setCookie(SESSION_KEY, JSON.stringify(session), {
     maxAge: 60 * 60 * 24 * 7, // 7 days
     path: "/",
     sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
   });
+
+  // Set access token using our cookie utility
+  clientCookies.setAccessToken(session.accessToken);
 };
 
 export const getSession = async (): Promise<AuthSession | null> => {
-  if (typeof window === "undefined") return null;
-
   // First try to get session from Supabase
   try {
     const supabaseSession = await getCurrentSession();
     if (supabaseSession) {
-      // Update local storage with fresh session
-      setSession(supabaseSession);
+      // Update cookies with fresh session
+      if (typeof window !== "undefined") {
+        setSession(supabaseSession);
+      }
       return supabaseSession;
     }
   } catch (error) {
     console.error("Error getting Supabase session:", error);
   }
 
-  // Fallback to local storage
-  const sessionData = localStorage.getItem(SESSION_KEY);
+  // Fallback to cookies
+  let sessionData: string | null = null;
+
+  if (typeof window !== "undefined") {
+    // Client-side: use cookies-next client
+    const { getCookie } = await import("cookies-next/client");
+    sessionData = getCookie(SESSION_KEY) as string | null;
+  } else {
+    // Server-side: use Next.js cookies
+    try {
+      const { cookies } = await import("next/headers");
+      const cookieStore = await cookies();
+      sessionData = cookieStore.get(SESSION_KEY)?.value || null;
+    } catch (error) {
+      console.error("Error accessing server cookies:", error);
+      return null;
+    }
+  }
+
   if (!sessionData) return null;
 
   try {
@@ -47,20 +66,24 @@ export const getSession = async (): Promise<AuthSession | null> => {
 
     // Check if session is expired
     if (Date.now() > session.expiresAt) {
-      clearSession();
+      if (typeof window !== "undefined") {
+        clearSession();
+      }
       return null;
     }
 
     return session;
   } catch {
-    clearSession();
+    if (typeof window !== "undefined") {
+      clearSession();
+    }
     return null;
   }
 };
 
 export const getToken = (): string | null => {
   if (typeof window === "undefined") return null;
-  return localStorage.getItem(TOKEN_KEY);
+  return clientCookies.getAccessToken();
 };
 
 export const clearSession = async (): Promise<void> => {
@@ -73,15 +96,14 @@ export const clearSession = async (): Promise<void> => {
     console.error("Error signing out from Supabase:", error);
   }
 
-  localStorage.removeItem(SESSION_KEY);
-  localStorage.removeItem(TOKEN_KEY);
-
-  // Clear cookie
-  deleteCookie(TOKEN_KEY);
+  // Clear all cookies
+  deleteCookie(SESSION_KEY);
+  clientCookies.clearTokens();
 };
 
-export const isAuthenticated = (): boolean => {
-  return getSession() !== null;
+export const isAuthenticated = async (): Promise<boolean> => {
+  const session = await getSession();
+  return session !== null;
 };
 
 // Verify OTP code
