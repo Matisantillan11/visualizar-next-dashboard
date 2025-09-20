@@ -2,6 +2,7 @@ import { supabase } from "@/lib/auth/supabase";
 import type { AuthUser, AuthSession, AuthResponse } from "./types";
 import { fetcher } from "../fetcher";
 import { SESSION_KEY } from "./constants";
+const { getCookie } = await import("cookies-next/client");
 
 export const sendOTP = async (email: string): Promise<void> => {
   const { error } = await supabase.auth.signInWithOtp({
@@ -77,26 +78,25 @@ export const getCurrentSession = async (): Promise<AuthSession | null> => {
     error,
   } = await supabase.auth.getSession();
 
-  const storedSession = localStorage.getItem(SESSION_KEY);
-
-  if (error || !session || !storedSession) {
+  const sessionData = getCookie(SESSION_KEY) as string | null;
+  if (error || !session || !sessionData) {
     return null;
   }
 
-  const storedSessionData = JSON.parse(storedSession);
+  const cookieSessionData = JSON.parse(sessionData);
 
   const authUser: AuthUser = {
-    id: storedSessionData.user.id,
-    role: storedSessionData.user.role,
+    id: cookieSessionData.user.id,
+    role: cookieSessionData.user.role,
     supabaseUserId: session.user.id,
     email: session.user.email!,
-    name: storedSessionData.user.name ?? "",
+    name: cookieSessionData.user.name ?? "",
   };
 
   return {
     user: authUser,
     token: session.access_token,
-    accessToken: storedSessionData.access_token,
+    accessToken: cookieSessionData.access_token,
     expiresAt: new Date(session.expires_at! * 1000).getTime(),
   };
 };
@@ -114,25 +114,10 @@ export const onAuthStateChange = async (
   callback: (session: AuthSession | null) => void,
 ) => {
   return supabase.auth.onAuthStateChange(async (event: any, session: any) => {
-    const storedSession = localStorage.getItem(SESSION_KEY);
-    if (session && storedSession) {
-      const storedSessionData = JSON.parse(storedSession);
-      const authUser: AuthUser = {
-        id: storedSessionData.user.id,
-        role: storedSessionData.user.role,
-        supabaseUserId: session.user.id,
-        email: session.user.email!,
-        name: storedSessionData.user.name ?? "",
-      };
+    const currentSession = await getCurrentSession();
 
-      const authSession: AuthSession = {
-        user: authUser,
-        token: session.access_token,
-        accessToken: storedSessionData.access_token,
-        expiresAt: new Date(session.expires_at! * 1000).getTime(),
-      };
-
-      callback(authSession);
+    if (session && currentSession) {
+      callback(currentSession);
     } else {
       callback(null);
     }

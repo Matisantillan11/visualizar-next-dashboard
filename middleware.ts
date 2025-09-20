@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { TOKEN_KEY } from "@/lib/auth/constants";
+import { SESSION_KEY, TOKEN_KEY } from "@/lib/auth/constants";
 
 const publicRoutes = [
   "/auth/sign-in",
@@ -14,10 +14,11 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith(route),
   );
 
+  const session = request.cookies.has(SESSION_KEY);
   const token = request.cookies.has(TOKEN_KEY);
 
   // If user is not authenticated and trying to access protected route
-  if (!isPublicRoute && !token) {
+  if (!isPublicRoute && !session && !token) {
     const signInUrl = new URL("/auth/sign-in", request.url);
     return NextResponse.redirect(signInUrl);
   }

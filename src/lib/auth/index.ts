@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
-import { SESSION_KEY, TOKEN_KEY } from "./constants";
+import { SESSION_KEY } from "./constants";
 import { AuthSession } from "./types";
 import { setCookie, deleteCookie } from "cookies-next/client";
-import { clientCookies, getAccessToken } from "./cookies";
+import { clientCookies } from "./cookies";
 import {
   getCurrentSession,
   sendOTP,
@@ -27,7 +27,7 @@ export const setSession = (session: AuthSession): void => {
 
 export const getSession = async (): Promise<AuthSession | null> => {
   // First try to get session from Supabase
-  try {
+  /* try {
     const supabaseSession = await getCurrentSession();
     if (supabaseSession) {
       // Update cookies with fresh session
@@ -38,7 +38,7 @@ export const getSession = async (): Promise<AuthSession | null> => {
     }
   } catch (error) {
     console.error("Error getting Supabase session:", error);
-  }
+  } */
 
   // Fallback to cookies
   let sessionData: string | null = null;
