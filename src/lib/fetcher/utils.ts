@@ -25,6 +25,8 @@ async function getAuthorizationHeader(): Promise<Record<string, string>> {
     const { getAccessToken } = await import("@/lib/auth/cookies");
     token = (await getAccessToken()) || "";
 
+    console.log({ token });
+
     if (!token) {
       console.warn("No access token found in cookies");
       return {};
