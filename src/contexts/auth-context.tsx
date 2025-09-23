@@ -1,11 +1,5 @@
 "use client";
-import {
-  getSession,
-  onAuthStateChange,
-  onVerifyOTP,
-  sendOTP,
-  signOut,
-} from "@/lib/auth";
+import { getSession, onVerifyOTP, sendOTP, signOut } from "@/lib/auth";
 import { AuthUser } from "@/lib/auth/types";
 import { useRouter } from "next/navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
@@ -42,21 +36,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     checkSession();
-
-    const checkAuthState = async () => {
-      const {
-        data: { subscription },
-      } = await onAuthStateChange((session) => {
-        if (session) {
-          setUser(session.user);
-        } else {
-          setUser(null);
-        }
-      });
-
-      return () => subscription.unsubscribe();
-    };
-    checkAuthState();
   }, []);
 
   const handleSendOTP = async (email: string) => {
@@ -85,7 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(null);
     } catch (error) {
       console.error("Error signing out:", error);
-      // Still clear local state even if Supabase signout fails
+      // Still clear local state even if signout fails
       setUser(null);
       router.push("/auth/sign-in");
     }

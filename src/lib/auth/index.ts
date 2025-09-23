@@ -3,12 +3,7 @@ import { SESSION_KEY } from "./constants";
 import { AuthSession } from "./types";
 import { setCookie, deleteCookie } from "cookies-next/client";
 import { clientCookies } from "./cookies";
-import {
-  getCurrentSession,
-  sendOTP,
-  supabaseSignOut,
-  verifyOTP,
-} from "./supabase-auth";
+import { sendOTP, verifyOTP } from "./otp-auth";
 
 export const setSession = (session: AuthSession): void => {
   if (typeof window === "undefined") return;
@@ -26,21 +21,7 @@ export const setSession = (session: AuthSession): void => {
 };
 
 export const getSession = async (): Promise<AuthSession | null> => {
-  // First try to get session from Supabase
-  /* try {
-    const supabaseSession = await getCurrentSession();
-    if (supabaseSession) {
-      // Update cookies with fresh session
-      if (typeof window !== "undefined") {
-        setSession(supabaseSession);
-      }
-      return supabaseSession;
-    }
-  } catch (error) {
-    console.error("Error getting Supabase session:", error);
-  } */
-
-  // Fallback to cookies
+  // Get session from cookies
   let sessionData: string | null = null;
 
   if (typeof window !== "undefined") {
@@ -88,14 +69,6 @@ export const getToken = (): string | null => {
 
 export const clearSession = async (): Promise<void> => {
   if (typeof window === "undefined") return;
-
-  // Sign out from Supabase
-  try {
-    await supabaseSignOut();
-  } catch (error) {
-    console.error("Error signing out from Supabase:", error);
-  }
-
   // Clear all cookies
   deleteCookie(SESSION_KEY);
   clientCookies.clearTokens();
@@ -129,4 +102,5 @@ export const signOut = async (): Promise<void> => {
   redirect("/auth/sign-in");
 };
 
-export { onAuthStateChange, sendOTP } from "./supabase-auth";
+// Export OTP functions
+export { sendOTP } from "./otp-auth";

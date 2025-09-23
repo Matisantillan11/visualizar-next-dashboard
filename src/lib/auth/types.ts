@@ -1,7 +1,6 @@
 import { Role } from "@/types/user";
 
 export interface AuthUser {
-  supabaseUserId: string;
   id: string;
   role: Role;
   email: string;
