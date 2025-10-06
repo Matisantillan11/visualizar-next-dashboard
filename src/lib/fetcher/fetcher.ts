@@ -1,6 +1,9 @@
 import { BASE_URL } from "./constants";
 import { APIFetchArgs } from "./types";
-import { getHeaders } from "./utils";
+import { getHeaders, getResponseHeaders } from "./utils";
+import { clientCookies } from "@/lib/auth/cookies";
+
+const SUPABASE_URL = String(process.env.NEXT_PUBLIC_SUPABASE_URL);
 
 /**
  * Base API fetch function that handles authentication and response parsing.
@@ -16,7 +19,8 @@ export const fetcher = async <T>({
   init,
   withAuthentication = true,
 }: APIFetchArgs): Promise<T> => {
-  const isExternalApi = url.includes("https") || url.includes("http");
+  const isExternalApi =
+    url.includes("https") || url.includes("http") || url.includes(SUPABASE_URL);
   const endpoint = isExternalApi ? url : `${BASE_URL}${url}`;
 
   const headers = await getHeaders({ isExternalApi, withAuthentication, init });
@@ -31,7 +35,11 @@ export const fetcher = async <T>({
 
   try {
     const response = await fetch(request);
-    const result = await response.json();
+    if (response.status === 401 || response.status === 403) {
+      clientCookies.clearTokens();
+    }
+
+    const result = getResponseHeaders(response);
 
     return result;
   } catch (error) {

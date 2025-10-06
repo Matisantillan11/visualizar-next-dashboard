@@ -9,7 +9,9 @@ interface CreateBookData {
   imageUrl: string;
   releaseDate: string;
   authorId: string;
-  courseIds: string[];
+  courseId: string;
+  categoryId: string;
+  animationFolderName: string;
 }
 
 interface ActionResult {
@@ -27,27 +29,25 @@ export async function createBook(formData: FormData): Promise<ActionResult> {
     const releaseDate = formData.get("releaseDate") as string;
     const authorId = formData.get("authorId") as string;
 
-    // Extract course IDs from form data
-    const courseIds: string[] = [];
-    let index = 0;
-    while (formData.get(`courseIds[${index}]`)) {
-      courseIds.push(formData.get(`courseIds[${index}]`) as string);
-      index++;
-    }
+    // Extract course ID from form data
+    const courseId = formData.get("courseId") as string;
+    const categoryId = formData.get("categoryId") as string;
+    const animationFolderName = formData.get("animationFolderName") as string;
 
     // Validate required fields
-    if (!name || !description || !imageUrl || !releaseDate || !authorId) {
+    if (
+      !name ||
+      !description ||
+      !imageUrl ||
+      !releaseDate ||
+      !authorId ||
+      !courseId ||
+      !categoryId ||
+      !animationFolderName
+    ) {
       return {
         success: false,
         error: "All fields including author are required",
-      };
-    }
-
-    // Validate courses
-    if (courseIds.length === 0) {
-      return {
-        success: false,
-        error: "At least one course is required",
       };
     }
 
@@ -92,7 +92,9 @@ export async function createBook(formData: FormData): Promise<ActionResult> {
       imageUrl: imageUrl.trim(),
       releaseDate: releaseDate,
       authorId: authorId.trim(),
-      courseIds: courseIds,
+      courseId: courseId.trim(),
+      categoryId: categoryId.trim(),
+      animationFolderName: animationFolderName.trim(),
     };
 
     // Call your backend API to create the book

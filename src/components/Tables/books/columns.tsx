@@ -1,8 +1,9 @@
 "use client";
-import { ColumnDef } from "@tanstack/react-table";
 import { Skeleton } from "@/components/ui/skeleton";
-import { formatDate } from "@/utils/date-utils";
 import { Book } from "@/types/book";
+import { formatDate } from "@/utils/date-utils";
+import { ColumnDef } from "@tanstack/react-table";
+import Image from "next/image";
 
 const EMPTY_PLACEHOLDER = "-";
 
@@ -11,9 +12,15 @@ export const columns: Array<ColumnDef<Book>> = [
     enableSorting: true,
     accessorKey: "imageUrl",
     id: "imageUrl",
-    cell: ({ getValue }) => {
-      return getValue() ?? EMPTY_PLACEHOLDER;
-    },
+    cell: ({ getValue, row }) => (
+      <Image
+        src={getValue() as string}
+        alt={row.original.name.toLowerCase().replace(/ /g, "-")}
+        width={32}
+        height={32}
+        className="rounded-lg"
+      />
+    ),
     header: "Image",
   },
   {
@@ -40,8 +47,10 @@ export const columns: Array<ColumnDef<Book>> = [
     enableSorting: true,
     accessorKey: "releaseDate",
     id: "releaseDate",
-    cell: ({ getValue }) => {
-      return formatDate(getValue() as string) ?? EMPTY_PLACEHOLDER;
+    cell: ({ getValue, row }) => {
+      return getValue()
+        ? formatDate(getValue() as string)
+        : formatDate(row.original.createdAt);
     },
     header: "Released At",
   },

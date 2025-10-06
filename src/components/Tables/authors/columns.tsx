@@ -1,13 +1,31 @@
 "use client";
-import { User } from "@/types/user";
-import { ColumnDef } from "@tanstack/react-table";
 import { Skeleton } from "@/components/ui/skeleton";
-import { formatDate } from "@/utils/date-utils";
 import { Author } from "@/types/author";
+import { formatDate } from "@/utils/date-utils";
+import { ColumnDef } from "@tanstack/react-table";
+import Image from "next/image";
 
 const EMPTY_PLACEHOLDER = "-";
 
 export const columns: Array<ColumnDef<Author>> = [
+  {
+    enableSorting: true,
+    accessorKey: "imageUrl",
+    id: "imageUrl",
+    cell: ({ getValue, row }) => {
+      console.log(getValue());
+      return (
+        <Image
+          src={getValue() as string}
+          alt={row.original.name.toLowerCase().replace(/ /g, "-")}
+          width={32}
+          height={32}
+          className="rounded-lg"
+        />
+      );
+    },
+    header: "Image",
+  },
   {
     enableSorting: true,
     accessorKey: "name",

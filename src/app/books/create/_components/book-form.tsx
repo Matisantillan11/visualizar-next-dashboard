@@ -2,13 +2,14 @@
 
 import FormInput from "@/components/FormElements/form-input";
 import FormSelect from "@/components/FormElements/form-select";
-import FormMultiSelect from "@/components/FormElements/form-multi-select";
+import { fetcher } from "@/lib/fetcher";
+import { storeFile } from "@/lib/storage";
 import { Author } from "@/types/author";
+import { Category } from "@/types/category";
 import { Course } from "@/types/course";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { createBook } from "../action";
-import { fetcher } from "@/lib/fetcher";
 
 interface CreateBookFormData {
   name: string;
@@ -16,13 +17,17 @@ interface CreateBookFormData {
   imageUrl: string;
   releaseDate: string;
   authorId: string;
-  courseIds: string[];
+  courseId: string;
+  categoryId: string;
+  animationFolderName: string;
 }
+const BUCKET = "visualizar-attachments";
 
 export default function BookForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [authors, setAuthors] = useState<Author[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [loadingData, setLoadingData] = useState(true);
   const [formData, setFormData] = useState<CreateBookFormData>({
@@ -31,7 +36,9 @@ export default function BookForm() {
     imageUrl: "",
     releaseDate: "",
     authorId: "",
-    courseIds: [],
+    courseId: "",
+    categoryId: "",
+    animationFolderName: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -39,15 +46,22 @@ export default function BookForm() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [authorsData, coursesData] = await Promise.all([
+        const [authorsData, coursesData, categoriesData] = await Promise.all([
           fetcher({ url: "/authors" }),
           fetcher({ url: "/courses" }),
+          fetcher({ url: "/categories" }),
         ]);
 
         if ((authorsData as Author[]).length > 0) {
           setAuthors(authorsData as Author[]);
         } else {
           console.error("Failed to fetch authors");
+        }
+
+        if ((categoriesData as Category[]).length > 0) {
+          setCategories(categoriesData as Category[]);
+        } else {
+          console.error("Failed to fetch categories");
         }
 
         if ((coursesData as Course[]).length > 0) {
@@ -65,67 +79,54 @@ export default function BookForm() {
     fetchData();
   }, []);
 
-  const validateForm = (): boolean => {
-    const newErrors: Record<string, string> = {};
+  function slugify(text: string) {
+    return text
+      .toString()
+      .normalize("NFD") // separa acentos
+      .replace(/[\u0300-\u036f]/g, "") // elimina acentos
+      .replace(/ñ/g, "n") // reemplaza ñ
+      .replace(/[^a-zA-Z0-9-_./]/g, "-") // reemplaza todo lo que no sea válido
+      .toLowerCase();
+  }
 
-    if (!formData.name.trim()) {
-      newErrors.name = "Book name is required";
-    } else if (formData.name.trim().length < 2) {
-      newErrors.name = "Book name must be at least 2 characters";
-    }
-
-    if (!formData.description.trim()) {
-      newErrors.description = "Description is required";
-    } else if (formData.description.trim().length < 10) {
-      newErrors.description = "Description must be at least 10 characters";
-    }
-
-    if (!formData.imageUrl.trim()) {
-      newErrors.imageUrl = "Image URL is required";
-    } else if (!isValidUrl(formData.imageUrl)) {
-      newErrors.imageUrl = "Please enter a valid URL";
-    }
-
-    if (!formData.releaseDate) {
-      newErrors.releaseDate = "Release date is required";
-    }
-
-    if (!formData.authorId) {
-      newErrors.authorId = "Author is required";
-    }
-
-    if (formData.courseIds.length === 0) {
-      newErrors.courseIds = "At least one course is required";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const isValidUrl = (string: string) => {
-    try {
-      new URL(string);
-      return true;
-    } catch (_) {
-      return false;
-    }
-  };
-
-  const handleServerActionSubmit = async (formDataObj: FormData) => {
-    if (!validateForm()) {
-      return;
-    }
-
+  const handleServerActionSubmit = async (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault(); // Prevent default form submission
+    const formDataObj = new FormData(event.currentTarget);
+    console.log({ formDataObj });
     setIsLoading(true);
 
     try {
-      const result = await createBook(formDataObj);
+      // Get the file from the form data
+      const fileInput = document.querySelector(
+        'input[name="file"]',
+      ) as HTMLInputElement;
+      const file = fileInput.files?.[0];
+      if (file) {
+        // Upload the file to Supabase Storage
+        const folder = slugify(
+          formDataObj
+            .get("name")
+            ?.toString()
+            ?.toLowerCase()
+            ?.replace(/ /g, "-") as string,
+        );
+        const path = `books/${folder}/${file.name}`;
+        const imageUrl = await storeFile(file, BUCKET, path);
+        if (imageUrl) {
+          formDataObj.set("imageUrl", imageUrl);
+          formDataObj.set("animationFolderName", `books/${folder}`);
+        }
+        console.log({ formDataObj });
+        const result = await createBook(formDataObj);
 
-      if (result.success) {
-        console.log("Book created successfully:", result.data);
-        router.push("/books");
-      } else {
-        setErrors({ submit: result.error || "Failed to create book" });
+        if (result.success) {
+          console.log("Book created successfully:", result.data);
+          router.push("/books");
+        } else {
+          setErrors({ submit: result.error || "Failed to create book" });
+        }
       }
     } catch (error) {
       console.error("Error creating book:", error);
@@ -158,27 +159,17 @@ export default function BookForm() {
       }
     };
 
-  const handleCourseSelectionChange = (selectedCourseIds: string[]) => {
-    setFormData((prev) => ({
-      ...prev,
-      courseIds: selectedCourseIds,
-    }));
-
-    // Clear error when user makes selection
-    if (errors.courseIds) {
-      setErrors((prev) => {
-        const newErrors = { ...prev };
-        delete newErrors.courseIds;
-        return newErrors;
-      });
-    }
-  };
-
-  console.log({ authors });
   const authorOptions = authors
     ? authors.map((author) => ({
         value: author.id,
         label: author.name,
+      }))
+    : [];
+
+  const categoryOptions = categories
+    ? categories.map((category) => ({
+        value: category.id,
+        label: category.name,
       }))
     : [];
 
@@ -190,7 +181,7 @@ export default function BookForm() {
     : [];
 
   return (
-    <form action={handleServerActionSubmit} className="p-6.5">
+    <form onSubmit={handleServerActionSubmit} className="p-6.5">
       <div className="mb-4.5">
         <FormInput
           name="name"
@@ -227,19 +218,6 @@ export default function BookForm() {
 
       <div className="mb-4.5">
         <FormInput
-          name="imageUrl"
-          label="Image URL"
-          type="url"
-          placeholder="Enter image URL (e.g., https://example.com/image.jpg)"
-          required
-          value={formData.imageUrl}
-          onChange={handleInputChange("imageUrl")}
-          error={errors.imageUrl}
-        />
-      </div>
-
-      <div className="mb-4.5">
-        <FormInput
           name="releaseDate"
           label="Release Date"
           type="date"
@@ -266,25 +244,42 @@ export default function BookForm() {
       </div>
 
       <div className="mb-6">
-        <FormMultiSelect
-          name="courseIds"
+        <FormSelect
+          name="categoryId"
+          label="Genres"
+          items={categoryOptions}
+          placeholder={loadingData ? "Loading courses..." : "Select courses"}
+          required
+          value={formData.categoryId}
+          onChange={handleInputChange("categoryId")}
+          error={errors.categoryId}
+        />
+      </div>
+
+      <div className="mb-6">
+        <FormSelect
+          name="courseId"
           label="Courses"
           items={courseOptions}
           placeholder={loadingData ? "Loading courses..." : "Select courses"}
           required
-          selectedValues={formData.courseIds}
-          onSelectionChange={handleCourseSelectionChange}
-          error={errors.courseIds}
+          value={formData.courseId}
+          onChange={handleInputChange("courseId")}
+          error={errors.courseId}
         />
-        {/* Hidden inputs for form submission */}
-        {formData.courseIds.map((courseId, index) => (
-          <input
-            key={courseId}
-            type="hidden"
-            name={`courseIds[${index}]`}
-            value={courseId}
-          />
-        ))}
+      </div>
+
+      <div className="mb-6">
+        <label className="text-body-sm font-medium text-dark dark:text-white">
+          Upload Image
+          <span className="ml-1 select-none text-red">*</span>
+        </label>
+        <input
+          type="file"
+          name="file"
+          accept="image/*"
+          className="mt-3 block w-full text-sm text-gray-500 file:mr-4 file:rounded-full file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-opacity-90"
+        />
       </div>
 
       {errors.submit && (

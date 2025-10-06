@@ -25,8 +25,6 @@ async function getAuthorizationHeader(): Promise<Record<string, string>> {
     const { getAccessToken } = await import("@/lib/auth/cookies");
     token = (await getAccessToken()) || "";
 
-    console.log({ token });
-
     if (!token) {
       console.warn("No access token found in cookies");
       return {};
@@ -38,3 +36,16 @@ async function getAuthorizationHeader(): Promise<Record<string, string>> {
 
   return { Authorization: `Bearer ${token}` };
 }
+
+export const getResponseHeaders = async (response: Response) => {
+  const contentType = response.headers.get("Content-Type");
+  let result;
+
+  if (contentType?.includes("application/json")) {
+    result = await response.json();
+  } else {
+    result = await response.text();
+  }
+
+  return result;
+};

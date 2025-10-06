@@ -4,6 +4,9 @@ import FormInput from "@/components/FormElements/form-input";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createAuthor } from "../action";
+import { storeFile } from "@/lib/storage";
+
+const BUCKET = "visualizar-attachments";
 
 interface CreateAuthorFormData {
   name: string;
@@ -55,23 +58,40 @@ export default function AuthorForm() {
     }
   };
 
-  const handleServerActionSubmit = async (formDataObj: FormData) => {
-    if (!validateForm()) {
-      return;
-    }
+  const handleServerActionSubmit = async (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault(); // Prevent default form submission
+    console.log({ formData });
+    const formDataObj = new FormData(event.currentTarget);
 
     setIsLoading(true);
 
     try {
-      const result = await createAuthor(formDataObj);
+      // Get the file from the form data
+      const fileInput = document.querySelector(
+        'input[name="file"]',
+      ) as HTMLInputElement;
+      const file = fileInput.files?.[0];
+      if (file) {
+        // Upload the file to Supabase Storage
+        const path = `authors/${formDataObj.get("name")?.toString()?.toLowerCase()?.replace(/ /g, "-")}/${file.name}`;
+        const imageUrl = await storeFile(file, BUCKET, path);
+        if (imageUrl) {
+          formDataObj.set("imageUrl", imageUrl);
+        }
+        console.log({ formDataObj });
+        const result = await createAuthor(formDataObj);
 
-      if (result.success) {
-        console.log("Author created successfully:", result.data);
-        router.push("/authors");
-      } else {
-        setErrors({ submit: result.error || "Failed to create author" });
+        if (result.success) {
+          console.log("Author created successfully:", result.data);
+          router.push("/authors");
+        } else {
+          setErrors({ submit: result.error || "Failed to create author" });
+        }
       }
     } catch (error) {
+      console.log({ error });
       console.error("Error creating author:", error);
       setErrors({ submit: "Failed to create author. Please try again." });
     } finally {
@@ -99,7 +119,7 @@ export default function AuthorForm() {
     };
 
   return (
-    <form action={handleServerActionSubmit} className="p-6.5">
+    <form onSubmit={handleServerActionSubmit} className="p-6.5">
       <div className="mb-4.5">
         <FormInput
           name="name"
@@ -135,15 +155,15 @@ export default function AuthorForm() {
       </div>
 
       <div className="mb-6">
-        <FormInput
-          name="imageUrl"
-          label="Image URL"
-          type="url"
-          placeholder="Enter image URL (e.g., https://example.com/image.jpg)"
-          required
-          value={formData.imageUrl}
-          onChange={handleInputChange("imageUrl")}
-          error={errors.imageUrl}
+        <label className="text-body-sm font-medium text-dark dark:text-white">
+          Upload Image
+          <span className="ml-1 select-none text-red">*</span>
+        </label>
+        <input
+          type="file"
+          name="file"
+          accept="image/*"
+          className="mt-3 block w-full text-sm text-gray-500 file:mr-4 file:rounded-full file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-opacity-90"
         />
       </div>
 
@@ -155,9 +175,9 @@ export default function AuthorForm() {
 
       <div className="flex gap-4">
         <button
+          className="flex w-full justify-center rounded-lg bg-primary p-3 font-medium text-white hover:bg-opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
           type="submit"
           disabled={isLoading}
-          className="flex w-full justify-center rounded-lg bg-primary p-3 font-medium text-white hover:bg-opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isLoading ? (
             <div className="flex items-center gap-2">
