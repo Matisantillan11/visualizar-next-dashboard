@@ -1,9 +1,9 @@
+import { deleteCookie, setCookie } from "cookies-next/client";
 import { redirect } from "next/navigation";
 import { SESSION_KEY } from "./constants";
-import { AuthSession } from "./types";
-import { setCookie, deleteCookie } from "cookies-next/client";
 import { clientCookies } from "./cookies";
 import { sendOTP, verifyOTP } from "./otp-auth";
+import { AuthSession } from "./types";
 
 export const setSession = (session: AuthSession): void => {
   if (typeof window === "undefined") return;

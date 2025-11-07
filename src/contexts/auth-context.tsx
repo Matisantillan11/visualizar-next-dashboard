@@ -27,9 +27,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const session = await getSession();
         if (session) {
           setUser(session.user);
+        } else {
+          setUser(null);
         }
       } catch (error) {
         console.error("Error checking session:", error);
+        setUser(null);
       } finally {
         setIsLoading(false);
       }
@@ -62,6 +65,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       await signOut();
       setUser(null);
+      router.push("/auth/sign-in");
     } catch (error) {
       console.error("Error signing out:", error);
       // Still clear local state even if signout fails
