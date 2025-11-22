@@ -1,6 +1,9 @@
 "use server";
 
 import { fetcher } from "@/lib/fetcher";
+import { Author } from "@/types/author";
+import { Category } from "@/types/category";
+import { Course } from "@/types/course";
 import { redirect } from "next/navigation";
 
 interface CreateBookData {
@@ -19,6 +22,33 @@ interface ActionResult {
   error?: string;
   data?: any;
 }
+
+
+export const getCreateBookOptions = async (): Promise<{
+  authors: Author[];
+  courses: Course[];
+  categories: Category[];
+}> => {
+  const [authors, courses, categories] = await Promise.all([
+    fetcher({ url: "/authors" }),
+    fetcher({ url: "/courses" }),
+    fetcher({ url: "/categories" }),
+  ]);
+
+  if (!authors || !courses || !categories) {
+    throw new Error("Failed to fetch data");
+  }
+
+  const authorsData = authors as Author[];
+  const coursesData = courses as Course[];
+  const categoriesData = categories as Category[];
+
+  return {
+    authors: authorsData,
+    courses: coursesData,
+    categories: categoriesData,
+  };
+};
 
 export async function createBook(formData: FormData): Promise<ActionResult> {
   try {

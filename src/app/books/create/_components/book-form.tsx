@@ -2,13 +2,12 @@
 
 import FormInput from "@/components/FormElements/form-input";
 import FormSelect from "@/components/FormElements/form-select";
-import { fetcher } from "@/lib/fetcher";
 import { storeFile } from "@/lib/storage";
 import { Author } from "@/types/author";
 import { Category } from "@/types/category";
 import { Course } from "@/types/course";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createBook } from "../action";
 
 interface CreateBookFormData {
@@ -23,13 +22,17 @@ interface CreateBookFormData {
 }
 const BUCKET = "visualizar-attachments";
 
-export default function BookForm() {
+export default function BookForm({
+  authors,
+  courses,
+  categories,
+}: {
+  authors: Author[];
+  courses: Course[];
+  categories: Category[];
+}) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [authors, setAuthors] = useState<Author[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [loadingData, setLoadingData] = useState(true);
   const [formData, setFormData] = useState<CreateBookFormData>({
     name: "",
     description: "",
@@ -41,43 +44,6 @@ export default function BookForm() {
     animationFolderName: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
-
-  // Fetch authors and courses on component mount
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [authorsData, coursesData, categoriesData] = await Promise.all([
-          fetcher({ url: "/authors" }),
-          fetcher({ url: "/courses" }),
-          fetcher({ url: "/categories" }),
-        ]);
-
-        if ((authorsData as Author[]).length > 0) {
-          setAuthors(authorsData as Author[]);
-        } else {
-          console.error("Failed to fetch authors");
-        }
-
-        if ((categoriesData as Category[]).length > 0) {
-          setCategories(categoriesData as Category[]);
-        } else {
-          console.error("Failed to fetch categories");
-        }
-
-        if ((coursesData as Course[]).length > 0) {
-          setCourses(coursesData as Course[]);
-        } else {
-          console.error("Failed to fetch courses");
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoadingData(false);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   function slugify(text: string) {
     return text
@@ -159,22 +125,24 @@ export default function BookForm() {
       }
     };
 
-  const authorOptions = authors
-    ? authors.map((author) => ({
-        value: author.id,
-        label: author.name,
-      }))
-    : [];
+  console.log({ authors });
+  const authorOptions =
+    authors.length > 0
+      ? authors.map((author) => ({
+          value: author.id,
+          label: author.name,
+        }))
+      : [];
 
   const categoryOptions = categories
-    ? categories.map((category) => ({
+    ? categories?.map((category) => ({
         value: category.id,
         label: category.name,
       }))
     : [];
 
   const courseOptions = courses
-    ? courses.map((course) => ({
+    ? courses?.map((course) => ({
         value: course.id,
         label: course.name,
       }))
@@ -234,9 +202,11 @@ export default function BookForm() {
           name="authorId"
           label="Author"
           items={authorOptions}
-          placeholder={loadingData ? "Loading authors..." : "Select author"}
+          placeholder={
+            authors.length === 0 ? "Loading authors..." : "Select author"
+          }
           required
-          disabled={loadingData}
+          disabled={authors.length === 0}
           value={formData.authorId}
           onChange={handleInputChange("authorId")}
           error={errors.authorId}
@@ -248,7 +218,11 @@ export default function BookForm() {
           name="categoryId"
           label="Genres"
           items={categoryOptions}
-          placeholder={loadingData ? "Loading courses..." : "Select courses"}
+          placeholder={
+            categories.length === 0
+              ? "Loading categories..."
+              : "Select categories"
+          }
           required
           value={formData.categoryId}
           onChange={handleInputChange("categoryId")}
@@ -261,7 +235,9 @@ export default function BookForm() {
           name="courseId"
           label="Courses"
           items={courseOptions}
-          placeholder={loadingData ? "Loading courses..." : "Select courses"}
+          placeholder={
+            courses.length === 0 ? "Loading courses..." : "Select courses"
+          }
           required
           value={formData.courseId}
           onChange={handleInputChange("courseId")}

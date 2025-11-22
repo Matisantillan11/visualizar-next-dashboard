@@ -14,7 +14,12 @@ export const NAV_DATA = [
         title: "Books",
         url: "/books",
         icon: Icons.Table,
-        items: [],
+        items: [
+          {
+            title: "Books requests",
+            url: "/books/requests",
+          },
+        ],
       },
       {
         title: "Categories",
