@@ -1,9 +1,9 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { Suspense } from "react";
-import Link from "next/link";
-import getStudents from "./action";
 import { StudentsTable } from "@/components/Tables/students";
 import { StudentsSkeleton } from "@/components/Tables/students/skeleton";
+import Link from "next/link";
+import { Suspense } from "react";
+import getStudents from "./action";
 
 export default async function StudentsPage() {
   const students = await getStudents();
@@ -19,7 +19,7 @@ export default async function StudentsPage() {
             Student Management
           </h2>
           <Link
-            href="/users/students/create"
+            href="/users/create"
             className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
           >
             Add New Student

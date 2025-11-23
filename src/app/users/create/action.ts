@@ -76,7 +76,7 @@ export async function createUser(formData: FormData): Promise<ActionResult> {
 
     // Call your backend API to create the user
     const newUser = await fetcher({
-      url: "/users",
+      url: "/auth/create-user",
       init: {
         method: "POST",
         body: JSON.stringify(userData),

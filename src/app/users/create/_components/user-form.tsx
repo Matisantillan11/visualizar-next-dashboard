@@ -60,7 +60,6 @@ export default function UserForm() {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Method 1: Using Server Actions (Recommended for Next.js 15)
   const handleServerActionSubmit = async (formDataObj: FormData) => {
     if (!validateForm()) {
       return;
@@ -70,9 +69,8 @@ export default function UserForm() {
 
     try {
       const result = await createUser(formDataObj);
-
-      if (result.success) {
-        console.log("User created successfully:", result.data);
+      if (result.data.user) {
+        console.log("User created successfully:", result.data.user);
         router.push("/users");
       } else {
         setErrors({ submit: result.error || "Failed to create user" });

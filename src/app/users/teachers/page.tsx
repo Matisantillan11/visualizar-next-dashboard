@@ -1,8 +1,8 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { Suspense } from "react";
-import Link from "next/link";
-import { TeachersSkeleton } from "@/components/Tables/teachers/skeleton";
 import { TeachersTable } from "@/components/Tables/teachers";
+import { TeachersSkeleton } from "@/components/Tables/teachers/skeleton";
+import Link from "next/link";
+import { Suspense } from "react";
 import getTeachers from "./action";
 
 export default async function TeachersPage() {
@@ -19,7 +19,7 @@ export default async function TeachersPage() {
             Teacher Management
           </h2>
           <Link
-            href="/users/teachers/create"
+            href="/users/create"
             className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
           >
             Add New Teacher
