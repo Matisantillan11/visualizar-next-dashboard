@@ -1,35 +1,32 @@
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { Suspense } from "react";
-import Link from "next/link";
-import { BooksSkeleton } from "@/components/Tables/books/skeleton";
-import { BooksTable } from "@/components/Tables/books";
-import getBooks from "./action";
+"use client";
 
-export default async function BooksPage() {
-  const books = await getBooks();
+import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import { BooksTable } from "@/components/Tables/books";
+import { BooksSkeleton } from "@/components/Tables/books/skeleton";
+import { useBooks } from "@/lib/react-query/books";
+
+export default function BooksPage() {
+  const { data: books, isLoading, error } = useBooks();
 
   return (
     <>
       <Breadcrumb pageName="Books" />
 
       <div className="space-y-6">
-        {/* Header with Add New Book button */}
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold text-dark dark:text-white">
             Book Management
           </h2>
-          <Link
-            href="/books/create"
-            className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
-          >
-            Add New Book
-          </Link>
         </div>
 
         <div className="space-y-10">
-          <Suspense fallback={<BooksSkeleton />}>
-            <BooksTable books={books} />
-          </Suspense>
+          {isLoading && <BooksSkeleton />}
+          {error && (
+            <div className="rounded-lg bg-red-50 p-4 text-red-600 dark:bg-red-900/20 dark:text-red-400">
+              Error loading books: {error.message}
+            </div>
+          )}
+          {books && <BooksTable books={books ?? []} />}
         </div>
       </div>
     </>

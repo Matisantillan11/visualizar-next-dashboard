@@ -74,8 +74,6 @@ export async function createAuthor(formData: FormData): Promise<ActionResult> {
       },
     });
 
-    console.log("Author created successfully:", newAuthor);
-
     return {
       success: true,
       data: newAuthor,

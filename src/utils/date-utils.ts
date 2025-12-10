@@ -8,12 +8,12 @@
 export function formatDate(stringDate: string) {
   const date = new Date(stringDate);
 
-  if (date.toISOString() === "Invalid Date") {
+  if (date?.toISOString() === "Invalid Date") {
     console.info("Invalid date", stringDate);
     return date;
   }
 
-  return new Date(date).toLocaleDateString("es-AR", {
+  return new Date(date)?.toLocaleDateString("es-AR", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",

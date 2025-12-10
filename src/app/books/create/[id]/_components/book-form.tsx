@@ -2,13 +2,13 @@
 
 import FormInput from "@/components/FormElements/form-input";
 import FormSelect from "@/components/FormElements/form-select";
+import { useAuthors } from "@/lib/react-query/authors";
+import { CreateBookInput, useCreateBook } from "@/lib/react-query/books";
+import { useCategories } from "@/lib/react-query/categories";
+import { useCourses } from "@/lib/react-query/courses";
 import { storeFile } from "@/lib/storage";
-import { Author } from "@/types/author";
-import { Category } from "@/types/category";
-import { Course } from "@/types/course";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { createBook } from "../action";
 
 interface CreateBookFormData {
   name: string;
@@ -22,17 +22,18 @@ interface CreateBookFormData {
 }
 const BUCKET = "visualizar-attachments";
 
-export default function BookForm({
-  authors,
-  courses,
-  categories,
-}: {
-  authors: Author[];
-  courses: Course[];
-  categories: Category[];
-}) {
+export default function BookForm() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+
+  // Fetch data with TanStack Query
+  const { data: authors = [], isLoading: authorsLoading } = useAuthors();
+  const { data: courses = [], isLoading: coursesLoading } = useCourses();
+  const { data: categories = [], isLoading: categoriesLoading } =
+    useCategories();
+
+  // Create book mutation
+  const createBookMutation = useCreateBook();
+
   const [formData, setFormData] = useState<CreateBookFormData>({
     name: "",
     description: "",
@@ -60,8 +61,6 @@ export default function BookForm({
   ) => {
     event.preventDefault(); // Prevent default form submission
     const formDataObj = new FormData(event.currentTarget);
-    console.log({ formDataObj });
-    setIsLoading(true);
 
     try {
       // Get the file from the form data
@@ -69,6 +68,9 @@ export default function BookForm({
         'input[name="file"]',
       ) as HTMLInputElement;
       const file = fileInput.files?.[0];
+
+      let imageUrl = formData.imageUrl;
+
       if (file) {
         // Upload the file to Supabase Storage
         const folder = slugify(
@@ -79,26 +81,32 @@ export default function BookForm({
             ?.replace(/ /g, "-") as string,
         );
         const path = `books/${folder}/${file.name}`;
-        const imageUrl = await storeFile(file, BUCKET, path);
-        if (imageUrl) {
-          formDataObj.set("imageUrl", imageUrl);
-          formDataObj.set("animationFolderName", `books/${folder}`);
-        }
-        console.log({ formDataObj });
-        const result = await createBook(formDataObj);
-
-        if (result.success) {
-          console.log("Book created successfully:", result.data);
-          router.push("/books");
-        } else {
-          setErrors({ submit: result.error || "Failed to create book" });
+        const uploadedUrl = await storeFile(file, BUCKET, path);
+        if (uploadedUrl) {
+          imageUrl = uploadedUrl;
         }
       }
+
+      // Prepare book data
+      const bookData: CreateBookInput = {
+        name: formDataObj.get("name") as string,
+        description: formDataObj.get("description") as string,
+        imageUrl,
+        releaseDate: formDataObj.get("releaseDate") as string,
+        authorId: formDataObj.get("authorId") as string,
+        courseId: formDataObj.get("courseId") as string,
+        categoryId: formDataObj.get("categoryId") as string,
+        animations: [""],
+        bookRequestId: "0f9e24ee-1487-45fa-8cf8-ccbad73551d9",
+      };
+
+      // Use the mutation
+      await createBookMutation.mutateAsync(bookData);
+
+      router.push("/books");
     } catch (error) {
       console.error("Error creating book:", error);
       setErrors({ submit: "Failed to create book. Please try again." });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -125,7 +133,6 @@ export default function BookForm({
       }
     };
 
-  console.log({ authors });
   const authorOptions =
     authors.length > 0
       ? authors.map((author) => ({
@@ -267,10 +274,10 @@ export default function BookForm({
       <div className="flex gap-4">
         <button
           type="submit"
-          disabled={isLoading}
+          disabled={createBookMutation.isPending}
           className="flex w-full justify-center rounded-lg bg-primary p-3 font-medium text-white hover:bg-opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isLoading ? (
+          {createBookMutation.isPending ? (
             <div className="flex items-center gap-2">
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
               Creating...
@@ -283,7 +290,7 @@ export default function BookForm({
         <button
           type="button"
           onClick={() => router.push("/books")}
-          disabled={isLoading}
+          disabled={createBookMutation.isPending}
           className="flex w-full justify-center rounded-lg border border-stroke bg-white p-3 font-medium text-dark hover:bg-gray-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-dark-3 dark:bg-gray-dark dark:text-white dark:hover:bg-dark-2"
         >
           Cancel

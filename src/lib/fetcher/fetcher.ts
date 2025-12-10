@@ -1,7 +1,7 @@
+import { clientCookies } from "@/lib/auth/cookies";
 import { BASE_URL } from "./constants";
 import { APIFetchArgs } from "./types";
 import { getHeaders, getResponseHeaders } from "./utils";
-import { clientCookies } from "@/lib/auth/cookies";
 
 const SUPABASE_URL = String(process.env.NEXT_PUBLIC_SUPABASE_URL);
 
@@ -24,7 +24,6 @@ export const fetcher = async <T>({
   const endpoint = isExternalApi ? url : `${BASE_URL}${url}`;
 
   const headers = await getHeaders({ isExternalApi, withAuthentication, init });
-  console.log({ headers });
   const request = new Request(endpoint, {
     ...init,
     headers: {

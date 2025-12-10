@@ -2,14 +2,17 @@
 
 import { SidebarProvider } from "@/components/Layouts/sidebar/sidebar-context";
 import { AuthProvider } from "@/contexts/auth-context";
+import { ReactQueryProvider } from "@/lib/react-query";
 import { ThemeProvider } from "next-themes";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider defaultTheme="dark" attribute="class">
-      <AuthProvider>
-        <SidebarProvider>{children}</SidebarProvider>
-      </AuthProvider>
+      <ReactQueryProvider>
+        <AuthProvider>
+          <SidebarProvider>{children}</SidebarProvider>
+        </AuthProvider>
+      </ReactQueryProvider>
     </ThemeProvider>
   );
 }

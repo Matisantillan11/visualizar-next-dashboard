@@ -2,6 +2,7 @@
 
 import { fetcher } from "@/lib/fetcher";
 import { Author } from "@/types/author";
+import { Book } from "@/types/book";
 import { Category } from "@/types/category";
 import { Course } from "@/types/course";
 import { redirect } from "next/navigation";
@@ -10,11 +11,11 @@ interface CreateBookData {
   name: string;
   description: string;
   imageUrl: string;
-  releaseDate: string;
+  animations: string[];
   authorId: string;
   courseId: string;
   categoryId: string;
-  animationFolderName: string;
+  bookRequestId: string;
 }
 
 interface ActionResult {
@@ -22,7 +23,6 @@ interface ActionResult {
   error?: string;
   data?: any;
 }
-
 
 export const getCreateBookOptions = async (): Promise<{
   authors: Author[];
@@ -62,18 +62,15 @@ export async function createBook(formData: FormData): Promise<ActionResult> {
     // Extract course ID from form data
     const courseId = formData.get("courseId") as string;
     const categoryId = formData.get("categoryId") as string;
-    const animationFolderName = formData.get("animationFolderName") as string;
 
     // Validate required fields
     if (
       !name ||
       !description ||
       !imageUrl ||
-      !releaseDate ||
       !authorId ||
       !courseId ||
-      !categoryId ||
-      !animationFolderName
+      !categoryId
     ) {
       return {
         success: false,
@@ -120,15 +117,15 @@ export async function createBook(formData: FormData): Promise<ActionResult> {
       name: name.trim(),
       description: description.trim(),
       imageUrl: imageUrl.trim(),
-      releaseDate: releaseDate,
       authorId: authorId.trim(),
       courseId: courseId.trim(),
       categoryId: categoryId.trim(),
-      animationFolderName: animationFolderName.trim(),
+      animations: [""],
+      bookRequestId: "0f9e24ee-1487-45fa-8cf8-ccbad73551d9",
     };
 
     // Call your backend API to create the book
-    const newBook = await fetcher({
+    const newBook = await fetcher<Book>({
       url: "/books",
       init: {
         method: "POST",
@@ -139,11 +136,16 @@ export async function createBook(formData: FormData): Promise<ActionResult> {
       },
     });
 
-    console.log("Book created successfully:", newBook);
+    if ("id" in newBook) {
+      return {
+        success: true,
+        data: newBook,
+      };
+    }
 
     return {
-      success: true,
-      data: newBook,
+      success: false,
+      data: undefined,
     };
   } catch (error) {
     console.error("Error creating book:", error);

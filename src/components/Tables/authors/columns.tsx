@@ -13,7 +13,6 @@ export const columns: Array<ColumnDef<Author>> = [
     accessorKey: "imageUrl",
     id: "imageUrl",
     cell: ({ getValue, row }) => {
-      console.log(getValue());
       return (
         <Image
           src={getValue() as string}

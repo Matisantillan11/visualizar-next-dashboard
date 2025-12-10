@@ -1,8 +1,10 @@
 "use client";
+import { ArrowLeftIcon } from "@/assets/icons";
 import { Skeleton } from "@/components/ui/skeleton";
-import { BookRequest } from "@/types/book";
+import { BookRequest, BookRequestStatus } from "@/types/book";
 import { formatDate } from "@/utils/date-utils";
 import { ColumnDef } from "@tanstack/react-table";
+import Link from "next/link";
 import { getReverseAnimationsSelected } from "./helper";
 import { StatusCell } from "./status-cell";
 
@@ -92,6 +94,26 @@ export const columns: Array<ColumnDef<BookRequest>> = [
       );
     },
     header: "Status",
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const bookRequestStatus = row.original.status;
+      const bookRequestId = row.original.id;
+      if (bookRequestStatus === BookRequestStatus.APPROVED) {
+        return (
+          <Link
+            href={`/books/create/${bookRequestId}`}
+            className="inline-flex h-10 w-10 rotate-180 items-center justify-center rounded-lg text-center text-white hover:bg-primary/50 hover:bg-opacity-90"
+          >
+            <ArrowLeftIcon />
+          </Link>
+        );
+      }
+
+      return null;
+    },
+    header: "",
   },
 ];
 

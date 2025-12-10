@@ -8,7 +8,7 @@ type PropsType = {
   }>;
 };
 
-export default async function Home({ searchParams }: PropsType) {
+export default function Home({ searchParams }: PropsType) {
   // force the user to go to books page
   const router = useRouter();
   useEffect(() => {

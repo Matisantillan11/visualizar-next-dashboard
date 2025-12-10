@@ -1,10 +1,10 @@
-import { cn } from "@/lib/utils";
 import Table from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 
-import { columns } from "./columns";
 import { Book } from "@/types/book";
+import { columns } from "./columns";
 
-export async function BooksTable({
+export function BooksTable({
   className,
   books,
 }: {

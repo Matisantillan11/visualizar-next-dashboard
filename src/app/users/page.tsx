@@ -3,8 +3,8 @@ import { UsersTable } from "@/components/Tables/users";
 import { UsersSkeleton } from "@/components/Tables/users/skeleton";
 
 import { Metadata } from "next";
-import { Suspense } from "react";
 import Link from "next/link";
+import { Suspense } from "react";
 import getUsers from "./action";
 
 export const metadata: Metadata = {
@@ -13,7 +13,6 @@ export const metadata: Metadata = {
 
 export default async function UsersPage() {
   const users = await getUsers();
-  console.log({ users });
 
   return (
     <>

@@ -12,15 +12,17 @@ export const columns: Array<ColumnDef<Book>> = [
     enableSorting: true,
     accessorKey: "imageUrl",
     id: "imageUrl",
-    cell: ({ getValue, row }) => (
-      <Image
-        src={getValue() as string}
-        alt={row.original.name.toLowerCase().replace(/ /g, "-")}
-        width={32}
-        height={32}
-        className="rounded-lg"
-      />
-    ),
+    cell: ({ getValue, row }) => {
+      return (
+        <Image
+          src={getValue() as string}
+          alt={row?.original?.name?.toLowerCase()?.replace(/ /g, "-")}
+          width={32}
+          height={32}
+          className="rounded-lg"
+        />
+      );
+    },
     header: "Image",
   },
   {

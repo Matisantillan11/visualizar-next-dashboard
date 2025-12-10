@@ -1,9 +1,13 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import BookForm from "./_components/book-form";
-import { getCreateBookOptions } from "./action";
 
-export default async function CreateBookPage() {
-  const { authors, courses, categories } = await getCreateBookOptions();
+export default async function CreateBookPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  console.log(id);
 
   return (
     <>
@@ -19,11 +23,7 @@ export default async function CreateBookPage() {
               </h3>
             </div>
 
-            <BookForm
-              authors={authors}
-              courses={courses}
-              categories={categories}
-            />
+            <BookForm />
           </div>
         </div>
       </div>

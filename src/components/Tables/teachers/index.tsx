@@ -1,8 +1,8 @@
-import { cn } from "@/lib/utils";
 import Table from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 
-import { columns } from "./columns";
 import { Teacher } from "@/types/teacher";
+import { columns } from "./columns";
 
 export async function TeachersTable({
   className,
@@ -11,7 +11,6 @@ export async function TeachersTable({
   className?: string;
   teachers: Teacher[];
 }) {
-  console.log({ teachers });
   return (
     <div
       className={cn(

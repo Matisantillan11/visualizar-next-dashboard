@@ -14,7 +14,6 @@ export function StatusCell({ requestId, currentStatus }: StatusCellProps) {
   const router = useRouter();
 
   const handleStatusChange = async (newStatus: BookRequestStatus) => {
-    console.log({ newStatus });
     await updateBookRequestStatus(requestId, newStatus);
     router.refresh(); // Refresh the page to show updated data
   };

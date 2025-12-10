@@ -1,10 +1,10 @@
 "use client";
 
 import FormInput from "@/components/FormElements/form-input";
+import { storeFile } from "@/lib/storage";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createAuthor } from "../action";
-import { storeFile } from "@/lib/storage";
 
 const BUCKET = "visualizar-attachments";
 
@@ -62,7 +62,6 @@ export default function AuthorForm() {
     event: React.FormEvent<HTMLFormElement>,
   ) => {
     event.preventDefault(); // Prevent default form submission
-    console.log({ formData });
     const formDataObj = new FormData(event.currentTarget);
 
     setIsLoading(true);
@@ -80,18 +79,15 @@ export default function AuthorForm() {
         if (imageUrl) {
           formDataObj.set("imageUrl", imageUrl);
         }
-        console.log({ formDataObj });
         const result = await createAuthor(formDataObj);
 
         if (result.success) {
-          console.log("Author created successfully:", result.data);
           router.push("/authors");
         } else {
           setErrors({ submit: result.error || "Failed to create author" });
         }
       }
     } catch (error) {
-      console.log({ error });
       console.error("Error creating author:", error);
       setErrors({ submit: "Failed to create author. Please try again." });
     } finally {
