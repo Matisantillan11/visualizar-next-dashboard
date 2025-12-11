@@ -2,10 +2,10 @@
 
 import FormInput from "@/components/FormElements/form-input";
 import FormSelect from "@/components/FormElements/form-select";
-import { Institution } from "@/types/institutions";
+import { useCreateCourse } from "@/lib/react-query/courses";
+import { useInstitutions } from "@/lib/react-query/institutions";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
-import { createCourse } from "../action";
+import { useEffect, useState } from "react";
 
 interface CreateCourseFormData {
   name: string;
@@ -14,35 +14,23 @@ interface CreateCourseFormData {
 
 export default function CourseForm() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [institutions, setInstitutions] = useState<Institution[]>([]);
-  const [loadingInstitutions, setLoadingInstitutions] = useState(true);
+  const { data: institutions, isPending: loadingInstitutions } =
+    useInstitutions();
+  const { mutate: createCourse, isPending, isSuccess } = useCreateCourse();
+
   const [formData, setFormData] = useState<CreateCourseFormData>({
     name: "",
     institutionId: "",
   });
-  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // Fetch institutions on component mount
   useEffect(() => {
-    const fetchInstitutions = async () => {
-      try {
-        const response = await fetch("/api/institutions");
-        if (response.ok) {
-          const institutionsData = await response.json();
-          setInstitutions(institutionsData);
-        } else {
-          console.error("Failed to fetch institutions");
-        }
-      } catch (error) {
-        console.error("Error fetching institutions:", error);
-      } finally {
-        setLoadingInstitutions(false);
-      }
-    };
-
-    fetchInstitutions();
-  }, []);
+    if (isSuccess) {
+      setFormData({
+        name: "",
+        institutionId: "",
+      });
+    }
+  }, [isSuccess]);
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -57,31 +45,21 @@ export default function CourseForm() {
       newErrors.institutionId = "Institution is required";
     }
 
-    setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleServerActionSubmit = async (formDataObj: FormData) => {
+  const handleSubmit = async () => {
     if (!validateForm()) {
       return;
     }
 
-    setIsLoading(true);
-
     try {
-      const result = await createCourse(formDataObj);
-
-      if (result.success) {
-        console.log("Course created successfully:", result.data);
-        router.push("/courses");
-      } else {
-        setErrors({ submit: result.error || "Failed to create course" });
-      }
+      await createCourse({
+        name: formData.name,
+        institutionId: formData.institutionId,
+      });
     } catch (error) {
       console.error("Error creating course:", error);
-      setErrors({ submit: "Failed to create course. Please try again." });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -93,24 +71,15 @@ export default function CourseForm() {
         ...prev,
         [field]: value,
       }));
-
-      // Clear error when user starts typing
-      if (errors[field]) {
-        setErrors((prev) => {
-          const newErrors = { ...prev };
-          delete newErrors[field];
-          return newErrors;
-        });
-      }
     };
 
-  const institutionOptions = institutions.map((institution) => ({
+  const institutionOptions = institutions?.map((institution) => ({
     value: institution.id,
     label: institution.name,
   }));
 
   return (
-    <form action={handleServerActionSubmit} className="p-6.5">
+    <form action={handleSubmit} className="p-6.5">
       <div className="mb-4.5">
         <FormInput
           name="name"
@@ -120,7 +89,6 @@ export default function CourseForm() {
           required
           value={formData.name}
           onChange={handleInputChange("name")}
-          error={errors.name}
         />
       </div>
 
@@ -128,7 +96,7 @@ export default function CourseForm() {
         <FormSelect
           name="institutionId"
           label="Institution"
-          items={institutionOptions}
+          items={institutionOptions ?? []}
           placeholder={
             loadingInstitutions
               ? "Loading institutions..."
@@ -138,23 +106,16 @@ export default function CourseForm() {
           disabled={loadingInstitutions}
           value={formData.institutionId}
           onChange={handleInputChange("institutionId")}
-          error={errors.institutionId}
         />
       </div>
-
-      {errors.submit && (
-        <div className="mb-4 rounded-lg bg-red-50 p-4 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
-          {errors.submit}
-        </div>
-      )}
 
       <div className="flex gap-4">
         <button
           type="submit"
-          disabled={isLoading}
+          disabled={isPending}
           className="flex w-full justify-center rounded-lg bg-primary p-3 font-medium text-white hover:bg-opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isLoading ? (
+          {isPending ? (
             <div className="flex items-center gap-2">
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
               Creating...
@@ -167,7 +128,7 @@ export default function CourseForm() {
         <button
           type="button"
           onClick={() => router.push("/courses")}
-          disabled={isLoading}
+          disabled={isPending}
           className="flex w-full justify-center rounded-lg border border-stroke bg-white p-3 font-medium text-dark hover:bg-gray-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-dark-3 dark:bg-gray-dark dark:text-white dark:hover:bg-dark-2"
         >
           Cancel

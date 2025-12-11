@@ -6,7 +6,7 @@ import { BooksSkeleton } from "@/components/Tables/books/skeleton";
 import { useBooks } from "@/lib/react-query/books";
 
 export default function BooksPage() {
-  const { data: books, isLoading, error } = useBooks();
+  const { data: books, isPending } = useBooks();
 
   return (
     <>
@@ -20,13 +20,7 @@ export default function BooksPage() {
         </div>
 
         <div className="space-y-10">
-          {isLoading && <BooksSkeleton />}
-          {error && (
-            <div className="rounded-lg bg-red-50 p-4 text-red-600 dark:bg-red-900/20 dark:text-red-400">
-              Error loading books: {error.message}
-            </div>
-          )}
-          {books && <BooksTable books={books ?? []} />}
+          {isPending ? <BooksSkeleton /> : <BooksTable books={books ?? []} />}
         </div>
       </div>
     </>

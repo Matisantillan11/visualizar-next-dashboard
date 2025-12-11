@@ -1,12 +1,12 @@
+"use client";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { InstitutionsTable } from "@/components/Tables/institutions";
-import { Suspense } from "react";
-import Link from "next/link";
-import getInstitutions from "./action";
 import { InstitutionsSkeleton } from "@/components/Tables/institutions/skeleton";
+import { useInstitutions } from "@/lib/react-query/institutions";
+import Link from "next/link";
 
-export default async function InstitutionsPage() {
-  const institutions = await getInstitutions();
+export default function InstitutionsPage() {
+  const { data: institutions, isPending } = useInstitutions();
 
   return (
     <>
@@ -27,9 +27,11 @@ export default async function InstitutionsPage() {
         </div>
 
         <div className="space-y-10">
-          <Suspense fallback={<InstitutionsSkeleton />}>
-            <InstitutionsTable institutions={institutions} />
-          </Suspense>
+          {isPending ? (
+            <InstitutionsSkeleton />
+          ) : (
+            <InstitutionsTable institutions={institutions ?? []} />
+          )}
         </div>
       </div>
     </>

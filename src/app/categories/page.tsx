@@ -4,10 +4,9 @@ import { CategoriesTable } from "@/components/Tables/categories";
 import { CategoriesSkeleton } from "@/components/Tables/categories/skeleton";
 import { useCategories } from "@/lib/react-query/categories";
 import Link from "next/link";
-import { Suspense } from "react";
 
 export default function CategoriesPage() {
-  const { data: categories } = useCategories();
+  const { data: categories, isPending } = useCategories();
 
   return (
     <>
@@ -28,9 +27,11 @@ export default function CategoriesPage() {
         </div>
 
         <div className="space-y-10">
-          <Suspense fallback={<CategoriesSkeleton />}>
+          {isPending ? (
+            <CategoriesSkeleton />
+          ) : (
             <CategoriesTable categories={categories ?? []} />
-          </Suspense>
+          )}
         </div>
       </div>
     </>

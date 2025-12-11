@@ -4,10 +4,9 @@ import { AuthorsTable } from "@/components/Tables/authors";
 import { AuthorsSkeleton } from "@/components/Tables/authors/skeleton";
 import { useAuthors } from "@/lib/react-query/authors";
 import Link from "next/link";
-import { Suspense } from "react";
 
 export default function AuthorsPage() {
-  const { data: authors } = useAuthors();
+  const { data: authors, isPending } = useAuthors();
 
   return (
     <>
@@ -27,9 +26,11 @@ export default function AuthorsPage() {
         </div>
 
         <div className="space-y-10">
-          <Suspense fallback={<AuthorsSkeleton />}>
+          {isPending ? (
+            <AuthorsSkeleton />
+          ) : (
             <AuthorsTable authors={authors ?? []} />
-          </Suspense>
+          )}
         </div>
       </div>
     </>

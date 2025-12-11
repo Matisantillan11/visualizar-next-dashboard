@@ -1,9 +1,9 @@
 "use client";
 
 import FormInput from "@/components/FormElements/form-input";
+import { useCreateInstitution } from "@/lib/react-query/institutions";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { createInstitution } from "../action";
+import { useEffect, useState } from "react";
 
 interface CreateInstitutionFormData {
   name: string;
@@ -14,14 +14,19 @@ interface CreateInstitutionFormData {
 
 export default function InstitutionForm() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+
   const [formData, setFormData] = useState<CreateInstitutionFormData>({
     name: "",
     address: "",
     phone: "",
     email: "",
   });
-  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const {
+    mutateAsync: createInstitution,
+    isPending,
+    isSuccess,
+  } = useCreateInstitution();
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -50,31 +55,23 @@ export default function InstitutionForm() {
       newErrors.email = "Please enter a valid email address";
     }
 
-    setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleServerActionSubmit = async (formDataObj: FormData) => {
+  const handleSubmit = async () => {
     if (!validateForm()) {
       return;
     }
 
-    setIsLoading(true);
-
     try {
-      const result = await createInstitution(formDataObj);
-
-      if (result.success) {
-        console.log("Institution created successfully:", result.data);
-        router.push("/institutions");
-      } else {
-        setErrors({ submit: result.error || "Failed to create institution" });
-      }
+      await createInstitution({
+        name: formData.name,
+        address: formData.address,
+        phone: formData.phone,
+        email: formData.email,
+      });
     } catch (error) {
       console.error("Error creating institution:", error);
-      setErrors({ submit: "Failed to create institution. Please try again." });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -86,19 +83,20 @@ export default function InstitutionForm() {
         ...prev,
         [field]: value,
       }));
-
-      // Clear error when user starts typing
-      if (errors[field]) {
-        setErrors((prev) => {
-          const newErrors = { ...prev };
-          delete newErrors[field];
-          return newErrors;
-        });
-      }
     };
+  useEffect(() => {
+    if (isSuccess) {
+      setFormData({
+        name: "",
+        address: "",
+        phone: "",
+        email: "",
+      });
+    }
+  }, [isSuccess]);
 
   return (
-    <form action={handleServerActionSubmit} className="p-6.5">
+    <form action={handleSubmit} className="p-6.5">
       <div className="mb-4.5">
         <FormInput
           name="name"
@@ -108,7 +106,6 @@ export default function InstitutionForm() {
           required
           value={formData.name}
           onChange={handleInputChange("name")}
-          error={errors.name}
         />
       </div>
 
@@ -121,7 +118,6 @@ export default function InstitutionForm() {
           required
           value={formData.address}
           onChange={handleInputChange("address")}
-          error={errors.address}
         />
       </div>
 
@@ -134,7 +130,6 @@ export default function InstitutionForm() {
           required
           value={formData.phone}
           onChange={handleInputChange("phone")}
-          error={errors.phone}
         />
       </div>
 
@@ -147,23 +142,16 @@ export default function InstitutionForm() {
           required
           value={formData.email}
           onChange={handleInputChange("email")}
-          error={errors.email}
         />
       </div>
-
-      {errors.submit && (
-        <div className="mb-4 rounded-lg bg-red-50 p-4 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
-          {errors.submit}
-        </div>
-      )}
 
       <div className="flex gap-4">
         <button
           type="submit"
-          disabled={isLoading}
+          disabled={isPending}
           className="flex w-full justify-center rounded-lg bg-primary p-3 font-medium text-white hover:bg-opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isLoading ? (
+          {isPending ? (
             <div className="flex items-center gap-2">
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
               Creating...
@@ -176,7 +164,7 @@ export default function InstitutionForm() {
         <button
           type="button"
           onClick={() => router.push("/institutions")}
-          disabled={isLoading}
+          disabled={isPending}
           className="flex w-full justify-center rounded-lg border border-stroke bg-white p-3 font-medium text-dark hover:bg-gray-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-dark-3 dark:bg-gray-dark dark:text-white dark:hover:bg-dark-2"
         >
           Cancel

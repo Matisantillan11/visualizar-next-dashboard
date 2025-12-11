@@ -5,54 +5,57 @@ export const NAV_DATA = [
     label: "MAIN MENU",
     items: [
       {
-        title: "Authors",
+        title: "Autores",
         url: "/authors",
         icon: Icons.Table,
         items: [],
       },
       {
-        title: "Books",
-        url: "/books",
+        title: "Libros",
         icon: Icons.Table,
         items: [
           {
-            title: "Books requests",
+            title: "Todos los libros",
+            url: "/books",
+          },
+          {
+            title: "Solicitudes de libros",
             url: "/books/requests",
           },
         ],
       },
       {
-        title: "Categories",
+        title: "Categorias",
         url: "/categories",
         icon: Icons.Table,
         items: [],
       },
       {
-        title: "Courses",
+        title: "Cursos",
         url: "/courses",
         icon: Icons.Table,
         items: [],
       },
       {
-        title: "Institutions",
+        title: "Instituciones",
         icon: Icons.Table,
         url: "/institutions",
         items: [],
       },
       {
-        title: "Users",
+        title: "Usuarios",
         icon: Icons.Table,
         items: [
           {
-            title: "All users",
+            title: "Todos los usuarios",
             url: "/users",
           },
           {
-            title: "Students",
+            title: "Estudiantes",
             url: "/users/students",
           },
           {
-            title: "Teachers",
+            title: "Profesores",
             url: "/users/teachers",
           },
         ],

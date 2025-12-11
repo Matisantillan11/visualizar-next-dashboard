@@ -1,12 +1,12 @@
+"use client";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { Suspense } from "react";
-import Link from "next/link";
 import { CoursesTable } from "@/components/Tables/courses";
 import { CourseSkeleton } from "@/components/Tables/courses/skeleton";
-import getCourses from "./action";
+import { useCourses } from "@/lib/react-query/courses";
+import Link from "next/link";
 
-export default async function CoursesPage() {
-  const courses = await getCourses();
+export default function CoursesPage() {
+  const { data: courses, isPending } = useCourses();
 
   return (
     <>
@@ -27,9 +27,11 @@ export default async function CoursesPage() {
         </div>
 
         <div className="space-y-10">
-          <Suspense fallback={<CourseSkeleton />}>
-            <CoursesTable courses={courses} />
-          </Suspense>
+          {isPending ? (
+            <CourseSkeleton />
+          ) : (
+            <CoursesTable courses={courses ?? []} />
+          )}
         </div>
       </div>
     </>
