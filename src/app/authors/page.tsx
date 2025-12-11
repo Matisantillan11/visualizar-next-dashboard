@@ -1,19 +1,19 @@
+"use client";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { AuthorsTable } from "@/components/Tables/authors";
 import { AuthorsSkeleton } from "@/components/Tables/authors/skeleton";
-import { Suspense } from "react";
+import { useAuthors } from "@/lib/react-query/authors";
 import Link from "next/link";
-import getAuthors from "./action";
+import { Suspense } from "react";
 
-export default async function AuthorsPage() {
-  const authors = await getAuthors();
+export default function AuthorsPage() {
+  const { data: authors } = useAuthors();
 
   return (
     <>
       <Breadcrumb pageName="Authors" />
 
       <div className="space-y-6">
-        {/* Header with Add New Author button */}
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold text-dark dark:text-white">
             Author Management
@@ -28,7 +28,7 @@ export default async function AuthorsPage() {
 
         <div className="space-y-10">
           <Suspense fallback={<AuthorsSkeleton />}>
-            <AuthorsTable authors={authors} />
+            <AuthorsTable authors={authors ?? []} />
           </Suspense>
         </div>
       </div>

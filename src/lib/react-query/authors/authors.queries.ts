@@ -28,4 +28,7 @@ export const useAuthors = () =>
   createQuery<Author[]>({
     url: "/authors",
     queryKey: queryKeys.authors.lists(),
+    fetchConfig: {
+      cache: "reload",
+    },
   })();
