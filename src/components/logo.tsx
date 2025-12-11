@@ -7,7 +7,6 @@ export function Logo() {
       <Image
         src={logo}
         fill
-        className="dark:hidden"
         alt="Visualizar logo"
         role="presentation"
         quality={100}

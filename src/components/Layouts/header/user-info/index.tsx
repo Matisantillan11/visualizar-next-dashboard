@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/dropdown";
 import { useAuth } from "@/contexts/auth-context";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 import { useState } from "react";
 import { LogOutIcon } from "./icons";
 
@@ -25,20 +24,15 @@ export function UserInfo() {
   return (
     <Dropdown isOpen={isOpen} setIsOpen={setIsOpen}>
       <DropdownTrigger className="rounded align-middle outline-none ring-primary ring-offset-2 focus-visible:ring-1 dark:ring-offset-gray-dark">
-        <span className="sr-only">My Account</span>
+        <span className="sr-only">Mi cuenta</span>
 
         <figure className="flex items-center gap-3">
-          <Image
-            src={USER.img}
-            className="size-12"
-            alt={`Avatar of ${USER.name}`}
-            role="presentation"
-            width={200}
-            height={200}
-          />
+          <div className="flex size-12 items-center justify-center rounded-full bg-primary/80">
+            <p className="text-xl font-bold text-white">
+              {USER.name.charAt(0)}
+            </p>
+          </div>
           <figcaption className="flex items-center gap-1 font-medium text-dark dark:text-dark-6 max-[1024px]:sr-only">
-            <span>{USER.name}</span>
-
             <ChevronUpIcon
               aria-hidden
               className={cn(
@@ -55,17 +49,14 @@ export function UserInfo() {
         className="w-fit border border-stroke bg-white shadow-md dark:border-dark-3 dark:bg-gray-dark min-[230px]:min-w-[18.5rem]"
         align="end"
       >
-        <h2 className="sr-only">User information</h2>
+        <h2 className="sr-only">Información de usuario</h2>
 
         <figure className="flex items-center gap-2.5 px-5 py-3.5">
-          <Image
-            src={USER.img}
-            className="size-12"
-            alt={`Avatar for ${USER.name}`}
-            role="presentation"
-            width={200}
-            height={200}
-          />
+          <div className="flex size-12 items-center justify-center rounded-full bg-primary/80">
+            <p className="text-xl font-bold text-white">
+              {USER.name.charAt(0)}
+            </p>
+          </div>
 
           <figcaption className="space-y-1 text-base font-medium">
             <div className="mb-2 leading-none text-dark dark:text-white">
