@@ -33,9 +33,16 @@ export interface StatusBadgeProps
 }
 
 export function StatusBadge({ className, status, ...props }: StatusBadgeProps) {
+  const statusLabels = {
+    [BookRequestStatus.PENDING]: "Pendiente",
+    [BookRequestStatus.APPROVED]: "Aprobado",
+    [BookRequestStatus.DENIED]: "Rechazado",
+    [BookRequestStatus.PUBLISHED]: "Publicado",
+  };
+
   return (
     <span className={cn(statusBadgeVariants({ status }), className)} {...props}>
-      {status}
+      {statusLabels[status]}
     </span>
   );
 }

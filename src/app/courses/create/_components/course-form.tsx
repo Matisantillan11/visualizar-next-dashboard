@@ -36,13 +36,13 @@ export default function CourseForm() {
     const newErrors: Record<string, string> = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = "Course name is required";
+      newErrors.name = "El nombre del curso es requerido";
     } else if (formData.name.trim().length < 2) {
-      newErrors.name = "Course name must be at least 2 characters";
+      newErrors.name = "El nombre del curso debe tener al menos 2 caracteres";
     }
 
     if (!formData.institutionId) {
-      newErrors.institutionId = "Institution is required";
+      newErrors.institutionId = "La institución es requerida";
     }
 
     return Object.keys(newErrors).length === 0;
@@ -83,9 +83,9 @@ export default function CourseForm() {
       <div className="mb-4.5">
         <FormInput
           name="name"
-          label="Course Name"
+          label="Nombre del Curso"
           type="text"
-          placeholder="Enter course name"
+          placeholder="Ingrese el nombre del curso"
           required
           value={formData.name}
           onChange={handleInputChange("name")}
@@ -95,12 +95,12 @@ export default function CourseForm() {
       <div className="mb-6">
         <FormSelect
           name="institutionId"
-          label="Institution"
+          label="Institución"
           items={institutionOptions ?? []}
           placeholder={
             loadingInstitutions
-              ? "Loading institutions..."
-              : "Select institution"
+              ? "Cargando instituciones..."
+              : "Seleccione la institución"
           }
           required
           disabled={loadingInstitutions}
@@ -118,10 +118,10 @@ export default function CourseForm() {
           {isPending ? (
             <div className="flex items-center gap-2">
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-              Creating...
+              Creando...
             </div>
           ) : (
-            "Create Course"
+            "Crear Curso"
           )}
         </button>
 
@@ -131,7 +131,7 @@ export default function CourseForm() {
           disabled={isPending}
           className="flex w-full justify-center rounded-lg border border-stroke bg-white p-3 font-medium text-dark hover:bg-gray-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-dark-3 dark:bg-gray-dark dark:text-white dark:hover:bg-dark-2"
         >
-          Cancel
+          Cancelar
         </button>
       </div>
     </form>

@@ -50,9 +50,9 @@ export default function CategoryForm() {
       <div className="mb-6">
         <FormInput
           name="name"
-          label="Category Name"
+          label="Nombre de la Categoría"
           type="text"
-          placeholder="Enter category name"
+          placeholder="Ingrese el nombre de la categoría"
           required
           value={formData.name}
           onChange={handleInputChange("name")}
@@ -68,10 +68,10 @@ export default function CategoryForm() {
           {isPending ? (
             <div className="flex items-center gap-2">
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-              Creating...
+              Creando...
             </div>
           ) : (
-            "Create Category"
+            "Crear Categoría"
           )}
         </button>
 
@@ -81,7 +81,7 @@ export default function CategoryForm() {
           disabled={isPending}
           className="flex w-full justify-center rounded-lg border border-stroke bg-white p-3 font-medium text-dark hover:bg-gray-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-dark-3 dark:bg-gray-dark dark:text-white dark:hover:bg-dark-2"
         >
-          Cancel
+          Cancelar
         </button>
       </div>
     </form>

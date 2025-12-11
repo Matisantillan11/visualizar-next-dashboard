@@ -10,12 +10,12 @@ export default function BooksPage() {
 
   return (
     <>
-      <Breadcrumb pageName="Books" />
+      <Breadcrumb pageName="Libros" />
 
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold text-dark dark:text-white">
-            Book Management
+            Gestión de Libros
           </h2>
         </div>
 

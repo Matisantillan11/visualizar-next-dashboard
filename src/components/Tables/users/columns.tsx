@@ -1,9 +1,8 @@
 "use client";
-import { Role, User } from "@/types/user";
-import { ColumnDef } from "@tanstack/react-table";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Role, User } from "@/types/user";
 import { formatDate } from "@/utils/date-utils";
-import { Badge } from "@/components/ui/badge";
+import { ColumnDef } from "@tanstack/react-table";
 import getRoleBadge from "./utils";
 
 const EMPTY_PLACEHOLDER = "-";
@@ -16,7 +15,7 @@ export const columns: Array<ColumnDef<User>> = [
     cell: ({ getValue }) => {
       return getValue() ?? EMPTY_PLACEHOLDER;
     },
-    header: "Name",
+    header: "Nombre",
   },
   {
     enableSorting: true,
@@ -43,7 +42,7 @@ export const columns: Array<ColumnDef<User>> = [
     cell: ({ getValue }) => {
       return getValue() ? getRoleBadge(getValue() as Role) : EMPTY_PLACEHOLDER;
     },
-    header: "Role",
+    header: "Rol",
   },
   {
     enableSorting: true,
@@ -52,7 +51,7 @@ export const columns: Array<ColumnDef<User>> = [
     cell: ({ getValue }) => {
       return formatDate(getValue() as string) ?? EMPTY_PLACEHOLDER;
     },
-    header: "Created At",
+    header: "Fecha de Creación",
   },
 ];
 
@@ -64,7 +63,7 @@ export const skeletonColumns: Array<ColumnDef<User>> = [
     cell: () => {
       return <Skeleton className="h-8" />;
     },
-    header: "Name",
+    header: "Nombre",
   },
   {
     enableSorting: true,
@@ -91,7 +90,7 @@ export const skeletonColumns: Array<ColumnDef<User>> = [
     cell: () => {
       return <Skeleton className="h-8" />;
     },
-    header: "Role",
+    header: "Rol",
   },
   {
     enableSorting: true,
@@ -100,6 +99,6 @@ export const skeletonColumns: Array<ColumnDef<User>> = [
     cell: () => {
       return <Skeleton className="h-8" />;
     },
-    header: "Created At",
+    header: "Fecha de Creación",
   },
 ];

@@ -8,7 +8,7 @@ import { Suspense } from "react";
 import getUsers from "./action";
 
 export const metadata: Metadata = {
-  title: "Users",
+  title: "Usuarios",
 };
 
 export default async function UsersPage() {
@@ -16,19 +16,19 @@ export default async function UsersPage() {
 
   return (
     <>
-      <Breadcrumb pageName="Users" />
+      <Breadcrumb pageName="Usuarios" />
 
       <div className="space-y-6">
         {/* Header with Add New User button */}
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold text-dark dark:text-white">
-            User Management
+            Gestión de Usuarios
           </h2>
           <Link
             href="/users/create"
             className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
           >
-            Add New User
+            Agregar Nuevo Usuario
           </Link>
         </div>
 

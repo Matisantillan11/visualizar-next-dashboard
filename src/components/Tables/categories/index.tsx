@@ -1,8 +1,8 @@
-import { cn } from "@/lib/utils";
 import Table from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 
-import { columns } from "./columns";
 import { Category } from "@/types/category";
+import { columns } from "./columns";
 
 export async function CategoriesTable({
   className,
@@ -19,7 +19,7 @@ export async function CategoriesTable({
       )}
     >
       <h2 className="mb-4 text-body-2xlg font-bold text-dark dark:text-white">
-        Book Categories
+        Categorias de libros
       </h2>
 
       <Table data={categories} columns={columns} />

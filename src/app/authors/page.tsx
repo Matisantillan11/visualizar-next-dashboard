@@ -10,18 +10,18 @@ export default function AuthorsPage() {
 
   return (
     <>
-      <Breadcrumb pageName="Authors" />
+      <Breadcrumb pageName="Autores" />
 
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold text-dark dark:text-white">
-            Author Management
+            Gestión de Autores
           </h2>
           <Link
             href="/authors/create"
             className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
           >
-            Add New Author
+            Agregar Nuevo Autor
           </Link>
         </div>
 

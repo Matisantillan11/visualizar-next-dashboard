@@ -14,7 +14,7 @@ export const columns: Array<ColumnDef<Author>> = [
     cell: ({ getValue }) => {
       return getValue() ?? EMPTY_PLACEHOLDER;
     },
-    header: "Name",
+    header: "Nombre",
   },
   {
     enableSorting: true,
@@ -23,7 +23,7 @@ export const columns: Array<ColumnDef<Author>> = [
     cell: ({ getValue }) => {
       return getValue() ?? EMPTY_PLACEHOLDER;
     },
-    header: "Biography",
+    header: "Biografía",
   },
   {
     enableSorting: true,
@@ -32,7 +32,7 @@ export const columns: Array<ColumnDef<Author>> = [
     cell: ({ getValue }) => {
       return formatDate(getValue() as string) ?? EMPTY_PLACEHOLDER;
     },
-    header: "Created At",
+    header: "Fecha de Creación",
   },
 ];
 
@@ -44,7 +44,7 @@ export const skeletonColumns: Array<ColumnDef<Author>> = [
     cell: () => {
       return <Skeleton className="h-8" />;
     },
-    header: "Name",
+    header: "Nombre",
   },
   {
     enableSorting: true,
@@ -53,7 +53,7 @@ export const skeletonColumns: Array<ColumnDef<Author>> = [
     cell: () => {
       return <Skeleton className="h-8" />;
     },
-    header: "Biography",
+    header: "Biografía",
   },
 
   {
@@ -63,6 +63,6 @@ export const skeletonColumns: Array<ColumnDef<Author>> = [
     cell: () => {
       return <Skeleton className="h-8" />;
     },
-    header: "Created At",
+    header: "Fecha de Creación",
   },
 ];

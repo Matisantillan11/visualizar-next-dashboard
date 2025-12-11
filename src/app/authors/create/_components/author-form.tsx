@@ -60,9 +60,9 @@ export default function AuthorForm() {
       <div className="mb-4.5">
         <FormInput
           name="name"
-          label="Author Name"
+          label="Nombre del Autor"
           type="text"
-          placeholder="Enter author name"
+          placeholder="Ingrese el nombre del autor"
           required
           value={formData.name}
           onChange={handleInputChange("name")}
@@ -71,13 +71,13 @@ export default function AuthorForm() {
 
       <div className="mb-4.5">
         <label className="text-body-sm font-medium text-dark dark:text-white">
-          Biography
+          Biografía
           <span className="ml-1 select-none text-red">*</span>
         </label>
         <div className="relative mt-3">
           <textarea
             name="biography"
-            placeholder="Enter author biography"
+            placeholder="Ingrese la biografía del autor"
             rows={4}
             required
             value={formData.biography}
@@ -102,10 +102,10 @@ export default function AuthorForm() {
           {isPending ? (
             <div className="flex items-center gap-2">
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-              Creating...
+              Creando...
             </div>
           ) : (
-            "Create Author"
+            "Crear Autor"
           )}
         </button>
 
@@ -115,7 +115,7 @@ export default function AuthorForm() {
           disabled={isPending}
           className="flex w-full justify-center rounded-lg border border-stroke bg-white p-3 font-medium text-dark hover:bg-gray-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-dark-3 dark:bg-gray-dark dark:text-white dark:hover:bg-dark-2"
         >
-          Cancel
+          Cancelar
         </button>
       </div>
     </form>

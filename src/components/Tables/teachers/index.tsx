@@ -19,7 +19,7 @@ export async function TeachersTable({
       )}
     >
       <h2 className="mb-4 text-body-2xlg font-bold text-dark dark:text-white">
-        Teachers
+        Profesores
       </h2>
 
       <Table data={teachers} columns={columns} />

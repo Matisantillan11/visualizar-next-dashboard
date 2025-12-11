@@ -18,7 +18,7 @@ export const columns: Array<ColumnDef<BookRequest>> = [
     cell: ({ getValue }) => {
       return getValue() ?? EMPTY_PLACEHOLDER;
     },
-    header: "Title",
+    header: "Título",
   },
   {
     enableSorting: true,
@@ -27,7 +27,7 @@ export const columns: Array<ColumnDef<BookRequest>> = [
     cell: ({ getValue }) => {
       return getValue() ?? EMPTY_PLACEHOLDER;
     },
-    header: "Author",
+    header: "Autor",
   },
   {
     enableSorting: true,
@@ -38,7 +38,7 @@ export const columns: Array<ColumnDef<BookRequest>> = [
         ? `${(getValue() as string)?.slice(0, 150)}...`
         : EMPTY_PLACEHOLDER;
     },
-    header: "Comments",
+    header: "Comentarios",
   },
   {
     enableSorting: true,
@@ -50,7 +50,7 @@ export const columns: Array<ColumnDef<BookRequest>> = [
         EMPTY_PLACEHOLDER
       );
     },
-    header: "Animations",
+    header: "Animaciones",
   },
   {
     enableSorting: true,
@@ -59,7 +59,7 @@ export const columns: Array<ColumnDef<BookRequest>> = [
     cell: ({ getValue }) => {
       return getValue() ?? EMPTY_PLACEHOLDER;
     },
-    header: "Requested by",
+    header: "Solicitado por",
   },
   {
     enableSorting: true,
@@ -72,7 +72,7 @@ export const columns: Array<ColumnDef<BookRequest>> = [
       );
       return coursesNames.join(", ") ?? EMPTY_PLACEHOLDER;
     },
-    header: "Course",
+    header: "Curso",
   },
   {
     enableSorting: true,
@@ -81,7 +81,7 @@ export const columns: Array<ColumnDef<BookRequest>> = [
     cell: ({ getValue }) => {
       return formatDate(getValue() as string) ?? EMPTY_PLACEHOLDER;
     },
-    header: "Created At",
+    header: "Fecha de Creación",
   },
   {
     enableSorting: true,
@@ -93,7 +93,7 @@ export const columns: Array<ColumnDef<BookRequest>> = [
         <StatusCell requestId={request.id} currentStatus={request.status} />
       );
     },
-    header: "Status",
+    header: "Estado",
   },
   {
     id: "actions",
@@ -125,7 +125,7 @@ export const skeletonColumns: Array<ColumnDef<BookRequest>> = [
     cell: () => {
       return <Skeleton className="h-8" />;
     },
-    header: "Title",
+    header: "Título",
   },
   {
     enableSorting: true,
@@ -134,7 +134,7 @@ export const skeletonColumns: Array<ColumnDef<BookRequest>> = [
     cell: () => {
       return <Skeleton className="h-8" />;
     },
-    header: "Author",
+    header: "Autor",
   },
   {
     enableSorting: true,
@@ -143,7 +143,7 @@ export const skeletonColumns: Array<ColumnDef<BookRequest>> = [
     cell: () => {
       return <Skeleton className="h-8" />;
     },
-    header: "Comments",
+    header: "Comentarios",
   },
   {
     enableSorting: true,
@@ -152,7 +152,7 @@ export const skeletonColumns: Array<ColumnDef<BookRequest>> = [
     cell: () => {
       return <Skeleton className="h-8" />;
     },
-    header: "Animations",
+    header: "Animaciones",
   },
   {
     enableSorting: true,
@@ -161,7 +161,7 @@ export const skeletonColumns: Array<ColumnDef<BookRequest>> = [
     cell: () => {
       return <Skeleton className="h-8" />;
     },
-    header: "Created At",
+    header: "Fecha de Creación",
   },
   {
     enableSorting: true,
@@ -170,6 +170,6 @@ export const skeletonColumns: Array<ColumnDef<BookRequest>> = [
     cell: () => {
       return <Skeleton className="h-8" />;
     },
-    header: "Status",
+    header: "Estado",
   },
 ];

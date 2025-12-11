@@ -19,7 +19,7 @@ export function BooksTable({
       )}
     >
       <h2 className="mb-4 text-body-2xlg font-bold text-dark dark:text-white">
-        Books
+        Libros
       </h2>
 
       <Table data={books} columns={columns} />

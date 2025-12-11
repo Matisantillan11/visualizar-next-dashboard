@@ -106,7 +106,9 @@ export default function BookForm() {
       router.push("/books");
     } catch (error) {
       console.error("Error creating book:", error);
-      setErrors({ submit: "Failed to create book. Please try again." });
+      setErrors({
+        submit: "Error al crear el libro. Por favor intente nuevamente.",
+      });
     }
   };
 
@@ -160,9 +162,9 @@ export default function BookForm() {
       <div className="mb-4.5">
         <FormInput
           name="name"
-          label="Book Title"
+          label="Título del Libro"
           type="text"
-          placeholder="Enter book title"
+          placeholder="Ingrese el título del libro"
           required
           value={formData.name}
           onChange={handleInputChange("name")}
@@ -172,13 +174,13 @@ export default function BookForm() {
 
       <div className="mb-4.5">
         <label className="text-body-sm font-medium text-dark dark:text-white">
-          Description
+          Descripción
           <span className="ml-1 select-none text-red">*</span>
         </label>
         <div className="relative mt-3">
           <textarea
             name="description"
-            placeholder="Enter book description"
+            placeholder="Ingrese la descripción del libro"
             rows={4}
             required
             value={formData.description}
@@ -194,7 +196,7 @@ export default function BookForm() {
       <div className="mb-4.5">
         <FormInput
           name="releaseDate"
-          label="Release Date"
+          label="Fecha de Lanzamiento"
           type="date"
           placeholder=""
           required
@@ -207,10 +209,10 @@ export default function BookForm() {
       <div className="mb-4.5">
         <FormSelect
           name="authorId"
-          label="Author"
+          label="Autor"
           items={authorOptions}
           placeholder={
-            authors.length === 0 ? "Loading authors..." : "Select author"
+            authors.length === 0 ? "Cargando autores..." : "Seleccione el autor"
           }
           required
           disabled={authors.length === 0}
@@ -223,12 +225,12 @@ export default function BookForm() {
       <div className="mb-6">
         <FormSelect
           name="categoryId"
-          label="Genres"
+          label="Géneros"
           items={categoryOptions}
           placeholder={
             categories.length === 0
-              ? "Loading categories..."
-              : "Select categories"
+              ? "Cargando categorías..."
+              : "Seleccione las categorías"
           }
           required
           value={formData.categoryId}
@@ -240,10 +242,12 @@ export default function BookForm() {
       <div className="mb-6">
         <FormSelect
           name="courseId"
-          label="Courses"
+          label="Cursos"
           items={courseOptions}
           placeholder={
-            courses.length === 0 ? "Loading courses..." : "Select courses"
+            courses.length === 0
+              ? "Cargando cursos..."
+              : "Seleccione los cursos"
           }
           required
           value={formData.courseId}
@@ -254,7 +258,7 @@ export default function BookForm() {
 
       <div className="mb-6">
         <label className="text-body-sm font-medium text-dark dark:text-white">
-          Upload Image
+          Subir Imagen
           <span className="ml-1 select-none text-red">*</span>
         </label>
         <input
@@ -280,10 +284,10 @@ export default function BookForm() {
           {createBookMutation.isPending ? (
             <div className="flex items-center gap-2">
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-              Creating...
+              Creando...
             </div>
           ) : (
-            "Create Book"
+            "Crear Libro"
           )}
         </button>
 
@@ -293,7 +297,7 @@ export default function BookForm() {
           disabled={createBookMutation.isPending}
           className="flex w-full justify-center rounded-lg border border-stroke bg-white p-3 font-medium text-dark hover:bg-gray-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-dark-3 dark:bg-gray-dark dark:text-white dark:hover:bg-dark-2"
         >
-          Cancel
+          Cancelar
         </button>
       </div>
     </form>

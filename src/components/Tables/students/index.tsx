@@ -1,8 +1,8 @@
-import { cn } from "@/lib/utils";
 import Table from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 
-import { columns } from "./columns";
 import { Student } from "@/types/student";
+import { columns } from "./columns";
 
 export async function StudentsTable({
   className,
@@ -19,7 +19,7 @@ export async function StudentsTable({
       )}
     >
       <h2 className="mb-4 text-body-2xlg font-bold text-dark dark:text-white">
-        Students
+        Estudiantes
       </h2>
 
       <Table data={students} columns={columns} />

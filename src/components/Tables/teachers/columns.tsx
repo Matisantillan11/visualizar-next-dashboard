@@ -1,8 +1,8 @@
 "use client";
-import { ColumnDef } from "@tanstack/react-table";
 import { Skeleton } from "@/components/ui/skeleton";
-import { formatDate } from "@/utils/date-utils";
 import { Teacher } from "@/types/teacher";
+import { formatDate } from "@/utils/date-utils";
+import { ColumnDef } from "@tanstack/react-table";
 
 const EMPTY_PLACEHOLDER = "-";
 
@@ -14,7 +14,7 @@ export const columns: Array<ColumnDef<Teacher>> = [
     cell: ({ getValue }) => {
       return getValue() ?? EMPTY_PLACEHOLDER;
     },
-    header: "Name",
+    header: "Nombre",
   },
   {
     enableSorting: true,
@@ -41,7 +41,7 @@ export const columns: Array<ColumnDef<Teacher>> = [
     cell: ({ getValue }) => {
       return formatDate(getValue() as string) ?? EMPTY_PLACEHOLDER;
     },
-    header: "Created At",
+    header: "Fecha de Creación",
   },
 ];
 
@@ -53,7 +53,7 @@ export const skeletonColumns: Array<ColumnDef<Teacher>> = [
     cell: () => {
       return <Skeleton className="h-8" />;
     },
-    header: "Name",
+    header: "Nombre",
   },
   {
     enableSorting: true,
@@ -80,6 +80,6 @@ export const skeletonColumns: Array<ColumnDef<Teacher>> = [
     cell: () => {
       return <Skeleton className="h-8" />;
     },
-    header: "Created At",
+    header: "Fecha de Creación",
   },
 ];

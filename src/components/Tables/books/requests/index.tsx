@@ -19,7 +19,7 @@ export async function BooksRequestsTable({
       )}
     >
       <h2 className="mb-4 text-body-2xlg font-bold text-dark dark:text-white">
-        Books
+        Solicitudes de libros
       </h2>
 
       <Table data={booksRequest} columns={columns} />

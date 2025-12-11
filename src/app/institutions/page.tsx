@@ -10,19 +10,19 @@ export default function InstitutionsPage() {
 
   return (
     <>
-      <Breadcrumb pageName="Institutions" />
+      <Breadcrumb pageName="Instituciones" />
 
       <div className="space-y-6">
         {/* Header with Add New Institution button */}
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold text-dark dark:text-white">
-            Institution Management
+            Gestión de Instituciones
           </h2>
           <Link
             href="/institutions/create"
             className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
           >
-            Add New Institution
+            Agregar Nueva Institución
           </Link>
         </div>
 

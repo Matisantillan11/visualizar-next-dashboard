@@ -26,34 +26,34 @@ export default function UserForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const roleOptions = [
-    { value: Role.ADMIN, label: "Admin" },
-    { value: Role.TEACHER, label: "Teacher" },
-    { value: Role.STUDENT, label: "Student" },
+    { value: Role.ADMIN, label: "Administrador" },
+    { value: Role.TEACHER, label: "Profesor" },
+    { value: Role.STUDENT, label: "Estudiante" },
   ];
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
+      newErrors.name = "El nombre es requerido";
     } else if (formData.name.trim().length < 2) {
-      newErrors.name = "Name must be at least 2 characters";
+      newErrors.name = "El nombre debe tener al menos 2 caracteres";
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
+      newErrors.email = "El email es requerido";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address";
+      newErrors.email = "Por favor ingrese un email válido";
     }
 
     if (!formData.dni.trim()) {
-      newErrors.dni = "DNI is required";
+      newErrors.dni = "El DNI es requerido";
     } else if (!/^\d{7,8}$/.test(formData.dni.trim())) {
-      newErrors.dni = "DNI must be 7 or 8 digits";
+      newErrors.dni = "El DNI debe tener 7 u 8 dígitos";
     }
 
     if (!formData.role) {
-      newErrors.role = "Role is required";
+      newErrors.role = "El rol es requerido";
     }
 
     setErrors(newErrors);
@@ -73,11 +73,13 @@ export default function UserForm() {
         console.log("User created successfully:", result.data.user);
         router.push("/users");
       } else {
-        setErrors({ submit: result.error || "Failed to create user" });
+        setErrors({ submit: result.error || "Error al crear el usuario" });
       }
     } catch (error) {
       console.error("Error creating user:", error);
-      setErrors({ submit: "Failed to create user. Please try again." });
+      setErrors({
+        submit: "Error al crear el usuario. Por favor intente nuevamente.",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -108,9 +110,9 @@ export default function UserForm() {
       <div className="mb-4.5">
         <FormInput
           name="name"
-          label="Full Name"
+          label="Nombre Completo"
           type="text"
-          placeholder="Enter full name"
+          placeholder="Ingrese el nombre completo"
           required
           value={formData.name}
           onChange={handleInputChange("name")}
@@ -121,9 +123,9 @@ export default function UserForm() {
       <div className="mb-4.5">
         <FormInput
           name="email"
-          label="Email Address"
+          label="Dirección de Email"
           type="email"
-          placeholder="Enter email address"
+          placeholder="Ingrese la dirección de email"
           required
           value={formData.email}
           onChange={handleInputChange("email")}
@@ -136,7 +138,7 @@ export default function UserForm() {
           name="dni"
           label="DNI"
           type="text"
-          placeholder="Enter DNI number"
+          placeholder="Ingrese el número de DNI"
           required
           value={formData.dni}
           onChange={handleInputChange("dni")}
@@ -147,9 +149,9 @@ export default function UserForm() {
       <div className="mb-6">
         <FormSelect
           name="role"
-          label="Role"
+          label="Rol"
           items={roleOptions}
-          placeholder="Select user role"
+          placeholder="Seleccione el rol del usuario"
           required
           value={formData.role}
           onChange={handleInputChange("role")}
@@ -172,10 +174,10 @@ export default function UserForm() {
           {isLoading ? (
             <div className="flex items-center gap-2">
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-              Creating...
+              Creando...
             </div>
           ) : (
-            "Create User"
+            "Crear Usuario"
           )}
         </button>
 
@@ -185,7 +187,7 @@ export default function UserForm() {
           disabled={isLoading}
           className="flex w-full justify-center rounded-lg border border-stroke bg-white p-3 font-medium text-dark hover:bg-gray-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-dark-3 dark:bg-gray-dark dark:text-white dark:hover:bg-dark-2"
         >
-          Cancel
+          Cancelar
         </button>
       </div>
     </form>

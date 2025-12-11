@@ -10,19 +10,19 @@ export default async function StudentsPage() {
 
   return (
     <>
-      <Breadcrumb pageName="Students" />
+      <Breadcrumb pageName="Estudiantes" />
 
       <div className="space-y-6">
         {/* Header with Add New Student button */}
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold text-dark dark:text-white">
-            Student Management
+            Gestión de Estudiantes
           </h2>
           <Link
             href="/users/create"
             className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
           >
-            Add New Student
+            Agregar Nuevo Estudiante
           </Link>
         </div>
 

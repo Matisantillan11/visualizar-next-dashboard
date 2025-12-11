@@ -23,7 +23,7 @@ export const columns: Array<ColumnDef<Book>> = [
         />
       );
     },
-    header: "Image",
+    header: "Imagen",
   },
   {
     enableSorting: true,
@@ -32,7 +32,7 @@ export const columns: Array<ColumnDef<Book>> = [
     cell: ({ getValue }) => {
       return getValue() ?? EMPTY_PLACEHOLDER;
     },
-    header: "Name",
+    header: "Nombre",
   },
   {
     enableSorting: true,
@@ -43,7 +43,7 @@ export const columns: Array<ColumnDef<Book>> = [
         ? `${(getValue() as string)?.slice(0, 150)}...`
         : EMPTY_PLACEHOLDER;
     },
-    header: "description",
+    header: "Descripción",
   },
   {
     enableSorting: true,
@@ -54,7 +54,7 @@ export const columns: Array<ColumnDef<Book>> = [
         ? formatDate(getValue() as string)
         : formatDate(row.original.createdAt);
     },
-    header: "Released At",
+    header: "Fecha de Lanzamiento",
   },
   {
     enableSorting: true,
@@ -63,7 +63,7 @@ export const columns: Array<ColumnDef<Book>> = [
     cell: ({ getValue }) => {
       return formatDate(getValue() as string) ?? EMPTY_PLACEHOLDER;
     },
-    header: "Created At",
+    header: "Fecha de Creación",
   },
 ];
 
@@ -75,7 +75,7 @@ export const skeletonColumns: Array<ColumnDef<Book>> = [
     cell: () => {
       return <Skeleton className="h-8" />;
     },
-    header: "Image",
+    header: "Imagen",
   },
   {
     enableSorting: true,
@@ -84,7 +84,7 @@ export const skeletonColumns: Array<ColumnDef<Book>> = [
     cell: () => {
       return <Skeleton className="h-8" />;
     },
-    header: "Name",
+    header: "Nombre",
   },
   {
     enableSorting: true,
@@ -93,7 +93,7 @@ export const skeletonColumns: Array<ColumnDef<Book>> = [
     cell: () => {
       return <Skeleton className="h-8" />;
     },
-    header: "description",
+    header: "Descripción",
   },
   {
     enableSorting: true,
@@ -102,7 +102,7 @@ export const skeletonColumns: Array<ColumnDef<Book>> = [
     cell: () => {
       return <Skeleton className="h-8" />;
     },
-    header: "Released At",
+    header: "Fecha de Lanzamiento",
   },
   {
     enableSorting: true,
@@ -111,6 +111,6 @@ export const skeletonColumns: Array<ColumnDef<Book>> = [
     cell: () => {
       return <Skeleton className="h-8" />;
     },
-    header: "Created At",
+    header: "Fecha de Creación",
   },
 ];

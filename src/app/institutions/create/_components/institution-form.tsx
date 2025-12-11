@@ -32,27 +32,28 @@ export default function InstitutionForm() {
     const newErrors: Record<string, string> = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = "Institution name is required";
+      newErrors.name = "El nombre de la institución es requerido";
     } else if (formData.name.trim().length < 2) {
-      newErrors.name = "Institution name must be at least 2 characters";
+      newErrors.name =
+        "El nombre de la institución debe tener al menos 2 caracteres";
     }
 
     if (!formData.address.trim()) {
-      newErrors.address = "Address is required";
+      newErrors.address = "La dirección es requerida";
     } else if (formData.address.trim().length < 5) {
-      newErrors.address = "Address must be at least 5 characters";
+      newErrors.address = "La dirección debe tener al menos 5 caracteres";
     }
 
     if (!formData.phone.trim()) {
-      newErrors.phone = "Phone number is required";
+      newErrors.phone = "El número de teléfono es requerido";
     } else if (!/^[\d\s\-\+\(\)]+$/.test(formData.phone.trim())) {
-      newErrors.phone = "Please enter a valid phone number";
+      newErrors.phone = "Por favor ingrese un número de teléfono válido";
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
+      newErrors.email = "El email es requerido";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address";
+      newErrors.email = "Por favor ingrese un email válido";
     }
 
     return Object.keys(newErrors).length === 0;
@@ -100,9 +101,9 @@ export default function InstitutionForm() {
       <div className="mb-4.5">
         <FormInput
           name="name"
-          label="Institution Name"
+          label="Nombre de la Institución"
           type="text"
-          placeholder="Enter institution name"
+          placeholder="Ingrese el nombre de la institución"
           required
           value={formData.name}
           onChange={handleInputChange("name")}
@@ -112,9 +113,9 @@ export default function InstitutionForm() {
       <div className="mb-4.5">
         <FormInput
           name="address"
-          label="Address"
+          label="Dirección"
           type="text"
-          placeholder="Enter institution address"
+          placeholder="Ingrese la dirección de la institución"
           required
           value={formData.address}
           onChange={handleInputChange("address")}
@@ -124,9 +125,9 @@ export default function InstitutionForm() {
       <div className="mb-4.5">
         <FormInput
           name="phone"
-          label="Phone Number"
+          label="Número de Teléfono"
           type="tel"
-          placeholder="Enter phone number"
+          placeholder="Ingrese el número de teléfono"
           required
           value={formData.phone}
           onChange={handleInputChange("phone")}
@@ -136,9 +137,9 @@ export default function InstitutionForm() {
       <div className="mb-6">
         <FormInput
           name="email"
-          label="Email Address"
+          label="Dirección de Email"
           type="email"
-          placeholder="Enter email address"
+          placeholder="Ingrese la dirección de email"
           required
           value={formData.email}
           onChange={handleInputChange("email")}
@@ -154,10 +155,10 @@ export default function InstitutionForm() {
           {isPending ? (
             <div className="flex items-center gap-2">
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-              Creating...
+              Creando...
             </div>
           ) : (
-            "Create Institution"
+            "Crear Institución"
           )}
         </button>
 
@@ -167,7 +168,7 @@ export default function InstitutionForm() {
           disabled={isPending}
           className="flex w-full justify-center rounded-lg border border-stroke bg-white p-3 font-medium text-dark hover:bg-gray-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-dark-3 dark:bg-gray-dark dark:text-white dark:hover:bg-dark-2"
         >
-          Cancel
+          Cancelar
         </button>
       </div>
     </form>

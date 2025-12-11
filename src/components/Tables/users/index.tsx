@@ -1,8 +1,8 @@
-import { cn } from "@/lib/utils";
 import Table from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 
-import { columns } from "./columns";
 import { User } from "@/types/user";
+import { columns } from "./columns";
 
 export async function UsersTable({
   className,
@@ -19,7 +19,7 @@ export async function UsersTable({
       )}
     >
       <h2 className="mb-4 text-body-2xlg font-bold text-dark dark:text-white">
-        Users
+        Usuarios
       </h2>
 
       <Table data={users} columns={columns} />
