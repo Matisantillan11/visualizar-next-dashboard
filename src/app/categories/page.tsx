@@ -1,12 +1,13 @@
+"use client";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { Suspense } from "react";
-import Link from "next/link";
-import getCategories from "./action";
 import { CategoriesTable } from "@/components/Tables/categories";
 import { CategoriesSkeleton } from "@/components/Tables/categories/skeleton";
+import { useCategories } from "@/lib/react-query/categories";
+import Link from "next/link";
+import { Suspense } from "react";
 
-export default async function CategoriesPage() {
-  const categories = await getCategories();
+export default function CategoriesPage() {
+  const { data: categories } = useCategories();
 
   return (
     <>
@@ -28,7 +29,7 @@ export default async function CategoriesPage() {
 
         <div className="space-y-10">
           <Suspense fallback={<CategoriesSkeleton />}>
-            <CategoriesTable categories={categories} />
+            <CategoriesTable categories={categories ?? []} />
           </Suspense>
         </div>
       </div>
