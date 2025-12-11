@@ -1,4 +1,4 @@
-import { BaseEntity } from "./base-entity";
+import { BaseEntity } from "@/types/base-entity";
 
 export enum Role {
   ADMIN = "ADMIN",

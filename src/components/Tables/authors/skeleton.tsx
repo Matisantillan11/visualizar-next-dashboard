@@ -1,5 +1,5 @@
 import Table from "@/components/ui/table";
-import { Author } from "@/types/author";
+import { Author } from "@/lib/react-query/authors/author.types";
 import { skeletonColumns } from "./columns";
 
 export function AuthorsSkeleton() {

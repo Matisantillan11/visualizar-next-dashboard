@@ -1,7 +1,10 @@
 "use client";
 import { ArrowLeftIcon } from "@/assets/icons";
 import { Skeleton } from "@/components/ui/skeleton";
-import { BookRequest, BookRequestStatus } from "@/types/book";
+import {
+  BookRequest,
+  BookRequestStatus,
+} from "@/lib/react-query/books/books.types";
 import { formatDate } from "@/utils/date-utils";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";

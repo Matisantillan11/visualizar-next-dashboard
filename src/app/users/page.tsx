@@ -1,18 +1,13 @@
+"use client";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { UsersTable } from "@/components/Tables/users";
 import { UsersSkeleton } from "@/components/Tables/users/skeleton";
 
-import { Metadata } from "next";
+import { useUsers } from "@/lib/react-query/users/users.queries";
 import Link from "next/link";
-import { Suspense } from "react";
-import getUsers from "./action";
 
-export const metadata: Metadata = {
-  title: "Usuarios",
-};
-
-export default async function UsersPage() {
-  const users = await getUsers();
+export default function UsersPage() {
+  const { data: users, isPending } = useUsers();
 
   return (
     <>
@@ -33,9 +28,7 @@ export default async function UsersPage() {
         </div>
 
         <div className="space-y-10">
-          <Suspense fallback={<UsersSkeleton />}>
-            <UsersTable users={users} />
-          </Suspense>
+          {isPending ? <UsersSkeleton /> : <UsersTable users={users ?? []} />}
         </div>
       </div>
     </>

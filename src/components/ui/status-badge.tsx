@@ -1,7 +1,7 @@
 "use client";
 
+import { BookRequestStatus } from "@/lib/react-query/books/books.types";
 import { cn } from "@/lib/utils";
-import { BookRequestStatus } from "@/types/book";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 

@@ -1,7 +1,8 @@
-import type { Author } from "@/types/author";
-import type { Book } from "@/types/book";
-import type { Category } from "@/types/category";
-import type { Course } from "@/types/course";
+import { BaseEntity } from "@/types/base-entity";
+import type { Author } from "../authors/author.types";
+import type { Category } from "../categories/categories.types";
+import type { Course } from "../courses/courses.types";
+import { User } from "../users/users.types";
 
 /**
  * Input type for creating a new book
@@ -34,7 +35,43 @@ export interface BookCreationOptions {
   categories: Category[];
 }
 
-/**
- * Re-export Book type for convenience
- */
-export type { Book };
+export type Book = BaseEntity & {
+  name: string;
+  description: string;
+  imageUrl: string;
+  releaseDate: string;
+  author: Author;
+  authorId: string;
+  courses: Course[];
+  courseIds: string[];
+};
+
+enum AnimationType {
+  ALL,
+  MAIN,
+  EXTRA,
+}
+
+export enum BookRequestStatus {
+  PENDING = "PENDING",
+  APPROVED = "APPROVED",
+  DENIED = "DENIED",
+  PUBLISHED = "PUBLISHED",
+}
+
+export type BookRequestCourse = BaseEntity & {
+  bookRequestId: string;
+  courseId: string;
+  course: Course;
+};
+
+export type BookRequest = BaseEntity & {
+  userId: string;
+  title: string;
+  authorName: string;
+  comments: string;
+  animations: Array<AnimationType>;
+  status: BookRequestStatus;
+  user: User;
+  bookRequestCourse: Array<BookRequestCourse>;
+};

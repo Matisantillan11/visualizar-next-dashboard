@@ -1,5 +1,5 @@
 import Table from "@/components/ui/table";
-import { Teacher } from "@/types/teacher";
+import { Teacher } from "@/lib/react-query/teachers/teachers.types";
 import { skeletonColumns } from "./columns";
 
 export function TeachersSkeleton() {

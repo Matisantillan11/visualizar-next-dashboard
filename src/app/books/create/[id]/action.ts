@@ -1,10 +1,10 @@
 "use server";
 
 import { fetcher } from "@/lib/fetcher";
-import { Author } from "@/types/author";
-import { Book } from "@/types/book";
-import { Category } from "@/types/category";
-import { Course } from "@/types/course";
+import { Author } from "@/lib/react-query/authors/author.types";
+import { Book } from "@/lib/react-query/books/books.types";
+import { Category } from "@/lib/react-query/categories/categories.types";
+import { Course } from "@/lib/react-query/courses/courses.types";
 import { redirect } from "next/navigation";
 
 interface CreateBookData {

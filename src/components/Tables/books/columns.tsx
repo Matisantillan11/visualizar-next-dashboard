@@ -1,6 +1,6 @@
 "use client";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Book } from "@/types/book";
+import { Book } from "@/lib/react-query/books/books.types";
 import { formatDate } from "@/utils/date-utils";
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";

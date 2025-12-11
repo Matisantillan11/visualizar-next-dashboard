@@ -1,10 +1,10 @@
 import Table from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 
-import { Category } from "@/types/category";
+import { Category } from "@/lib/react-query/categories/categories.types";
 import { columns } from "./columns";
 
-export async function CategoriesTable({
+export function CategoriesTable({
   className,
   categories,
 }: {

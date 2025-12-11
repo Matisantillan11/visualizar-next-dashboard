@@ -1,7 +1,7 @@
 import Table from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 
-import { Institution } from "@/types/institutions";
+import { Institution } from "@/lib/react-query/institutions/institutions.types";
 import { columns } from "./columns";
 
 export function InstitutionsTable({

@@ -1,6 +1,6 @@
 "use client";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Category } from "@/types/category";
+import { Category } from "@/lib/react-query/categories/categories.types";
 import { formatDate } from "@/utils/date-utils";
 import { ColumnDef } from "@tanstack/react-table";
 

@@ -1,7 +1,7 @@
 "use server";
 
 import { fetcher } from "@/lib/fetcher";
-import { Role } from "@/types/user";
+import { Role } from "@/lib/react-query/users/users.types";
 import { redirect } from "next/navigation";
 
 interface CreateUserData {

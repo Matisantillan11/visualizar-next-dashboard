@@ -1,5 +1,5 @@
 import Table from "@/components/ui/table";
-import { BookRequest } from "@/types/book";
+import { BookRequest } from "@/lib/react-query/books/books.types";
 import { skeletonColumns } from "./columns";
 
 export function BooksSkeleton() {

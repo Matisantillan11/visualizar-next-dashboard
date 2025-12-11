@@ -1,5 +1,5 @@
 import Table from "@/components/ui/table";
-import { User } from "@/types/user";
+import { User } from "@/lib/react-query/users/users.types";
 import { skeletonColumns } from "./columns";
 
 export function UsersSkeleton() {

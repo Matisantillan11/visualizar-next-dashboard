@@ -1,5 +1,5 @@
+import { Institution } from "@/lib/react-query/institutions/institutions.types";
 import { BaseEntity } from "@/types/base-entity";
-import { Institution } from "@/types/institutions";
 
 export type Course = BaseEntity & {
   name: string;

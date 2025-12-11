@@ -1,7 +1,7 @@
 import Table from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 
-import { BookRequest } from "@/types/book";
+import { BookRequest } from "@/lib/react-query/books/books.types";
 import { columns } from "./columns";
 
 export async function BooksRequestsTable({

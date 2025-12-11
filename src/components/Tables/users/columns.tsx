@@ -1,6 +1,6 @@
 "use client";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Role, User } from "@/types/user";
+import { Role, User } from "@/lib/react-query/users/users.types";
 import { formatDate } from "@/utils/date-utils";
 import { ColumnDef } from "@tanstack/react-table";
 import getRoleBadge from "./utils";

@@ -1,12 +1,12 @@
+"use client";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { TeachersTable } from "@/components/Tables/teachers";
 import { TeachersSkeleton } from "@/components/Tables/teachers/skeleton";
+import { useTeachers } from "@/lib/react-query/teachers";
 import Link from "next/link";
-import { Suspense } from "react";
-import getTeachers from "./action";
 
-export default async function TeachersPage() {
-  const teachers = await getTeachers();
+export default function TeachersPage() {
+  const { data: teachers, isPending } = useTeachers();
 
   return (
     <>
@@ -27,9 +27,11 @@ export default async function TeachersPage() {
         </div>
 
         <div className="space-y-10">
-          <Suspense fallback={<TeachersSkeleton />}>
-            <TeachersTable teachers={teachers} />
-          </Suspense>
+          {isPending ? (
+            <TeachersSkeleton />
+          ) : (
+            <TeachersTable teachers={teachers ?? []} />
+          )}
         </div>
       </div>
     </>

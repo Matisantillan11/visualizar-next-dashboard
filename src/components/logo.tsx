@@ -1,5 +1,4 @@
-import darkLogo from "@/assets/logos/logo.svg";
-import logo from "@/assets/logos/main.svg";
+import logo from "@/assets/logos/logo.svg";
 import Image from "next/image";
 
 export function Logo() {
@@ -10,15 +9,6 @@ export function Logo() {
         fill
         className="dark:hidden"
         alt="Visualizar logo"
-        role="presentation"
-        quality={100}
-      />
-
-      <Image
-        src={darkLogo}
-        fill
-        className="hidden dark:block"
-        alt="NextAdmin logo"
         role="presentation"
         quality={100}
       />

@@ -1,4 +1,4 @@
-import { Role } from "@/types/user";
+import { Role } from "@/lib/react-query/users/users.types";
 
 export interface AuthUser {
   id: string;

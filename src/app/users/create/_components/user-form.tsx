@@ -2,7 +2,7 @@
 
 import FormInput from "@/components/FormElements/form-input";
 import FormSelect from "@/components/FormElements/form-select";
-import { Role } from "@/types/user";
+import { Role } from "@/lib/react-query/users/users.types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createUser } from "../action";

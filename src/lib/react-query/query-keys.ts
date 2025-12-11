@@ -25,4 +25,6 @@ export const queryKeys = {
   institutions: createQueryKeyFactory("institutions"),
   users: createQueryKeyFactory("users"),
   bookRequests: createQueryKeyFactory("bookRequests"),
+  students: createQueryKeyFactory("students"),
+  teachers: createQueryKeyFactory("teachers"),
 } as const;

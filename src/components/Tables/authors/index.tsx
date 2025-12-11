@@ -1,10 +1,10 @@
 import Table from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 
-import { Author } from "@/types/author";
+import { Author } from "@/lib/react-query/authors/author.types";
 import { columns } from "./columns";
 
-export async function AuthorsTable({
+export function AuthorsTable({
   className,
   authors,
 }: {

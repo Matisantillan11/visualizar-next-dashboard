@@ -7,8 +7,8 @@ import {
   DropdownTrigger,
 } from "@/components/ui/dropdown";
 import { StatusBadge } from "@/components/ui/status-badge";
+import { BookRequestStatus } from "@/lib/react-query/books/books.types";
 import { cn } from "@/lib/utils";
-import { BookRequestStatus } from "@/types/book";
 import { useState } from "react";
 
 // Define the status transition rules

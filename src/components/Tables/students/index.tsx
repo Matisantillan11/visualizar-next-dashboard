@@ -1,10 +1,10 @@
 import Table from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 
-import { Student } from "@/types/student";
+import { Student } from "@/lib/react-query/students/students.types";
 import { columns } from "./columns";
 
-export async function StudentsTable({
+export function StudentsTable({
   className,
   students,
 }: {

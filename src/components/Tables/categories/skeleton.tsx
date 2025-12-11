@@ -1,5 +1,5 @@
 import Table from "@/components/ui/table";
-import { Category } from "@/types/category";
+import { Category } from "@/lib/react-query/categories/categories.types";
 import { skeletonColumns } from "./columns";
 
 export function CategoriesSkeleton() {

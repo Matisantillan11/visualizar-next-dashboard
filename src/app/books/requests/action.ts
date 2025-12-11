@@ -1,5 +1,8 @@
 import { fetcher } from "@/lib/fetcher";
-import { BookRequest, BookRequestStatus } from "@/types/book";
+import {
+  BookRequest,
+  BookRequestStatus,
+} from "@/lib/react-query/books/books.types";
 
 export default async function getBooksRequests() {
   return await fetcher<BookRequest[]>({ url: "/books/requests/all" });

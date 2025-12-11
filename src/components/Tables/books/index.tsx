@@ -1,7 +1,7 @@
 import Table from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 
-import { Book } from "@/types/book";
+import { Book } from "@/lib/react-query/books/books.types";
 import { columns } from "./columns";
 
 export function BooksTable({

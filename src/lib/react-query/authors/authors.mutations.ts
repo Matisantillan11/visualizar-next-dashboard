@@ -1,4 +1,4 @@
-import { Author } from "@/types/author";
+import { Author } from "@/lib/react-query/authors/author.types";
 import { createMutation } from "../mutation-factory";
 import { queryKeys } from "../query-keys";
 import { CreateAuthorInput } from "./author.types";

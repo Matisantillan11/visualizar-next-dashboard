@@ -2,13 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-type PropsType = {
-  searchParams: Promise<{
-    selected_time_frame?: string;
-  }>;
-};
-
-export default function Home({ searchParams }: PropsType) {
+export default function Home() {
   // force the user to go to books page
   const router = useRouter();
   useEffect(() => {

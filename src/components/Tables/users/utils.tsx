@@ -1,6 +1,7 @@
-import { Role } from "@/types/user";
 import { Badge } from "@/components/ui/badge";
+import { Role } from "@/lib/react-query/users/users.types";
 import { ReactNode } from "react";
+
 export default function getRoleBadge(role: Role): ReactNode {
   const badge = {
     [Role.ADMIN]: (

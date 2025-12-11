@@ -1,5 +1,5 @@
 import Table from "@/components/ui/table";
-import { Institution } from "@/types/institutions";
+import { Institution } from "@/lib/react-query/institutions/institutions.types";
 import { skeletonColumns } from "./columns";
 
 export function InstitutionsSkeleton() {

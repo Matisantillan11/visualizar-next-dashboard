@@ -1,17 +1,17 @@
-import type { Category } from "@/types/category";
+import type { Category } from "@/lib/react-query/categories/categories.types";
 import { createQuery } from "../query-factory";
 import { queryKeys } from "../query-keys";
 
 /**
  * Hook to fetch all categories
- * 
+ *
  * @example
  * ```tsx
  * function CategorySelect() {
  *   const { data: categories, isLoading } = useCategories();
- *   
+ *
  *   if (isLoading) return <div>Loading categories...</div>;
- *   
+ *
  *   return (
  *     <select>
  *       {categories?.map(category => (

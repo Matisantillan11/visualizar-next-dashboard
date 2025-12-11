@@ -1,17 +1,17 @@
-import type { Author } from "@/types/author";
+import type { Author } from "@/lib/react-query/authors/author.types";
 import { createQuery } from "../query-factory";
 import { queryKeys } from "../query-keys";
 
 /**
  * Hook to fetch all authors
- * 
+ *
  * @example
  * ```tsx
  * function AuthorSelect() {
  *   const { data: authors, isLoading } = useAuthors();
- *   
+ *
  *   if (isLoading) return <div>Loading authors...</div>;
- *   
+ *
  *   return (
  *     <select>
  *       {authors?.map(author => (

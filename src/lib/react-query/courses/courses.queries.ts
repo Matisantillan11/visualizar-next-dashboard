@@ -1,17 +1,17 @@
-import type { Course } from "@/types/course";
 import { createQuery } from "../query-factory";
 import { queryKeys } from "../query-keys";
+import { Course } from "./courses.types";
 
 /**
  * Hook to fetch all courses
- * 
+ *
  * @example
  * ```tsx
  * function CourseSelect() {
  *   const { data: courses, isLoading } = useCourses();
- *   
+ *
  *   if (isLoading) return <div>Loading courses...</div>;
- *   
+ *
  *   return (
  *     <select>
  *       {courses?.map(course => (

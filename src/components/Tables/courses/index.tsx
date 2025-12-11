@@ -1,7 +1,7 @@
 import Table from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 
-import { Course } from "@/types/course";
+import { Course } from "@/lib/react-query/courses/courses.types";
 import { columns } from "./columns";
 
 export function CoursesTable({
