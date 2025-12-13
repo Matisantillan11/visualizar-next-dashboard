@@ -8,8 +8,8 @@ export type CreateInstitutionInput = {
 };
 
 export type Institution = BaseEntity & {
-  name: string;
   address: string;
+  name: string;
   phone: string;
   email: string;
 };

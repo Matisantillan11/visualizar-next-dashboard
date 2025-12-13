@@ -3,24 +3,35 @@
 import FormInput from "@/components/FormElements/form-input";
 import FormSelect from "@/components/FormElements/form-select";
 import { useCreateCourse } from "@/lib/react-query/courses";
+import { useUpdateCourse } from "@/lib/react-query/courses/courses.mutations";
 import { useInstitutions } from "@/lib/react-query/institutions";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { CourseResponse } from "../../[id]/utils";
 
 interface CreateCourseFormData {
   name: string;
   institutionId: string;
 }
 
-export default function CourseForm() {
+export default function CourseForm({
+  courseId,
+  course,
+}: {
+  courseId?: string;
+  course?: CourseResponse;
+}) {
   const router = useRouter();
   const { data: institutions, isPending: loadingInstitutions } =
     useInstitutions();
   const { mutate: createCourse, isPending, isSuccess } = useCreateCourse();
 
+  const { mutate: updateCourse, isPending: updatePending } =
+    useUpdateCourse(courseId);
+
   const [formData, setFormData] = useState<CreateCourseFormData>({
-    name: "",
-    institutionId: "",
+    name: course?.name ?? "",
+    institutionId: course?.institution?.id ?? "",
   });
 
   useEffect(() => {
@@ -45,6 +56,7 @@ export default function CourseForm() {
       newErrors.institutionId = "La institución es requerida";
     }
 
+    console.log({ errores: Object.keys(newErrors) });
     return Object.keys(newErrors).length === 0;
   };
 
@@ -53,13 +65,25 @@ export default function CourseForm() {
       return;
     }
 
-    try {
-      await createCourse({
-        name: formData.name,
-        institutionId: formData.institutionId,
-      });
-    } catch (error) {
-      console.error("Error creating course:", error);
+    if (!courseId) {
+      try {
+        await createCourse({
+          name: formData.name,
+          institutionId: formData.institutionId,
+        });
+      } catch (error) {
+        console.error("Error creating course:", error);
+      }
+    } else {
+      try {
+        await updateCourse({
+          name: formData.name,
+          institutionId: formData.institutionId,
+          institutionCourseId: course?.institutionCourseId,
+        });
+      } catch (error) {
+        console.error("Error updating course:", error);
+      }
     }
   };
 
@@ -120,15 +144,23 @@ export default function CourseForm() {
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
               Creando...
             </div>
-          ) : (
+          ) : !courseId ? (
             "Crear Curso"
-          )}
+          ) : null}
+          {updatePending ? (
+            <div className="flex items-center gap-2">
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+              Actualizando...
+            </div>
+          ) : courseId ? (
+            "Actualizar Curso"
+          ) : null}
         </button>
 
         <button
           type="button"
           onClick={() => router.push("/courses")}
-          disabled={isPending}
+          disabled={isPending || updatePending}
           className="flex w-full justify-center rounded-lg border border-stroke bg-white p-3 font-medium text-dark hover:bg-gray-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-dark-3 dark:bg-gray-dark dark:text-white dark:hover:bg-dark-2"
         >
           Cancelar

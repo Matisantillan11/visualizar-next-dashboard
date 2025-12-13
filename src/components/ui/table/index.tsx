@@ -1,26 +1,28 @@
 "use client";
 import { ZapIcon } from "@/components/Layouts/sidebar/icons";
 import {
-  TableRoot,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "./table-core";
-import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import {
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRoot,
+  TableRow,
+} from "./table-core";
 
 export default function Table<T>({
   data,
   columns,
+  onRowClick,
 }: {
   data: Array<T>;
   columns: Array<ColumnDef<T>>;
+  onRowClick?: (row: T) => void;
 }) {
   const table = useReactTable({
     data,
@@ -58,6 +60,7 @@ export default function Table<T>({
                 <TableRow
                   className="text-left text-base font-medium text-dark dark:text-white"
                   key={row.id}
+                  onClick={() => onRowClick?.(row.original)}
                 >
                   {visibleCells.map((cell) => (
                     <TableCell key={cell.id}>

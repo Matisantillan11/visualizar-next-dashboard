@@ -29,3 +29,9 @@ export const useCourses = () =>
     url: "/courses",
     queryKey: queryKeys.courses.lists(),
   })();
+
+export const useCourseById = (id: string) =>
+  createQuery<Course>({
+    url: `/courses/${id}`,
+    queryKey: queryKeys.courses.detail(id),
+  })();
