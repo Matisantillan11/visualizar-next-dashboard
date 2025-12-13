@@ -7,3 +7,7 @@ export type Category = BaseEntity & {
 export type CreateCategoryInput = {
   name: string;
 };
+
+export type UpdateCategoryInput = {
+  name: string;
+};

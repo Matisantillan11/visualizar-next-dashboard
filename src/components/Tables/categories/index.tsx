@@ -2,6 +2,7 @@ import Table from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 
 import { Category } from "@/lib/react-query/categories/categories.types";
+import { useRouter } from "next/navigation";
 import { columns } from "./columns";
 
 export function CategoriesTable({
@@ -11,6 +12,15 @@ export function CategoriesTable({
   className?: string;
   categories: Category[];
 }) {
+  const router = useRouter();
+
+  const handleRowClick = (row: Category) => {
+    const id = row?.id;
+
+    if (!id) return;
+    router.push(`/categories/${id}`);
+  };
+
   return (
     <div
       className={cn(
@@ -22,7 +32,7 @@ export function CategoriesTable({
         Categorias de libros
       </h2>
 
-      <Table data={categories} columns={columns} />
+      <Table data={categories} columns={columns} onRowClick={handleRowClick} />
     </div>
   );
 }
