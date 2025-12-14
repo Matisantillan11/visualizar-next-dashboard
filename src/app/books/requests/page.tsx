@@ -1,6 +1,6 @@
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { BooksRequestsTable } from "@/components/Tables/books/requests";
-import { BooksSkeleton } from "@/components/Tables/books/skeleton";
+import Breadcrumb from "@/components/breadcrumb";
+import { BooksRequestsTable } from "@/components/tables/books/requests";
+import { BooksSkeleton } from "@/components/tables/books/skeleton";
 import { Suspense } from "react";
 import getBooksRequests from "./action";
 

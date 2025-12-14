@@ -1,7 +1,7 @@
 "use client";
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { InstitutionsTable } from "@/components/Tables/institutions";
-import { InstitutionsSkeleton } from "@/components/Tables/institutions/skeleton";
+import Breadcrumb from "@/components/breadcrumb";
+import { InstitutionsTable } from "@/components/tables/institutions";
+import { InstitutionsSkeleton } from "@/components/tables/institutions/skeleton";
 import { useInstitutions } from "@/lib/react-query/institutions";
 import Link from "next/link";
 

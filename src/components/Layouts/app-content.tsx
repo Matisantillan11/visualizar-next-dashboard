@@ -1,7 +1,7 @@
 "use client";
 
-import { Header } from "@/components/Layouts/header";
-import { Sidebar } from "@/components/Layouts/sidebar";
+import { Header } from "@/components/layouts/header";
+import { Sidebar } from "@/components/layouts/sidebar";
 import { ProtectedLayout } from "@/components/ProtectedLayout";
 import { usePathname } from "next/navigation";
 import type { PropsWithChildren } from "react";

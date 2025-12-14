@@ -1,5 +1,5 @@
 "use client";
-import { ZapIcon } from "@/components/Layouts/sidebar/icons";
+import { ZapIcon } from "@/components/layouts/sidebar/icons";
 import {
   ColumnDef,
   flexRender,

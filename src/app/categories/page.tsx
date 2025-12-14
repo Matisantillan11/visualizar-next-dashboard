@@ -1,7 +1,7 @@
 "use client";
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { CategoriesTable } from "@/components/Tables/categories";
-import { CategoriesSkeleton } from "@/components/Tables/categories/skeleton";
+import Breadcrumb from "@/components/breadcrumb";
+import { CategoriesTable } from "@/components/tables/categories";
+import { CategoriesSkeleton } from "@/components/tables/categories/skeleton";
 import { useCategories } from "@/lib/react-query/categories";
 import Link from "next/link";
 

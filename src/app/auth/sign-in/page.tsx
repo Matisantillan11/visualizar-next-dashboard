@@ -1,4 +1,4 @@
-import SigninWithPassword from "@/components/Auth/SigninWithPassword";
+import SigninWithPassword from "@/components/auth/SigninWithPassword";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

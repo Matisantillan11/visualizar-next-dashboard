@@ -1,4 +1,4 @@
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import Breadcrumb from "@/components/breadcrumb";
 import CategoryForm from "./_components/category-form";
 
 export default function CreateCategoryPage() {

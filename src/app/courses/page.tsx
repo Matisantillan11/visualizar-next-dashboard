@@ -1,7 +1,7 @@
 "use client";
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { CoursesTable } from "@/components/Tables/courses";
-import { CourseSkeleton } from "@/components/Tables/courses/skeleton";
+import Breadcrumb from "@/components/breadcrumb";
+import { CoursesTable } from "@/components/tables/courses";
+import { CourseSkeleton } from "@/components/tables/courses/skeleton";
 import { useCourses } from "@/lib/react-query/courses";
 import Link from "next/link";
 

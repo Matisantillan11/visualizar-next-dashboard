@@ -1,6 +1,6 @@
 "use client";
 
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import Breadcrumb from "@/components/breadcrumb";
 import Image from "next/image";
 
 import { useState } from "react";

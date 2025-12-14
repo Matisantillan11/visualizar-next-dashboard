@@ -1,6 +1,4 @@
-import FormInput, {
-  FormInputProps,
-} from "@/components/FormElements/form-input";
+import FormInput, { FormInputProps } from "@/components/ui/form-input";
 import { Controller, FieldValues, Path, UseFormReturn } from "react-hook-form";
 
 export const InputFormField = <TFieldValues extends FieldValues>({

@@ -1,4 +1,4 @@
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import Breadcrumb from "@/components/breadcrumb";
 import UserForm from "./_components/user-form";
 
 export default function CreateUserPage() {

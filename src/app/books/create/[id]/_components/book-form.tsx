@@ -1,7 +1,7 @@
 "use client";
 
-import FormInput from "@/components/FormElements/form-input";
-import FormSelect from "@/components/FormElements/form-select";
+import FormInput from "@/components/ui/form-input";
+import FormSelect from "@/components/ui/form-select";
 import { useAuthors } from "@/lib/react-query/authors";
 import {
   Book,

@@ -1,7 +1,7 @@
 "use client";
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { AuthorsTable } from "@/components/Tables/authors";
-import { AuthorsSkeleton } from "@/components/Tables/authors/skeleton";
+import Breadcrumb from "@/components/breadcrumb";
+import { AuthorsTable } from "@/components/tables/authors";
+import { AuthorsSkeleton } from "@/components/tables/authors/skeleton";
 import { useAuthors } from "@/lib/react-query/authors";
 import Link from "next/link";
 

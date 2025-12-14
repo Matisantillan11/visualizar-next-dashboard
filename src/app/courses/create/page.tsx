@@ -1,4 +1,4 @@
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import Breadcrumb from "@/components/breadcrumb";
 import CourseForm from "./_components/course-form";
 
 export default function CreateCoursePage() {

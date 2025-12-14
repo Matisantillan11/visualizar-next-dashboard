@@ -1,6 +1,4 @@
-import FormSelect, {
-  FormSelectProps,
-} from "@/components/FormElements/form-select";
+import FormSelect, { FormSelectProps } from "@/components/ui/form-select";
 import { Controller, FieldValues, Path, UseFormReturn } from "react-hook-form";
 
 export const InputFormSelect = <TFieldValues extends FieldValues>({

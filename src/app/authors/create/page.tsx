@@ -1,4 +1,4 @@
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import Breadcrumb from "@/components/breadcrumb";
 import AuthorForm from "./_components/author-form";
 
 export default function CreateAuthorPage() {

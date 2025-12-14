@@ -1,4 +1,4 @@
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import Breadcrumb from "@/components/breadcrumb";
 import InstitutionForm from "./_components/institution-form";
 
 export default function CreateInstitutionPage() {

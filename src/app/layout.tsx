@@ -7,7 +7,7 @@ import "jsvectormap/dist/jsvectormap.css";
 import type { Metadata } from "next";
 import NextTopLoader from "nextjs-toploader";
 import type { PropsWithChildren } from "react";
-import { AppContent } from "../components/Layouts/app-content";
+import { AppContent } from "../components/layouts/app-content";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {

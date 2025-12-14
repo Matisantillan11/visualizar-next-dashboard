@@ -1,8 +1,8 @@
 "use client";
 
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { BooksTable } from "@/components/Tables/books";
-import { BooksSkeleton } from "@/components/Tables/books/skeleton";
+import Breadcrumb from "@/components/breadcrumb";
+import { BooksTable } from "@/components/tables/books";
+import { BooksSkeleton } from "@/components/tables/books/skeleton";
 import { useBooks } from "@/lib/react-query/books";
 
 export default function BooksPage() {

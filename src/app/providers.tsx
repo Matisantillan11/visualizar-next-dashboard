@@ -1,6 +1,6 @@
 "use client";
 
-import { SidebarProvider } from "@/components/Layouts/sidebar/sidebar-context";
+import { SidebarProvider } from "@/components/layouts/sidebar/sidebar-context";
 import { AuthProvider } from "@/contexts/auth-context";
 import { ReactQueryProvider } from "@/lib/react-query";
 import { ThemeProvider } from "next-themes";
