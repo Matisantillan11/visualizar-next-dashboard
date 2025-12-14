@@ -1,32 +1,49 @@
 "use client";
 
 import FormInput from "@/components/FormElements/form-input";
-import { useCreateAuthor } from "@/lib/react-query/authors/authors.mutations";
+import { Author } from "@/lib/react-query/authors/author.types";
+import {
+  useCreateAuthor,
+  useUpdateAuthor,
+} from "@/lib/react-query/authors/authors.mutations";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
 interface CreateAuthorFormData {
   name: string;
   biography: string;
-  imageUrl: string;
 }
 
-export default function AuthorForm() {
+export default function AuthorForm({
+  authorId,
+  author,
+}: {
+  authorId?: string;
+  author?: Author;
+}) {
   const router = useRouter();
   const [formData, setFormData] = useState<CreateAuthorFormData>({
-    name: "",
-    biography: "",
-    imageUrl: "",
+    name: author?.name ?? "",
+    biography: author?.biography ?? "",
   });
 
   const { mutate, isPending, isSuccess, isError, error } = useCreateAuthor();
+  const { mutate: updateAuthor, isPending: isUpdatingAuthor } =
+    useUpdateAuthor(authorId);
 
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault(); // Prevent default form submission
 
       try {
-        await mutate({ name: formData.name, biography: formData.biography });
+        if (authorId) {
+          await updateAuthor({
+            name: formData.name,
+            biography: formData.biography,
+          });
+        } else {
+          await mutate({ name: formData.name, biography: formData.biography });
+        }
       } catch (error) {
         console.error("Error creating author:", error);
       } finally {
@@ -50,7 +67,6 @@ export default function AuthorForm() {
       setFormData({
         name: "",
         biography: "",
-        imageUrl: "",
       });
     }
   }, [isSuccess]);
@@ -97,13 +113,15 @@ export default function AuthorForm() {
         <button
           className="flex w-full justify-center rounded-lg bg-primary p-3 font-medium text-white hover:bg-opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
           type="submit"
-          disabled={isPending}
+          disabled={isPending || isUpdatingAuthor}
         >
-          {isPending ? (
+          {isPending || isUpdatingAuthor ? (
             <div className="flex items-center gap-2">
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-              Creando...
+              {authorId ? "Actualizando..." : "Creando..."}
             </div>
+          ) : authorId ? (
+            "Actualizar Autor"
           ) : (
             "Crear Autor"
           )}

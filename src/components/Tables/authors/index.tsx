@@ -2,6 +2,7 @@ import Table from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 
 import { Author } from "@/lib/react-query/authors/author.types";
+import { useRouter } from "next/navigation";
 import { columns } from "./columns";
 
 export function AuthorsTable({
@@ -11,6 +12,14 @@ export function AuthorsTable({
   className?: string;
   authors: Author[];
 }) {
+  const router = useRouter();
+
+  const handleRowClick = (row: Author) => {
+    const authorId = row?.id;
+    if (!authorId) return;
+    router.push(`/authors/${authorId}`);
+  };
+
   return (
     <div
       className={cn(
@@ -22,7 +31,7 @@ export function AuthorsTable({
         Autores
       </h2>
 
-      <Table data={authors} columns={columns} />
+      <Table data={authors} columns={columns} onRowClick={handleRowClick} />
     </div>
   );
 }

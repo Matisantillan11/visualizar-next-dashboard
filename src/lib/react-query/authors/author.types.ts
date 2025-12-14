@@ -5,6 +5,11 @@ export type CreateAuthorInput = {
   biography: string;
 };
 
+export type UpdateAuthorInput = {
+  name: string;
+  biography: string;
+};
+
 export type Author = BaseEntity & {
   name: string;
   biography: string;
