@@ -1,12 +1,13 @@
 "use client";
 
-import FormInput from "@/components/FormElements/form-input";
+import { InputFormField } from "@/components/ui/form/input-form-field";
 import { useCreateInstitution } from "@/lib/react-query/institutions";
 import { useUpdateInstitution } from "@/lib/react-query/institutions/institutions.mutations";
 import { Institution } from "@/lib/react-query/institutions/institutions.types";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-
+import { FormProvider, useForm } from "react-hook-form";
+import { insitutionSchema } from "./form-schema";
 interface CreateInstitutionFormData {
   name: string;
   address: string;
@@ -23,73 +24,43 @@ export default function InstitutionForm({
 }) {
   const router = useRouter();
 
-  const [formData, setFormData] = useState<CreateInstitutionFormData>({
-    name: institution?.name ?? "",
-    address: institution?.address ?? "",
-    phone: institution?.phone ?? "",
-    email: institution?.email ?? "",
+  const form = useForm({
+    defaultValues: {
+      name: "",
+      address: "",
+      phone: "",
+      email: "",
+    },
+    values: {
+      name: institution?.name ?? "",
+      address: institution?.address ?? "",
+      phone: institution?.phone ?? "",
+      email: institution?.email ?? "",
+    },
+    resolver: zodResolver(insitutionSchema),
   });
 
-  const {
-    mutateAsync: createInstitution,
-    isPending,
-    isSuccess,
-  } = useCreateInstitution();
+  const { mutateAsync: createInstitution, isPending } = useCreateInstitution();
 
   const { mutateAsync: updateInstitution, isPending: isUpdatePending } =
     useUpdateInstitution();
 
-  const validateForm = (): boolean => {
-    const newErrors: Record<string, string> = {};
-
-    if (!formData.name.trim()) {
-      newErrors.name = "El nombre de la institución es requerido";
-    } else if (formData.name.trim().length < 2) {
-      newErrors.name =
-        "El nombre de la institución debe tener al menos 2 caracteres";
-    }
-
-    if (!formData.address.trim()) {
-      newErrors.address = "La dirección es requerida";
-    } else if (formData.address.trim().length < 5) {
-      newErrors.address = "La dirección debe tener al menos 5 caracteres";
-    }
-
-    if (!formData.phone.trim()) {
-      newErrors.phone = "El número de teléfono es requerido";
-    } else if (!/^[\d\s\-\+\(\)]+$/.test(formData.phone.trim())) {
-      newErrors.phone = "Por favor ingrese un número de teléfono válido";
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = "El email es requerido";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Por favor ingrese un email válido";
-    }
-
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async () => {
-    if (!validateForm()) {
-      return;
-    }
-
+  const handleSubmit = async (data: CreateInstitutionFormData) => {
     try {
       if (institutionId) {
         await updateInstitution({
           id: institutionId,
-          name: formData.name,
-          address: formData.address,
-          phone: formData.phone,
-          email: formData.email,
+          name: data.name,
+          address: data.address,
+          phone: data.phone,
+          email: data.email,
         });
       } else {
         await createInstitution({
-          name: formData.name,
-          address: formData.address,
-          phone: formData.phone,
-          email: formData.email,
+          name: data.name,
+          address: data.address,
+          phone: data.phone,
+          email: data.email,
         });
       }
     } catch (error) {
@@ -97,103 +68,81 @@ export default function InstitutionForm({
     }
   };
 
-  const handleInputChange =
-    (field: keyof CreateInstitutionFormData) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setFormData((prev) => ({
-        ...prev,
-        [field]: value,
-      }));
-    };
-  useEffect(() => {
-    if (isSuccess) {
-      setFormData({
-        name: "",
-        address: "",
-        phone: "",
-        email: "",
-      });
-    }
-  }, [isSuccess]);
-
   return (
-    <form action={handleSubmit} className="p-6.5">
-      <div className="mb-4.5">
-        <FormInput
-          name="name"
-          label="Nombre de la Institución"
-          type="text"
-          placeholder="Ingrese el nombre de la institución"
-          required
-          value={formData.name}
-          onChange={handleInputChange("name")}
-        />
-      </div>
+    <FormProvider {...form}>
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="p-6.5">
+        <div className="mb-4.5">
+          <InputFormField
+            form={form}
+            name="name"
+            label="Nombre de la Institución"
+            type="text"
+            placeholder="Ingrese el nombre de la institución"
+            required
+          />
+        </div>
 
-      <div className="mb-4.5">
-        <FormInput
-          name="address"
-          label="Dirección"
-          type="text"
-          placeholder="Ingrese la dirección de la institución"
-          required
-          value={formData.address}
-          onChange={handleInputChange("address")}
-        />
-      </div>
+        <div className="mb-4.5">
+          <InputFormField
+            form={form}
+            name="address"
+            label="Dirección"
+            type="text"
+            placeholder="Ingrese la dirección de la institución"
+            required
+          />
+        </div>
 
-      <div className="mb-4.5">
-        <FormInput
-          name="phone"
-          label="Número de Teléfono"
-          type="tel"
-          placeholder="Ingrese el número de teléfono"
-          required
-          value={formData.phone}
-          onChange={handleInputChange("phone")}
-        />
-      </div>
+        <div className="mb-4.5">
+          <InputFormField
+            form={form}
+            name="phone"
+            label="Número de Teléfono"
+            type="tel"
+            placeholder="Ingrese el número de teléfono"
+            required
+          />
+        </div>
 
-      <div className="mb-6">
-        <FormInput
-          name="email"
-          label="Dirección de Email"
-          type="email"
-          placeholder="Ingrese la dirección de email"
-          required
-          value={formData.email}
-          onChange={handleInputChange("email")}
-        />
-      </div>
+        <div className="mb-6">
+          <InputFormField
+            form={form}
+            name="email"
+            label="Dirección de Email"
+            type="email"
+            placeholder="Ingrese la dirección de email"
+            required
+          />
+        </div>
 
-      <div className="flex gap-4">
-        <button
-          type="submit"
-          disabled={isPending || isUpdatePending}
-          className="flex w-full justify-center rounded-lg bg-primary p-3 font-medium text-white hover:bg-opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {isPending || isUpdatePending ? (
-            <div className="flex items-center gap-2">
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-              {institutionId ? "Actualizando..." : "Creando..."}
-            </div>
-          ) : institutionId ? (
-            "Actualizar Institución"
-          ) : (
-            "Crear Institución"
-          )}
-        </button>
+        <div className="flex gap-4">
+          <button
+            type="submit"
+            disabled={isPending || isUpdatePending}
+            className="flex w-full justify-center rounded-lg bg-primary p-3 font-medium text-white hover:bg-opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {isPending || isUpdatePending ? (
+              <div className="flex items-center gap-2">
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                {institutionId ? "Actualizando..." : "Creando..."}
+              </div>
+            ) : institutionId ? (
+              "Actualizar Institución"
+            ) : (
+              "Crear Institución"
+            )}
+          </button>
 
-        <button
-          type="button"
-          onClick={() => router.push("/institutions")}
-          disabled={isPending}
-          className="flex w-full justify-center rounded-lg border border-stroke bg-white p-3 font-medium text-dark hover:bg-gray-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-dark-3 dark:bg-gray-dark dark:text-white dark:hover:bg-dark-2"
-        >
-          Cancelar
-        </button>
-      </div>
-    </form>
+          <button
+            type="button"
+            onClick={() => router.push("/institutions")}
+            disabled={isPending}
+            className="flex w-full justify-center rounded-lg border border-stroke bg-white p-3 font-medium text-dark hover:bg-gray-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-dark-3 dark:bg-gray-dark dark:text-white dark:hover:bg-dark-2"
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </FormProvider>
   );
 }

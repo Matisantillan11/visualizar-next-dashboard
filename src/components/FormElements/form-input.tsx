@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { forwardRef, type HTMLInputTypeAttribute, useId } from "react";
 
-type FormInputProps = {
+export type FormInputProps = {
   className?: string;
   label: string;
   placeholder: string;

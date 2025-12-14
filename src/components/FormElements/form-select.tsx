@@ -4,7 +4,7 @@ import { ChevronUpIcon } from "@/assets/icons";
 import { cn } from "@/lib/utils";
 import { forwardRef, useId } from "react";
 
-type FormSelectProps = {
+export type FormSelectProps = {
   label: string;
   items: { value: string; label: string }[];
   prefixIcon?: React.ReactNode;
