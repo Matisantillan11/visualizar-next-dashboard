@@ -1,4 +1,6 @@
 import Breadcrumb from "@/components/breadcrumb";
+import { Book } from "@/lib/react-query/books";
+import { getBookRequestById } from "../../requests/action";
 import BookForm from "./_components/book-form";
 
 export default async function CreateBookPage({
@@ -7,7 +9,13 @@ export default async function CreateBookPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  console.log(id);
+  const bookRequest = await getBookRequestById(id);
+
+  const book: Partial<Book> = {
+    name: bookRequest.title,
+    courseIds: bookRequest.bookRequestCourse.map((course) => course.courseId),
+    authorId: bookRequest.authorId,
+  };
 
   return (
     <>
@@ -23,7 +31,7 @@ export default async function CreateBookPage({
               </h3>
             </div>
 
-            <BookForm />
+            <BookForm book={book} requestId={id} />
           </div>
         </div>
       </div>

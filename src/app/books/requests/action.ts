@@ -4,8 +4,14 @@ import {
   BookRequestStatus,
 } from "@/lib/react-query/books/books.types";
 
-export default async function getBooksRequests() {
+export async function getBooksRequests() {
   return await fetcher<BookRequest[]>({ url: "/books/requests/all" });
+}
+
+export async function getBookRequestById(requestId: string) {
+  return await fetcher<BookRequest & { authorId: string }>({
+    url: `/books/request/${requestId}`,
+  });
 }
 
 export async function updateBookRequestStatus(

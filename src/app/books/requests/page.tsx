@@ -2,7 +2,7 @@ import Breadcrumb from "@/components/breadcrumb";
 import { BooksRequestsTable } from "@/components/tables/books/requests";
 import { BooksSkeleton } from "@/components/tables/books/skeleton";
 import { Suspense } from "react";
-import getBooksRequests from "./action";
+import { getBooksRequests } from "./action";
 
 export default async function BooksPage() {
   const booksRequests = await getBooksRequests();

@@ -27,11 +27,13 @@ interface CreateBookFormData {
 const BUCKET = "visualizar-attachments";
 
 export default function BookForm({
+  requestId,
   bookId,
   book,
 }: {
+  requestId?: string;
   bookId?: string;
-  book?: Book;
+  book?: Book | Partial<Book>;
 }) {
   const router = useRouter();
 
@@ -50,10 +52,15 @@ export default function BookForm({
     name: book?.name ?? "",
     description: book?.description ?? "",
     imageUrl: book?.imageUrl ?? "",
-    authorId: book?.bookAuthor?.[0].authorId ?? "",
-    courseId: book?.bookCourse?.[0].courseId ?? "",
+    authorId: book?.authorId
+      ? book?.authorId
+      : (book?.bookAuthor?.[0].authorId ?? ""),
+    courseId: requestId
+      ? (book?.courseIds?.[0] ?? "")
+      : (book?.bookCourse?.[0]?.courseId ?? ""),
     categoryId: book?.bookCategory?.[0].categoryId ?? "",
   });
+
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   function slugify(text: string) {
@@ -108,7 +115,7 @@ export default function BookForm({
           courseId: formDataObj.get("courseId") as string,
           categoryId: formDataObj.get("categoryId") as string,
           animations: [""],
-          bookRequestId: "0f9e24ee-1487-45fa-8cf8-ccbad73551d9",
+          bookRequestId: requestId,
         };
 
         await createBookMutation.mutateAsync(bookData);
@@ -264,7 +271,7 @@ export default function BookForm({
       {bookId && book ? (
         <Image
           src={formData.imageUrl}
-          alt={book.name}
+          alt={book.name ? book.name : "book-image"}
           width={200}
           height={200}
           className="my-4 rounded-xl"
