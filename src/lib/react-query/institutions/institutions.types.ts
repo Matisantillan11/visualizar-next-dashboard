@@ -7,6 +7,13 @@ export type CreateInstitutionInput = {
   email: string;
 };
 
+export type UpdateInstitutionInput = {
+  name: string;
+  address: string;
+  phone: string;
+  email: string;
+};
+
 export type Institution = BaseEntity & {
   address: string;
   name: string;

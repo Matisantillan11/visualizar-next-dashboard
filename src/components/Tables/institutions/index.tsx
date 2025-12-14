@@ -2,6 +2,7 @@ import Table from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 
 import { Institution } from "@/lib/react-query/institutions/institutions.types";
+import { useRouter } from "next/navigation";
 import { columns } from "./columns";
 
 export function InstitutionsTable({
@@ -11,6 +12,14 @@ export function InstitutionsTable({
   className?: string;
   institutions: Institution[];
 }) {
+  const router = useRouter();
+
+  const handleRowClick = (institution: Institution) => {
+    const id = institution?.id;
+    if (!id) return;
+    router.push(`/institutions/${id}`);
+  };
+
   return (
     <div
       className={cn(
@@ -22,7 +31,11 @@ export function InstitutionsTable({
         Instituciones
       </h2>
 
-      <Table data={institutions} columns={columns} />
+      <Table
+        data={institutions}
+        columns={columns}
+        onRowClick={handleRowClick}
+      />
     </div>
   );
 }

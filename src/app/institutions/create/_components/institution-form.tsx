@@ -2,6 +2,8 @@
 
 import FormInput from "@/components/FormElements/form-input";
 import { useCreateInstitution } from "@/lib/react-query/institutions";
+import { useUpdateInstitution } from "@/lib/react-query/institutions/institutions.mutations";
+import { Institution } from "@/lib/react-query/institutions/institutions.types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -12,14 +14,20 @@ interface CreateInstitutionFormData {
   email: string;
 }
 
-export default function InstitutionForm() {
+export default function InstitutionForm({
+  institutionId,
+  institution,
+}: {
+  institutionId: string;
+  institution: Institution;
+}) {
   const router = useRouter();
 
   const [formData, setFormData] = useState<CreateInstitutionFormData>({
-    name: "",
-    address: "",
-    phone: "",
-    email: "",
+    name: institution?.name ?? "",
+    address: institution?.address ?? "",
+    phone: institution?.phone ?? "",
+    email: institution?.email ?? "",
   });
 
   const {
@@ -27,6 +35,9 @@ export default function InstitutionForm() {
     isPending,
     isSuccess,
   } = useCreateInstitution();
+
+  const { mutateAsync: updateInstitution, isPending: isUpdatePending } =
+    useUpdateInstitution(institutionId);
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -65,12 +76,21 @@ export default function InstitutionForm() {
     }
 
     try {
-      await createInstitution({
-        name: formData.name,
-        address: formData.address,
-        phone: formData.phone,
-        email: formData.email,
-      });
+      if (institutionId) {
+        await updateInstitution({
+          name: formData.name,
+          address: formData.address,
+          phone: formData.phone,
+          email: formData.email,
+        });
+      } else {
+        await createInstitution({
+          name: formData.name,
+          address: formData.address,
+          phone: formData.phone,
+          email: formData.email,
+        });
+      }
     } catch (error) {
       console.error("Error creating institution:", error);
     }
@@ -149,14 +169,16 @@ export default function InstitutionForm() {
       <div className="flex gap-4">
         <button
           type="submit"
-          disabled={isPending}
+          disabled={isPending || isUpdatePending}
           className="flex w-full justify-center rounded-lg bg-primary p-3 font-medium text-white hover:bg-opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isPending ? (
+          {isPending || isUpdatePending ? (
             <div className="flex items-center gap-2">
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-              Creando...
+              {institutionId ? "Actualizando..." : "Creando..."}
             </div>
+          ) : institutionId ? (
+            "Actualizar Institución"
           ) : (
             "Crear Institución"
           )}
