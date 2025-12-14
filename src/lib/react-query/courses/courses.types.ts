@@ -18,6 +18,7 @@ export type CreateCourseInput = {
 };
 
 export type UpdateCourseInput = {
+  id: string;
   name?: string;
   institutionId?: string;
   institutionCourseId?: string;

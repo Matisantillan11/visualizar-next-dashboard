@@ -25,12 +25,13 @@ export default function CategoryForm({
 
   const { mutate: createCategory, isPending, isSuccess } = useCreateCategory();
   const { mutate: updateCategory, isPending: isUpdatingBook } =
-    useUpdateCategory(categoryId);
+    useUpdateCategory();
 
   const handleSubmit = async () => {
     try {
       if (categoryId) {
         await updateCategory({
+          id: categoryId,
           name: formData.name,
         });
       } else {

@@ -29,7 +29,7 @@ export default function AuthorForm({
 
   const { mutate, isPending, isSuccess, isError, error } = useCreateAuthor();
   const { mutate: updateAuthor, isPending: isUpdatingAuthor } =
-    useUpdateAuthor(authorId);
+    useUpdateAuthor();
 
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
@@ -38,6 +38,7 @@ export default function AuthorForm({
       try {
         if (authorId) {
           await updateAuthor({
+            id: authorId,
             name: formData.name,
             biography: formData.biography,
           });

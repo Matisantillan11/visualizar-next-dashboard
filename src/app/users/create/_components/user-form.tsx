@@ -2,7 +2,8 @@
 
 import FormInput from "@/components/FormElements/form-input";
 import FormSelect from "@/components/FormElements/form-select";
-import { Role } from "@/lib/react-query/users/users.types";
+import { useUpdateUser } from "@/lib/react-query/users/users.mutations";
+import { Role, User } from "@/lib/react-query/users/users.types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createUser } from "../action";
@@ -14,16 +15,29 @@ interface CreateUserFormData {
   role: Role;
 }
 
-export default function UserForm() {
+export default function UserForm({
+  userId,
+  user,
+}: {
+  userId?: string;
+  user?: User;
+}) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<CreateUserFormData>({
-    name: "",
-    email: "",
-    dni: "",
-    role: "" as Role,
+    name: user?.name ?? "",
+    email: user?.email ?? "",
+    dni: user?.dni ?? "",
+    role: user?.role ?? ("" as Role),
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const {
+    mutateAsync: updateUser,
+    isPending: isUpdating,
+    isSuccess,
+    data,
+  } = useUpdateUser();
 
   const roleOptions = [
     { value: Role.ADMIN, label: "Administrador" },
@@ -61,19 +75,22 @@ export default function UserForm() {
   };
 
   const handleServerActionSubmit = async (formDataObj: FormData) => {
-    if (!validateForm()) {
-      return;
-    }
-
     setIsLoading(true);
 
     try {
-      const result = await createUser(formDataObj);
-      if (result.data.user) {
-        console.log("User created successfully:", result.data.user);
-        router.push("/users");
+      if (!userId) {
+        if (!validateForm()) {
+          return;
+        }
+        const result = await createUser(formDataObj);
+        if (result.data.user) {
+          console.log("User created successfully:", result.data.user);
+          router.push("/users");
+        } else {
+          setErrors({ submit: result.error || "Error al crear el usuario" });
+        }
       } else {
-        setErrors({ submit: result.error || "Error al crear el usuario" });
+        await updateUser({ id: userId, ...formData });
       }
     } catch (error) {
       console.error("Error creating user:", error);
@@ -103,6 +120,8 @@ export default function UserForm() {
         });
       }
     };
+
+  console.log({ isSuccess, data });
 
   // Using Server Actions (recommended)
   return (
@@ -168,14 +187,16 @@ export default function UserForm() {
       <div className="flex gap-4">
         <button
           type="submit"
-          disabled={isLoading}
+          disabled={isLoading || isUpdating}
           className="flex w-full justify-center rounded-lg bg-primary p-3 font-medium text-white hover:bg-opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isLoading ? (
+          {isLoading || isUpdating ? (
             <div className="flex items-center gap-2">
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-              Creando...
+              {userId ? "Actualizando..." : "Creando..."}
             </div>
+          ) : userId ? (
+            "Actualizar Usuario"
           ) : (
             "Crear Usuario"
           )}

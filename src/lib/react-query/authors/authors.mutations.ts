@@ -13,9 +13,9 @@ export const useCreateAuthor = () =>
     invalidateKeys: [queryKeys.authors.lists()],
   })();
 
-export const useUpdateAuthor = (id?: string) => {
+export const useUpdateAuthor = () => {
   return createMutation<Author, UpdateAuthorInput>({
-    url: `/authors/${id}`,
+    url: (variables) => `/authors/${variables.id}`,
     method: "PUT",
     invalidateKeys: [queryKeys.authors.lists()],
   })();

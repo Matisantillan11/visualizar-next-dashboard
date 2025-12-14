@@ -6,6 +6,7 @@ export type CreateAuthorInput = {
 };
 
 export type UpdateAuthorInput = {
+  id: string;
   name: string;
   biography: string;
 };

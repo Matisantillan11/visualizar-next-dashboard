@@ -14,9 +14,9 @@ export function useCreateCategory() {
   })();
 }
 
-export const useUpdateCategory = (id?: string) => {
+export const useUpdateCategory = () => {
   return createMutation<Category, UpdateCategoryInput>({
-    url: `/categories/${id}`,
+    url: (variables) => `/categories/${variables.id}`,
     method: "PUT",
     invalidateKeys: [queryKeys.categories.lists()],
   })();

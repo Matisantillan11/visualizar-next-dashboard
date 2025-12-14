@@ -30,8 +30,8 @@ export default function BookForm({
   bookId,
   book,
 }: {
-  bookId: string;
-  book: Book;
+  bookId?: string;
+  book?: Book;
 }) {
   const router = useRouter();
 
@@ -261,7 +261,7 @@ export default function BookForm({
         />
       </div>
 
-      {bookId ? (
+      {bookId && book ? (
         <Image
           src={formData.imageUrl}
           alt={book.name}

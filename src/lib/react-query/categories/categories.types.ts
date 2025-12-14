@@ -9,5 +9,6 @@ export type CreateCategoryInput = {
 };
 
 export type UpdateCategoryInput = {
+  id: string;
   name: string;
 };

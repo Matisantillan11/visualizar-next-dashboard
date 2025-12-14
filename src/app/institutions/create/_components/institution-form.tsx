@@ -18,8 +18,8 @@ export default function InstitutionForm({
   institutionId,
   institution,
 }: {
-  institutionId: string;
-  institution: Institution;
+  institutionId?: string;
+  institution?: Institution;
 }) {
   const router = useRouter();
 
@@ -37,7 +37,7 @@ export default function InstitutionForm({
   } = useCreateInstitution();
 
   const { mutateAsync: updateInstitution, isPending: isUpdatePending } =
-    useUpdateInstitution(institutionId);
+    useUpdateInstitution();
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -78,6 +78,7 @@ export default function InstitutionForm({
     try {
       if (institutionId) {
         await updateInstitution({
+          id: institutionId,
           name: formData.name,
           address: formData.address,
           phone: formData.phone,

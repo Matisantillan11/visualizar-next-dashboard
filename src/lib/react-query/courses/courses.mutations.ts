@@ -14,9 +14,9 @@ export const useCreateCourse = () => {
   })();
 };
 
-export const useUpdateCourse = (id?: string) => {
+export const useUpdateCourse = () => {
   return createMutation<Course, UpdateCourseInput>({
-    url: `/courses/${id}`,
+    url: (variables) => `/courses/${variables.id}`,
     method: "PUT",
     invalidateKeys: [queryKeys.courses.lists()],
   })();

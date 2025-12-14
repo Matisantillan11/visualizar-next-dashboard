@@ -26,8 +26,7 @@ export default function CourseForm({
     useInstitutions();
   const { mutate: createCourse, isPending, isSuccess } = useCreateCourse();
 
-  const { mutate: updateCourse, isPending: updatePending } =
-    useUpdateCourse(courseId);
+  const { mutate: updateCourse, isPending: updatePending } = useUpdateCourse();
 
   const [formData, setFormData] = useState<CreateCourseFormData>({
     name: course?.name ?? "",
@@ -77,6 +76,7 @@ export default function CourseForm({
     } else {
       try {
         await updateCourse({
+          id: courseId,
           name: formData.name,
           institutionId: formData.institutionId,
           institutionCourseId: course?.institutionCourseId,

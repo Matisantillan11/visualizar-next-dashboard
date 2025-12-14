@@ -13,3 +13,11 @@ export type User = BaseEntity & {
   dni: string;
   role: Role;
 };
+
+export type UpdateUserInput = {
+  id?: string;
+  email?: string;
+  name?: string | null;
+  dni?: string;
+  role?: Role;
+};

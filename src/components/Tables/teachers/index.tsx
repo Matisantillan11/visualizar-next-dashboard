@@ -2,6 +2,7 @@ import Table from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 
 import { Teacher } from "@/lib/react-query/teachers/teachers.types";
+import { useRouter } from "next/navigation";
 import { columns } from "./columns";
 
 export function TeachersTable({
@@ -11,6 +12,15 @@ export function TeachersTable({
   className?: string;
   teachers: Teacher[];
 }) {
+  const router = useRouter();
+
+  const handleOnRowClick = (row: Teacher) => {
+    const id = row?.userId;
+    if (id) {
+      router.push(`/users/${id}`);
+    }
+  };
+
   return (
     <div
       className={cn(
@@ -22,7 +32,7 @@ export function TeachersTable({
         Profesores
       </h2>
 
-      <Table data={teachers} columns={columns} />
+      <Table data={teachers} columns={columns} onRowClick={handleOnRowClick} />
     </div>
   );
 }

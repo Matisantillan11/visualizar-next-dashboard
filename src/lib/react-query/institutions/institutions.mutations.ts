@@ -14,9 +14,9 @@ export const useCreateInstitution = () => {
   })();
 };
 
-export const useUpdateInstitution = (id: string) => {
+export const useUpdateInstitution = () => {
   return createMutation<Institution, UpdateInstitutionInput>({
-    url: `/institutions/${id}`,
+    url: (variables) => `/institutions/${variables.id}`,
     method: "PUT",
     invalidateKeys: [queryKeys.institutions.lists()],
   })();
