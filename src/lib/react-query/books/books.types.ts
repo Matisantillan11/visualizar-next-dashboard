@@ -24,6 +24,14 @@ export interface CreateBookInput {
  */
 export interface UpdateBookInput extends Partial<CreateBookInput> {
   id: string;
+  name?: string;
+  description?: string;
+  imageUrl?: string;
+  releaseDate?: string;
+  authorId?: string;
+  courseId?: string;
+  categoryId?: string;
+  animations?: string[];
 }
 
 /**
@@ -35,6 +43,21 @@ export interface BookCreationOptions {
   categories: Category[];
 }
 
+export type BookAuthor = BaseEntity & {
+  authorId: string;
+  bookId: string;
+};
+
+export type BookCategory = BaseEntity & {
+  bookId: string;
+  categoryId: string;
+};
+
+export type BookCourse = BaseEntity & {
+  bookId: string;
+  courseId: string;
+};
+
 export type Book = BaseEntity & {
   name: string;
   description: string;
@@ -44,6 +67,10 @@ export type Book = BaseEntity & {
   authorId: string;
   courses: Course[];
   courseIds: string[];
+  bookAuthor?: Array<BookAuthor>;
+  bookCategory?: Array<BookCategory>;
+  bookCourse?: Array<BookCourse>;
+  bookRequestId?: string;
 };
 
 enum AnimationType {

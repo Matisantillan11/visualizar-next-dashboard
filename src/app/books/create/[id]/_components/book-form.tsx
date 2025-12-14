@@ -3,10 +3,16 @@
 import FormInput from "@/components/FormElements/form-input";
 import FormSelect from "@/components/FormElements/form-select";
 import { useAuthors } from "@/lib/react-query/authors";
-import { CreateBookInput, useCreateBook } from "@/lib/react-query/books";
+import {
+  Book,
+  CreateBookInput,
+  useCreateBook,
+  useUpdateBook,
+} from "@/lib/react-query/books";
 import { useCategories } from "@/lib/react-query/categories";
 import { useCourses } from "@/lib/react-query/courses";
 import { storeFile } from "@/lib/storage";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -14,15 +20,19 @@ interface CreateBookFormData {
   name: string;
   description: string;
   imageUrl: string;
-  releaseDate: string;
   authorId: string;
   courseId: string;
   categoryId: string;
-  animationFolderName: string;
 }
 const BUCKET = "visualizar-attachments";
 
-export default function BookForm() {
+export default function BookForm({
+  bookId,
+  book,
+}: {
+  bookId: string;
+  book: Book;
+}) {
   const router = useRouter();
 
   // Fetch data with TanStack Query
@@ -33,16 +43,16 @@ export default function BookForm() {
 
   // Create book mutation
   const createBookMutation = useCreateBook();
+  const { mutateAsync: updateBookMutation, isPending: updateBookLoading } =
+    useUpdateBook();
 
   const [formData, setFormData] = useState<CreateBookFormData>({
-    name: "",
-    description: "",
-    imageUrl: "",
-    releaseDate: "",
-    authorId: "",
-    courseId: "",
-    categoryId: "",
-    animationFolderName: "",
+    name: book?.name ?? "",
+    description: book?.description ?? "",
+    imageUrl: book?.imageUrl ?? "",
+    authorId: book?.bookAuthor?.[0].authorId ?? "",
+    courseId: book?.bookCourse?.[0].courseId ?? "",
+    categoryId: book?.bookCategory?.[0].categoryId ?? "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -63,45 +73,51 @@ export default function BookForm() {
     const formDataObj = new FormData(event.currentTarget);
 
     try {
-      // Get the file from the form data
-      const fileInput = document.querySelector(
-        'input[name="file"]',
-      ) as HTMLInputElement;
-      const file = fileInput.files?.[0];
+      if (!bookId) {
+        // Get the file from the form data
+        const fileInput = document.querySelector(
+          'input[name="file"]',
+        ) as HTMLInputElement;
+        const file = fileInput.files?.[0];
 
-      let imageUrl = formData.imageUrl;
+        let imageUrl = formData.imageUrl;
 
-      if (file) {
-        // Upload the file to Supabase Storage
-        const folder = slugify(
-          formDataObj
-            .get("name")
-            ?.toString()
-            ?.toLowerCase()
-            ?.replace(/ /g, "-") as string,
-        );
-        const path = `books/${folder}/${file.name}`;
-        const uploadedUrl = await storeFile(file, BUCKET, path);
-        if (uploadedUrl) {
-          imageUrl = uploadedUrl;
+        if (file) {
+          // Upload the file to Supabase Storage
+          const folder = slugify(
+            formDataObj
+              .get("name")
+              ?.toString()
+              ?.toLowerCase()
+              ?.replace(/ /g, "-") as string,
+          );
+          const path = `books/${folder}/${file.name}`;
+          const uploadedUrl = await storeFile(file, BUCKET, path);
+          if (uploadedUrl) {
+            imageUrl = uploadedUrl;
+          }
         }
+
+        // Prepare book data
+        const bookData: CreateBookInput = {
+          name: formDataObj.get("name") as string,
+          description: formDataObj.get("description") as string,
+          imageUrl,
+          releaseDate: formDataObj.get("releaseDate") as string,
+          authorId: formDataObj.get("authorId") as string,
+          courseId: formDataObj.get("courseId") as string,
+          categoryId: formDataObj.get("categoryId") as string,
+          animations: [""],
+          bookRequestId: "0f9e24ee-1487-45fa-8cf8-ccbad73551d9",
+        };
+
+        await createBookMutation.mutateAsync(bookData);
+      } else {
+        await updateBookMutation({
+          id: bookId,
+          ...formData,
+        });
       }
-
-      // Prepare book data
-      const bookData: CreateBookInput = {
-        name: formDataObj.get("name") as string,
-        description: formDataObj.get("description") as string,
-        imageUrl,
-        releaseDate: formDataObj.get("releaseDate") as string,
-        authorId: formDataObj.get("authorId") as string,
-        courseId: formDataObj.get("courseId") as string,
-        categoryId: formDataObj.get("categoryId") as string,
-        animations: [""],
-        bookRequestId: "0f9e24ee-1487-45fa-8cf8-ccbad73551d9",
-      };
-
-      // Use the mutation
-      await createBookMutation.mutateAsync(bookData);
 
       router.push("/books");
     } catch (error) {
@@ -194,19 +210,6 @@ export default function BookForm() {
       </div>
 
       <div className="mb-4.5">
-        <FormInput
-          name="releaseDate"
-          label="Fecha de Lanzamiento"
-          type="date"
-          placeholder=""
-          required
-          value={formData.releaseDate}
-          onChange={handleInputChange("releaseDate")}
-          error={errors.releaseDate}
-        />
-      </div>
-
-      <div className="mb-4.5">
         <FormSelect
           name="authorId"
           label="Autor"
@@ -215,7 +218,7 @@ export default function BookForm() {
             authors.length === 0 ? "Cargando autores..." : "Seleccione el autor"
           }
           required
-          disabled={authors.length === 0}
+          disabled={authors.length === 0 || authorsLoading}
           value={formData.authorId}
           onChange={handleInputChange("authorId")}
           error={errors.authorId}
@@ -236,6 +239,7 @@ export default function BookForm() {
           value={formData.categoryId}
           onChange={handleInputChange("categoryId")}
           error={errors.categoryId}
+          disabled={categories.length === 0 || categoriesLoading}
         />
       </div>
 
@@ -253,21 +257,32 @@ export default function BookForm() {
           value={formData.courseId}
           onChange={handleInputChange("courseId")}
           error={errors.courseId}
+          disabled={courses.length === 0 || coursesLoading}
         />
       </div>
 
-      <div className="mb-6">
-        <label className="text-body-sm font-medium text-dark dark:text-white">
-          Subir Imagen
-          <span className="ml-1 select-none text-red">*</span>
-        </label>
-        <input
-          type="file"
-          name="file"
-          accept="image/*"
-          className="mt-3 block w-full text-sm text-gray-500 file:mr-4 file:rounded-full file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-opacity-90"
+      {bookId ? (
+        <Image
+          src={formData.imageUrl}
+          alt={book.name}
+          width={200}
+          height={200}
+          className="my-4 rounded-xl"
         />
-      </div>
+      ) : (
+        <div className="mb-6">
+          <label className="text-body-sm font-medium text-dark dark:text-white">
+            Subir Imagen
+            <span className="ml-1 select-none text-red">*</span>
+          </label>
+          <input
+            type="file"
+            name="file"
+            accept="image/*"
+            className="mt-3 block w-full text-sm text-gray-500 file:mr-4 file:rounded-full file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-opacity-90"
+          />
+        </div>
+      )}
 
       {errors.submit && (
         <div className="mb-4 rounded-lg bg-red-50 p-4 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
@@ -278,14 +293,16 @@ export default function BookForm() {
       <div className="flex gap-4">
         <button
           type="submit"
-          disabled={createBookMutation.isPending}
+          disabled={createBookMutation.isPending || updateBookLoading}
           className="flex w-full justify-center rounded-lg bg-primary p-3 font-medium text-white hover:bg-opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {createBookMutation.isPending ? (
+          {createBookMutation.isPending || updateBookLoading ? (
             <div className="flex items-center gap-2">
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-              Creando...
+              {bookId ? "Actualizando..." : "Creando..."}
             </div>
+          ) : bookId ? (
+            "Actualizar Libro"
           ) : (
             "Crear Libro"
           )}

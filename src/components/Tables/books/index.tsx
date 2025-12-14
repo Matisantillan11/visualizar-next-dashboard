@@ -2,6 +2,7 @@ import Table from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 
 import { Book } from "@/lib/react-query/books/books.types";
+import { useRouter } from "next/navigation";
 import { columns } from "./columns";
 
 export function BooksTable({
@@ -11,6 +12,14 @@ export function BooksTable({
   className?: string;
   books: Book[];
 }) {
+  const router = useRouter();
+
+  const handleRowClick = (book: Book) => {
+    const id = book?.id;
+    if (!id) return;
+    router.push(`/books/${id}`);
+  };
+
   return (
     <div
       className={cn(
@@ -22,7 +31,7 @@ export function BooksTable({
         Libros
       </h2>
 
-      <Table data={books} columns={columns} />
+      <Table data={books} columns={columns} onRowClick={handleRowClick} />
     </div>
   );
 }

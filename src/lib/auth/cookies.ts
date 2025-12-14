@@ -1,7 +1,8 @@
-import { getCookie, setCookie, deleteCookie } from "cookies-next";
+import { deleteCookie, getCookie, setCookie } from "cookies-next";
 
 const ACCESS_TOKEN_KEY = "accessToken";
 const REFRESH_TOKEN_KEY = "refreshToken";
+const AUTH_KEY = "auth_session";
 
 // Cookie options for security
 const cookieOptions = {
@@ -36,6 +37,7 @@ export const clientCookies = {
   clearTokens: () => {
     deleteCookie(ACCESS_TOKEN_KEY);
     deleteCookie(REFRESH_TOKEN_KEY);
+    deleteCookie(AUTH_KEY);
   },
 };
 
