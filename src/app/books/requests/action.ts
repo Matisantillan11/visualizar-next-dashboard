@@ -5,7 +5,7 @@ import {
 } from "@/lib/react-query/books/books.types";
 
 export async function getBooksRequests() {
-  return await fetcher<BookRequest[]>({ url: "/books/requests/all" });
+  return await fetcher<BookRequest[]>({ url: "/books/all/requests" });
 }
 
 export async function getBookRequestById(requestId: string) {

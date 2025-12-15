@@ -4,6 +4,8 @@ import { BooksSkeleton } from "@/components/tables/books/skeleton";
 import { Suspense } from "react";
 import { getBooksRequests } from "./action";
 
+export const dynamic = "force-dynamic";
+
 export default async function BooksPage() {
   const booksRequests = await getBooksRequests();
 
