@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { DangerButton } from "@/components/danger-button";
 import { OutlineButton } from "@/components/outline-button";
 import { Modal } from "@/components/ui/dialog";
+import { useDeleteCourse } from "@/lib/react-query/courses";
 import { Course } from "@/lib/react-query/courses/courses.types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -17,21 +18,52 @@ export function CoursesTable({
   courses: Course[];
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [courseId, setCourseId] = useState<string | null>(null);
   const router = useRouter();
 
-  const handleRowClick = (row: Course) => {
-    const courseId = row?.id;
-    if (!courseId) return;
-    router.push(`/courses/${courseId}`);
+  const { mutateAsync: deleteCourse, isPending: isDeleting } =
+    useDeleteCourse();
+
+  const handleRowClick = (row: Course, columnId: string) => {
+    if (columnId !== "actions") {
+      const courseId = row?.id;
+      if (!courseId) return;
+      router.push(`/courses/${courseId}`);
+    }
   };
 
   const handleModalOpen = (open: boolean) => {
     setIsOpen(open);
   };
 
-  const handleDeleteCourse = () => {
-    setIsOpen(false);
+  const handleOpenErrorModal = (open: boolean) => {
+    setIsErrorModalOpen(open);
   };
+
+  const handleOpenDelete = (id: string) => {
+    setCourseId(id);
+    handleModalOpen(true);
+  };
+
+  const handleDeleteCourse = async () => {
+    if (courseId) {
+      await deleteCourse(
+        { id: courseId },
+        {
+          onSuccess: () => {
+            setIsOpen(false);
+          },
+          onError: () => {
+            setIsOpen(false);
+            setIsErrorModalOpen(true);
+          },
+        },
+      );
+    }
+  };
+
+  const columnsDef = columns(handleOpenDelete);
 
   return (
     <div
@@ -44,11 +76,7 @@ export function CoursesTable({
         Cursos
       </h2>
 
-      <Table
-        data={courses}
-        columns={columns}
-        onRowClick={(row) => handleRowClick(row)}
-      />
+      <Table data={courses} columns={columnsDef} onRowClick={handleRowClick} />
 
       <Modal
         isOpen={isOpen}
@@ -65,12 +93,29 @@ export function CoursesTable({
         }
       >
         <div className="flex w-full justify-end gap-4">
-          <OutlineButton onClick={() => setIsOpen(false)}>
+          <OutlineButton onClick={() => setIsOpen(false)} disabled={isDeleting}>
             Cancelar
           </OutlineButton>
-          <DangerButton onClick={handleDeleteCourse}>Eliminar</DangerButton>
+          <DangerButton onClick={handleDeleteCourse} disabled={isDeleting}>
+            {isDeleting ? "Eliminando..." : "Eliminar"}
+          </DangerButton>
         </div>
       </Modal>
+
+      <Modal
+        isOpen={isErrorModalOpen}
+        onOpenChange={handleOpenErrorModal}
+        title={"Tu curso no pudo ser eliminado"}
+        description={
+          <div className="my-5 text-center">
+            <p>Lo sentimos, hubo un error al eliminar el curso.</p>
+            <p>
+              Para poder eliminar el curso, primero debes eliminar los alumnos
+              inscritos y los libros asignados.
+            </p>
+          </div>
+        }
+      />
     </div>
   );
 }

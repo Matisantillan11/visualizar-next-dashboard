@@ -5,3 +5,7 @@ export type Student = BaseEntity & {
   user: User;
   userId?: string;
 };
+
+export type DeleteStudentInput = {
+  id: string;
+};

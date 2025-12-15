@@ -23,4 +23,7 @@ export type UpdateCourseInput = {
   institutionId?: string;
   institutionCourseId?: string;
 };
-  
+
+export type DeleteCourseInput = {
+  id: string;
+};

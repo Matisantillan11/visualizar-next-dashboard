@@ -21,3 +21,8 @@ export type UpdateUserInput = {
   dni?: string;
   role?: Role;
 };
+
+
+export type DeleteUserInput = {
+  id: string;
+};

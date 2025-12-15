@@ -11,6 +11,10 @@ export type UpdateAuthorInput = {
   biography: string;
 };
 
+export type DeleteAuthorInput = {
+  id: string;
+};
+
 export type Author = BaseEntity & {
   name: string;
   biography: string;

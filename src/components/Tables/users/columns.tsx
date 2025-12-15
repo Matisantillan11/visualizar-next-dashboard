@@ -1,4 +1,4 @@
-"use client";
+import { TrashIcon } from "@/assets/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Role, User } from "@/lib/react-query/users/users.types";
 import { formatDate } from "@/utils/date-utils";
@@ -7,7 +7,7 @@ import getRoleBadge from "./utils";
 
 const EMPTY_PLACEHOLDER = "-";
 
-export const columns: Array<ColumnDef<User>> = [
+export const columns = (onDelete: (id: string) => void): Array<ColumnDef<User>> => [
   {
     enableSorting: true,
     accessorKey: "name",
@@ -52,6 +52,20 @@ export const columns: Array<ColumnDef<User>> = [
       return formatDate(getValue() as string) ?? EMPTY_PLACEHOLDER;
     },
     header: "Fecha de Creación",
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      return (
+        <button
+          className="absolute right-2 z-50 flex w-10 items-center justify-center"
+          onClick={() => onDelete(row.original.id)}
+        >
+          <TrashIcon className="h-4 w-4" />
+        </button>
+      );
+    },
+    header: "",
   },
 ];
 

@@ -1,2 +1,6 @@
-export { useCreateCategory } from "./categories.mutations";
+export {
+  useCreateCategory,
+  useDeleteCategory,
+  useUpdateCategory,
+} from "./categories.mutations";
 export { useCategories } from "./categories.queries";

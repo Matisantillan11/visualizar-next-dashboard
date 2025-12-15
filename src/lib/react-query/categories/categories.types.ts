@@ -12,3 +12,7 @@ export type UpdateCategoryInput = {
   id: string;
   name: string;
 };
+
+export type DeleteCategoryInput = {
+  id: string;
+};

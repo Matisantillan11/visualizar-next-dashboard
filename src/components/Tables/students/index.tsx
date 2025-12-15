@@ -1,7 +1,6 @@
 import Table from "@/components/ui/table";
-import { cn } from "@/lib/utils";
-
 import { Student } from "@/lib/react-query/students/students.types";
+import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { columns } from "./columns";
 
@@ -14,7 +13,7 @@ export function StudentsTable({
 }) {
   const router = useRouter();
 
-  const handleOnRowClick = (row: Student) => {
+  const handleOnRowClick = (row: Student, _columnId: string) => {
     const id = row?.userId;
     if (id) {
       router.push(`/users/${id}`);

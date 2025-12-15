@@ -1,4 +1,5 @@
 "use client";
+import { TrashIcon } from "@/assets/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Author } from "@/lib/react-query/authors/author.types";
 import { formatDate } from "@/utils/date-utils";
@@ -6,7 +7,7 @@ import { ColumnDef } from "@tanstack/react-table";
 
 const EMPTY_PLACEHOLDER = "-";
 
-export const columns: Array<ColumnDef<Author>> = [
+export const columns = (onDelete: (id: string) => void): Array<ColumnDef<Author>> => [
   {
     enableSorting: true,
     accessorKey: "name",
@@ -33,6 +34,20 @@ export const columns: Array<ColumnDef<Author>> = [
       return formatDate(getValue() as string) ?? EMPTY_PLACEHOLDER;
     },
     header: "Fecha de Creación",
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      return (
+        <button
+          className="absolute right-2 z-50"
+          onClick={() => onDelete(row.original.id)}
+        >
+          <TrashIcon className="h-4 w-4" />
+        </button>
+      );
+    },
+    header: "",
   },
 ];
 

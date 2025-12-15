@@ -1,4 +1,4 @@
-"use client";
+import { TrashIcon } from "@/assets/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Book } from "@/lib/react-query/books/books.types";
 import { formatDate } from "@/utils/date-utils";
@@ -7,7 +7,9 @@ import Image from "next/image";
 
 const EMPTY_PLACEHOLDER = "-";
 
-export const columns: Array<ColumnDef<Book>> = [
+export const columns = (
+  onDelete: (id: string) => void,
+): Array<ColumnDef<Book>> => [
   {
     enableSorting: true,
     accessorKey: "imageUrl",
@@ -64,6 +66,20 @@ export const columns: Array<ColumnDef<Book>> = [
       return formatDate(getValue() as string) ?? EMPTY_PLACEHOLDER;
     },
     header: "Fecha de Creación",
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      return (
+        <button
+          className="absolute right-2 z-50"
+          onClick={() => onDelete(row.original.id)}
+        >
+          <TrashIcon className="h-4 w-4" />
+        </button>
+      );
+    },
+    header: "",
   },
 ];
 

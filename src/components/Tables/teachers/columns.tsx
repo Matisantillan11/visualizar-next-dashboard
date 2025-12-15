@@ -1,4 +1,3 @@
-"use client";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Teacher } from "@/lib/react-query/teachers/teachers.types";
 import { formatDate } from "@/utils/date-utils";
