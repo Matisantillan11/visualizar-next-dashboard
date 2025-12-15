@@ -1,5 +1,6 @@
 "use client";
 
+import Dropzone from "@/components/ui/dropzone";
 import FormInput from "@/components/ui/form-input";
 import FormSelect from "@/components/ui/form-select";
 import { useAuthors } from "@/lib/react-query/authors";
@@ -11,10 +12,10 @@ import {
 } from "@/lib/react-query/books";
 import { useCategories } from "@/lib/react-query/categories";
 import { useCourses } from "@/lib/react-query/courses";
-import { storeFile } from "@/lib/storage";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { AnimationsForm } from "./animations/animations-form";
 
 interface CreateBookFormData {
   name: string;
@@ -23,8 +24,11 @@ interface CreateBookFormData {
   authorId: string;
   courseId: string;
   categoryId: string;
+  animations: {
+    animationName: string;
+    animationUrls: string[];
+  }[];
 }
-const BUCKET = "visualizar-attachments";
 
 export default function BookForm({
   requestId,
@@ -54,11 +58,17 @@ export default function BookForm({
     imageUrl: book?.imageUrl ?? "",
     authorId: book?.authorId
       ? book?.authorId
-      : (book?.bookAuthor?.[0].authorId ?? ""),
+      : (book?.bookAuthor?.[0]?.authorId ?? ""),
     courseId: requestId
       ? (book?.courseIds?.[0] ?? "")
       : (book?.bookCourse?.[0]?.courseId ?? ""),
-    categoryId: book?.bookCategory?.[0].categoryId ?? "",
+    categoryId: book?.bookCategory?.[0]?.categoryId ?? "",
+    animations: [
+      {
+        animationName: "",
+        animationUrls: [""],
+      },
+    ],
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -81,40 +91,28 @@ export default function BookForm({
 
     try {
       if (!bookId) {
-        // Get the file from the form data
-        const fileInput = document.querySelector(
-          'input[name="file"]',
-        ) as HTMLInputElement;
-        const file = fileInput.files?.[0];
+        const reducedAnimations = formData.animations.reduce(
+          (acc: string[], animation) => {
+            if (animation?.animationUrls?.length > 0) {
+              animation.animationUrls.forEach((url) => {
+                acc.push(url);
+              });
+            }
 
-        let imageUrl = formData.imageUrl;
-
-        if (file) {
-          // Upload the file to Supabase Storage
-          const folder = slugify(
-            formDataObj
-              .get("name")
-              ?.toString()
-              ?.toLowerCase()
-              ?.replace(/ /g, "-") as string,
-          );
-          const path = `books/${folder}/${file.name}`;
-          const uploadedUrl = await storeFile(file, BUCKET, path);
-          if (uploadedUrl) {
-            imageUrl = uploadedUrl;
-          }
-        }
+            return acc;
+          },
+          [],
+        );
 
         // Prepare book data
         const bookData: CreateBookInput = {
-          name: formDataObj.get("name") as string,
-          description: formDataObj.get("description") as string,
-          imageUrl,
-          releaseDate: formDataObj.get("releaseDate") as string,
-          authorId: formDataObj.get("authorId") as string,
-          courseId: formDataObj.get("courseId") as string,
-          categoryId: formDataObj.get("categoryId") as string,
-          animations: [""],
+          name: formData.name,
+          description: formData.description,
+          imageUrl: formData.imageUrl,
+          authorId: formData.authorId,
+          courseId: formData.courseId,
+          categoryId: formData.categoryId,
+          animations: reducedAnimations,
           bookRequestId: requestId,
         };
 
@@ -123,6 +121,7 @@ export default function BookForm({
         await updateBookMutation({
           id: bookId,
           ...formData,
+          animations: [],
         });
       }
 
@@ -157,6 +156,22 @@ export default function BookForm({
         });
       }
     };
+
+  const handleUploadComplete = (url: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      imageUrl: url,
+    }));
+  };
+
+  const handleImageRemoval = (url: string) => {
+    if (formData.imageUrl === url) {
+      setFormData((prev) => ({
+        ...prev,
+        imageUrl: "",
+      }));
+    }
+  };
 
   const authorOptions =
     authors.length > 0
@@ -278,17 +293,28 @@ export default function BookForm({
         />
       ) : (
         <div className="mb-6">
-          <label className="text-body-sm font-medium text-dark dark:text-white">
-            Subir Imagen
-            <span className="ml-1 select-none text-red">*</span>
-          </label>
-          <input
-            type="file"
-            name="file"
-            accept="image/*"
-            className="mt-3 block w-full text-sm text-gray-500 file:mr-4 file:rounded-full file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-opacity-90"
+          <Dropzone
+            folder={`books/${requestId}`}
+            onUploadComplete={handleUploadComplete}
+            onFileRemoved={handleImageRemoval}
+            maxFiles={1}
+            allowedFileTypes={["image/*"]}
+            label="Portada del libro"
+            required
           />
         </div>
+      )}
+
+      {bookId && book ? null : (
+        <AnimationsForm
+          label="Animaciones"
+          requestId={requestId}
+          required
+          animations={formData.animations}
+          setAnimations={(animations) =>
+            setFormData((prev) => ({ ...prev, animations }))
+          }
+        />
       )}
 
       {errors.submit && (

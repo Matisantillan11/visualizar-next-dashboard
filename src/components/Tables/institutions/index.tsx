@@ -1,6 +1,7 @@
 import Table from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 
+import { useDeleteInstitution } from "@/lib/react-query/institutions";
 import { Institution } from "@/lib/react-query/institutions/institutions.types";
 import { useRouter } from "next/navigation";
 import { columns } from "./columns";
@@ -14,11 +15,19 @@ export function InstitutionsTable({
 }) {
   const router = useRouter();
 
+  const { mutateAsync: deleteInstitution } = useDeleteInstitution();
+
   const handleRowClick = (institution: Institution) => {
     const id = institution?.id;
     if (!id) return;
     router.push(`/institutions/${id}`);
   };
+
+  const handleDelete = async (institutionId: string) => {
+    await deleteInstitution({ id: institutionId });
+  };
+
+  const columnsDef = columns(handleDelete);
 
   return (
     <div
@@ -33,7 +42,7 @@ export function InstitutionsTable({
 
       <Table
         data={institutions}
-        columns={columns}
+        columns={columnsDef}
         onRowClick={handleRowClick}
       />
     </div>

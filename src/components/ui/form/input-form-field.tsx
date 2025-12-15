@@ -16,7 +16,6 @@ export const InputFormField = <TFieldValues extends FieldValues>({
   form: UseFormReturn<TFieldValues>;
   name: Path<TFieldValues>;
 }) => {
-  console.log({ form });
   return (
     <Controller
       name={name}

@@ -7,6 +7,10 @@ export type CreateInstitutionInput = {
   email: string;
 };
 
+export type DeleteInstitutionInput = {
+  id: string;
+};
+
 export type UpdateInstitutionInput = {
   id: string;
   name: string;

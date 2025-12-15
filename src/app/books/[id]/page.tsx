@@ -9,6 +9,5 @@ export default async function BookDetailPage({
   const id = (await params)?.id;
   const book = await getBookById(id);
 
-  console.log({ book });
   return <BookForm bookId={id} book={book} />;
 }

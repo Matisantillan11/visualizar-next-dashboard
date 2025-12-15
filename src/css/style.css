@@ -477,3 +477,47 @@ input[type="search"]::-webkit-search-cancel-button {
 .custom-gradient-1 {
   background-image: linear-gradient(145deg, #eef 0%, #fff8fc 100%);
 }
+
+
+.uppy-Dashboard-inner {
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.uppy-Dashboard-dragInner {
+  background-color: transparent !important;
+}
+
+.uppy-DashboardContent-bar {
+  display: none !important;
+}
+
+.uppy-Dashboard-progressindicators {
+  display: none !important;
+}
+
+.uppy-Dashboard-files{
+ @apply !h-full !max-h-[300px] !min-h-[250px];
+}
+/* Hide the Status Bar completely or just when complete? 
+   User said "bottom that says Complete and his container".
+   If I hide it completely, no progress bar. 
+   I'll hide it when complete. */
+.uppy-StatusBar.is-complete {
+  display: none !important;
+}
+
+/* Also hide the "Upload complete" top bar/header. */
+.uppy-Dashboard-header {
+  display: none !important;
+}
+
+/* Hide the "Done" button if it ever appears */
+.uppy-StatusBar-actionBtn--done {
+  display: none !important;
+}
+
+[data-uppy-theme="dark"] .uppy-Dashboard-browse {
+  color: #3c50e0 !important; /* Primary color or similar */
+}
+

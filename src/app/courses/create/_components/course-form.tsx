@@ -24,7 +24,6 @@ export default function CourseForm({
   course?: CourseResponse;
 }) {
   const router = useRouter();
-
   const form = useForm({
     defaultValues: {
       name: "",

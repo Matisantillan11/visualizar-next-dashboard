@@ -8,6 +8,6 @@ export default async function UserDetailPage({
 }) {
   const { id } = await params;
   const userData = await getUserById(id);
-  console.log({ userData });
+
   return <UserForm userId={id} user={userData} />;
 }
