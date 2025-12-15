@@ -13,7 +13,6 @@ export default function CoursesPage() {
       <Breadcrumb pageName="Cursos" />
 
       <div className="space-y-6">
-        {/* Header with Add New Course button */}
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold text-dark dark:text-white">
             Gestión de Cursos

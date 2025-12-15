@@ -38,7 +38,11 @@ export const fetcher = async <T>({
       clientCookies.clearTokens();
     }
 
-    const result = getResponseHeaders(response);
+    const result = await getResponseHeaders(response);
+
+    if (!response.ok) {
+      throw result;
+    }
 
     return result;
   } catch (error) {

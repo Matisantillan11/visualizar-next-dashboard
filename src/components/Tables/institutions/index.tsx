@@ -1,9 +1,13 @@
 import Table from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 
+import { DangerButton } from "@/components/danger-button";
+import { OutlineButton } from "@/components/outline-button";
+import { Modal } from "@/components/ui/dialog";
 import { useDeleteInstitution } from "@/lib/react-query/institutions";
 import { Institution } from "@/lib/react-query/institutions/institutions.types";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { columns } from "./columns";
 
 export function InstitutionsTable({
@@ -13,21 +17,53 @@ export function InstitutionsTable({
   className?: string;
   institutions: Institution[];
 }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [institutionId, setInstitutionId] = useState<string | null>(null);
   const router = useRouter();
 
-  const { mutateAsync: deleteInstitution } = useDeleteInstitution();
+  const { mutateAsync: deleteInstitution, isPending: isDeleting } =
+    useDeleteInstitution();
 
-  const handleRowClick = (institution: Institution) => {
-    const id = institution?.id;
-    if (!id) return;
-    router.push(`/institutions/${id}`);
+  const handleRowClick = (institution: Institution, columnId: string) => {
+    if (columnId !== "actions") {
+      const id = institution?.id;
+      if (!id) return;
+      router.push(`/institutions/${id}`);
+    }
   };
 
-  const handleDelete = async (institutionId: string) => {
-    await deleteInstitution({ id: institutionId });
+  const handleOpenDeleteModal = (open: boolean) => {
+    setIsOpen(open);
   };
 
-  const columnsDef = columns(handleDelete);
+  const handleOpenErrorModal = (open: boolean) => {
+    setIsErrorModalOpen(open);
+  };
+
+  const handleOpenDelete = (institutionId: string) => {
+    setInstitutionId(institutionId);
+    handleOpenDeleteModal(true);
+  };
+
+  const handleDelete = async () => {
+    if (institutionId) {
+      await deleteInstitution(
+        { id: institutionId },
+        {
+          onSuccess: () => {
+            setIsOpen(false);
+          },
+          onError: () => {
+            setIsOpen(false);
+            setIsErrorModalOpen(true);
+          },
+        },
+      );
+    }
+  };
+
+  const columnsDef = columns(handleOpenDelete);
 
   return (
     <div
@@ -44,6 +80,45 @@ export function InstitutionsTable({
         data={institutions}
         columns={columnsDef}
         onRowClick={handleRowClick}
+      />
+
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={handleOpenDeleteModal}
+        title="¿Estas seguro de eliminar este curso?"
+        description={
+          <div className="my-5 text-center">
+            <p>Esta acción no se puede deshacer.</p>
+            <p>
+              Si tienes alumnos inscritos en este curso o libros asignados a
+              este curso, primero debes eliminarlos/modificarlos.
+            </p>
+          </div>
+        }
+      >
+        <div className="flex w-full justify-end gap-4">
+          <OutlineButton onClick={() => setIsOpen(false)} disabled={isDeleting}>
+            Cancelar
+          </OutlineButton>
+          <DangerButton onClick={handleDelete} disabled={isDeleting}>
+            {isDeleting ? "Eliminando..." : "Eliminar"}
+          </DangerButton>
+        </div>
+      </Modal>
+
+      <Modal
+        isOpen={isErrorModalOpen}
+        onOpenChange={handleOpenErrorModal}
+        title={"Tu institución no pudo ser eliminada"}
+        description={
+          <div className="my-5 text-center">
+            <p>Lo sentimos, hubo un error al eliminar la institución.</p>
+            <p>
+              Para poder eliminar la institución, primero debes eliminar los
+              alumnos inscritos y los libros asignados.
+            </p>
+          </div>
+        }
       />
     </div>
   );

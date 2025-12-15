@@ -22,7 +22,7 @@ export default function Table<T>({
 }: {
   data: Array<T>;
   columns: Array<ColumnDef<T>>;
-  onRowClick?: (row: T) => void;
+  onRowClick?: (row: T, columnId: string) => void;
 }) {
   const table = useReactTable({
     data,
@@ -55,15 +55,20 @@ export default function Table<T>({
           <TableBody>
             {rows.map((row) => {
               const visibleCells = row.getVisibleCells();
-
               return (
                 <TableRow
-                  className="text-left text-base font-medium text-dark dark:text-white"
+                  className={
+                    onRowClick
+                      ? "cursor-pointer text-left text-base font-medium text-dark dark:text-white"
+                      : "text-left text-base font-medium text-dark dark:text-white"
+                  }
                   key={row.id}
-                  onClick={() => onRowClick?.(row.original)}
                 >
                   {visibleCells.map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      onClick={() => onRowClick?.(row.original, cell.column.id)}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),

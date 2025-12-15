@@ -53,7 +53,7 @@ export const columns = (
     cell: ({ row }) => {
       return (
         <button
-          className="absolute right-2 z-50"
+          className="absolute right-2 z-50 flex w-10 items-center justify-center"
           onClick={() => onDelete(row.original.id)}
         >
           <TrashIcon className="h-4 w-4" />
