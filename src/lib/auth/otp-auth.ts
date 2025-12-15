@@ -1,5 +1,7 @@
 import { fetcher } from "../fetcher";
-import type { AuthUser, AuthSession, AuthResponse } from "./types";
+import type { AuthError, AuthResponse, AuthSession, AuthUser } from "./types";
+
+const STORED_RETRY_DATE = "retry_at";
 
 /**
  * OTP-based authentication functions
@@ -21,6 +23,15 @@ export const sendOTP = async (email: string): Promise<void> => {
     });
   } catch (error) {
     console.error("Error sending OTP:", error);
+    if (
+      (error as AuthError).message.includes(
+        "Account is temporarily blocked due to multiple failed OTP attempts",
+      )
+    ) {
+      throw new Error(
+        "Cuenta bloqueada temporalmente, intenta nuevamente más tarde.",
+      );
+    }
     throw new Error("Failed to send OTP code. Please try again.");
   }
 };
@@ -66,6 +77,20 @@ export const verifyOTP = async (
     throw new Error("Invalid response from server");
   } catch (error) {
     console.error("Error verifying OTP:", error);
-    throw new Error("Invalid OTP code. Please try again.");
+    const attempts = (error as AuthError).attemts;
+
+    if (attempts > 1) {
+      throw new Error("Invalid OTP code. Please try again.");
+    } else {
+      if (
+        (error as AuthError).message.includes(
+          "Account is temporarily blocked due to multiple failed OTP attempts",
+        )
+      ) {
+        throw new Error(
+          "Cuenta bloqueada temporalmente, intenta nuevamente más tarde.",
+        );
+      }
+    }
   }
 };

@@ -27,3 +27,9 @@ export interface AuthResponse {
     role: Role;
   };
 }
+
+export type AuthError = {
+  attemts: number;
+  message: string;
+  retryAt: string | null;
+};

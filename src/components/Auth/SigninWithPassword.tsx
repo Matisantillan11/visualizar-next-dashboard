@@ -29,15 +29,16 @@ export default function SigninWithPassword() {
   });
   const [loading, setLoading] = useState(false);
   const [showOTP, setShowOTP] = useState(false);
+   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (data: { email: string }) => {
     setLoading(true);
-
+    setError(null)
     try {
       await sendOTP(data.email);
       setShowOTP(true);
     } catch (err) {
-      console.error("Error sending OTP:", err);
+      setError(err instanceof Error ? err.message : "Error enviando codigo OTP");
     } finally {
       setLoading(false);
     }
@@ -73,6 +74,13 @@ export default function SigninWithPassword() {
             {form.formState.errors.email.message}
           </div>
         )}
+
+        {error && (
+        <div className="mb-4 rounded-lg bg-red-50 p-4 text-sm text-red-700 dark:bg-red-900/20 dark:text-red-400">
+          {error}
+        </div>
+      )}
+
 
         <InputFormField
           form={form}
