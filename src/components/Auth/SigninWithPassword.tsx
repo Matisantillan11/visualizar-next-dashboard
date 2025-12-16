@@ -62,10 +62,10 @@ export default function SigninWithPassword() {
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <div className="mb-6">
           <h2 className="sm:text-title-xl2 mb-2 text-2xl font-bold text-black dark:text-white">
-            Sign In
+            Iniciar sesión
           </h2>
           <p className="text-gray-600 dark:text-gray-400">
-            Enter your email to receive a verification code
+            Ingresá tu correo electrónico para recibir tu código de verificación
           </p>
         </div>
 
@@ -87,7 +87,7 @@ export default function SigninWithPassword() {
           type="email"
           label="Email"
           className="mb-6 [&_input]:py-[15px]"
-          placeholder="Enter your email address"
+          placeholder="Ingresa tu correo electrónico"
           name="email"
           icon={<EmailIcon />}
           required
@@ -99,7 +99,7 @@ export default function SigninWithPassword() {
             disabled={loading || !form.watch("email").trim()}
             className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary p-4 font-medium text-white transition hover:bg-opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Send Verification Code
+            Enviar código de verificación
             {loading && (
               <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-white border-t-transparent" />
             )}
@@ -108,7 +108,7 @@ export default function SigninWithPassword() {
 
         <div className="text-center text-sm text-gray-600 dark:text-gray-400">
           <p>
-            We&apos;ll send you a secure 6-digit code to verify your identity.
+            Te enviaremos un código secure de 6 dìgitos para verificar tu identidad.
           </p>
         </div>
       </form>

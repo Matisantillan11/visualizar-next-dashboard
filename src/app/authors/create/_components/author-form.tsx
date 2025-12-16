@@ -55,7 +55,10 @@ export default function AuthorForm({
           {
             onSuccess: () => {
               toast.success("Autor creado exitosamente!");
-              form.reset();
+              form.reset({
+                biography: "",
+                name: "",
+              });
             },
             onError: () =>
               toast.error(

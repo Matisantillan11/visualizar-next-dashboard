@@ -60,7 +60,12 @@ export default function InstitutionForm({
           {
             onSuccess: () => {
               toast.success("Institución creada exitosamente!");
-              form.reset();
+              form.reset({
+                address: "",
+                email: "",
+                name: "",
+                phone: "",
+              });
             },
             onError: () =>
               toast.error(

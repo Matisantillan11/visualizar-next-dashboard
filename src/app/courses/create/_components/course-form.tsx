@@ -53,8 +53,8 @@ export default function CourseForm({
           },
           {
             onSuccess: () => {
-              toast.success("Curso creado exitosamente!");
               form.reset();
+              toast.success("Curso creado exitosamente!");
             },
             onError: () =>
               toast.error(
@@ -72,8 +72,11 @@ export default function CourseForm({
           },
           {
             onSuccess: () => {
+              form.reset({
+                institutionId: "",
+                name: "",
+              });
               toast.success("Curso actualizado exitosamente!");
-              form.reset();
             },
             onError: () =>
               toast.error(

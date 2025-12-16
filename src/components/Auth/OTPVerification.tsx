@@ -1,6 +1,6 @@
 "use client";
 import { useAuth } from "@/contexts/auth-context";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface OTPVerificationProps {
   email: string;
@@ -95,10 +95,10 @@ export default function OTPVerification({
     <form onSubmit={handleSubmit}>
       <div className="mb-6">
         <h2 className="sm:text-title-xl2 mb-2 text-2xl font-bold text-black dark:text-white">
-          Verify Your Email
+         Verifica tu correo electrónico
         </h2>
         <p className="text-gray-600 dark:text-gray-400">
-          We sent a 6-digit code to <span className="font-medium">{email}</span>
+          Enviamos el código de verificación a <span className="font-medium">{email}</span>
         </p>
       </div>
 
@@ -110,7 +110,7 @@ export default function OTPVerification({
 
       <div className="mb-6">
         <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-          Enter verification code
+          Ingresa tu código de verificación
         </label>
         <div className="flex justify-center gap-2" onPaste={handlePaste}>
           {otp.map((digit, index) => (
@@ -141,7 +141,7 @@ export default function OTPVerification({
           disabled={loading || otp.join("").length !== 6}
           className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary p-4 font-medium text-white transition hover:bg-opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          Verify Code
+          Verificar código
           {loading && (
             <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-white border-t-transparent" />
           )}
@@ -155,7 +155,7 @@ export default function OTPVerification({
           className="text-primary hover:underline"
           disabled={loading}
         >
-          Back to email entry
+          Volver a iniciar sesión
         </button>
       </div>
     </form>

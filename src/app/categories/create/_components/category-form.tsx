@@ -48,7 +48,9 @@ export default function CategoryForm({
           {
             onSuccess: () => {
               toast.success("Categoría actualizada exitosamente!");
-              form.reset();
+              form.reset({
+                name: "",
+              });
             },
             onError: () =>
               toast.error(

@@ -82,7 +82,7 @@ export default function UserForm({
           {
             onSuccess: () => {
               toast.success("Usuario actualizado exitosamente!");
-              form.reset();
+              form.reset({ dni: "", email: "", name: "", role: Role.ADMIN });
             },
             onError: () =>
               toast.error(
