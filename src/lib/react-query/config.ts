@@ -18,7 +18,7 @@ export const queryClientConfig = {
       // Refetch on window focus in production
       refetchOnWindowFocus: process.env.NODE_ENV === "production",
       // Don't refetch on mount if data is fresh
-      refetchOnMount: false,
+      refetchOnMount: true,
       // Refetch on reconnect
       refetchOnReconnect: true,
     },

@@ -85,10 +85,7 @@ export default function Dropzone({
               .replace(/-+/g, "-")
           : "unnamed";
 
-        const objectName = `${folder}/${Date.now()}-${cleanName}`.replace(
-          /\/{2,}/g,
-          "/",
-        );
+        const objectName = `${folder}/${cleanName}`.replace(/\/{2,}/g, "/");
 
         // Store meta for file removal logic
         uppy.setFileMeta(file.id, {
