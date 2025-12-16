@@ -1,6 +1,19 @@
 import { createMutation } from "../mutation-factory";
 import { queryKeys } from "../query-keys";
-import { DeleteUserInput, UpdateUserInput, User } from "./users.types";
+import {
+  CreateUserInput,
+  DeleteUserInput,
+  UpdateUserInput,
+  User,
+} from "./users.types";
+
+export const useCreateUser = () => {
+  return createMutation<User, CreateUserInput>({
+    url: () => "/auth/create-user",
+    method: "POST",
+    invalidateKeys: [queryKeys.users.lists()],
+  })();
+};
 
 export const useUpdateUser = () => {
   return createMutation<User, UpdateUserInput>({

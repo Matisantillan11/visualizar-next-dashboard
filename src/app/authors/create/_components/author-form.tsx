@@ -2,6 +2,7 @@
 
 import { InputFormField } from "@/components/ui/form/input-form-field";
 import { InputTextArea } from "@/components/ui/form/input-text-area";
+import { toast } from "@/components/ui/toast";
 import { Author } from "@/lib/react-query/authors/author.types";
 import {
   useCreateAuthor,
@@ -45,13 +46,37 @@ export default function AuthorForm({
   const handleSubmit = async (data: CreateAuthorFormData) => {
     try {
       if (authorId) {
-        await updateAuthor({
-          id: authorId,
-          name: data.name,
-          biography: data.biography,
-        });
+        await updateAuthor(
+          {
+            id: authorId,
+            name: data.name,
+            biography: data.biography,
+          },
+          {
+            onSuccess: () => {
+              toast.success("Autor creado exitosamente!");
+              form.reset();
+            },
+            onError: () =>
+              toast.error(
+                '"Ooops! Hubo un error al crear tu autor. Intenta de nuevo más tarde',
+              ),
+          },
+        );
       } else {
-        await mutate({ name: data.name, biography: data.biography });
+        await mutate(
+          { name: data.name, biography: data.biography },
+          {
+            onSuccess: () => {
+              toast.success("Autor actualizado exitosamente!");
+              form.reset();
+            },
+            onError: () =>
+              toast.error(
+                '"Ooops! Hubo un error al actulizar tu autor. Intenta de nuevo más tarde',
+              ),
+          },
+        );
       }
     } catch (error) {
       console.error("Error creating author:", error);

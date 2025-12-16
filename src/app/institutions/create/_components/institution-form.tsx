@@ -1,6 +1,7 @@
 "use client";
 
 import { InputFormField } from "@/components/ui/form/input-form-field";
+import { toast } from "@/components/ui/toast";
 import { useCreateInstitution } from "@/lib/react-query/institutions";
 import { useUpdateInstitution } from "@/lib/react-query/institutions/institutions.mutations";
 import { Institution } from "@/lib/react-query/institutions/institutions.types";
@@ -48,20 +49,44 @@ export default function InstitutionForm({
   const handleSubmit = async (data: CreateInstitutionFormData) => {
     try {
       if (institutionId) {
-        await updateInstitution({
-          id: institutionId,
-          name: data.name,
-          address: data.address,
-          phone: data.phone,
-          email: data.email,
-        });
+        await updateInstitution(
+          {
+            id: institutionId,
+            name: data.name,
+            address: data.address,
+            phone: data.phone,
+            email: data.email,
+          },
+          {
+            onSuccess: () => {
+              toast.success("Institución creada exitosamente!");
+              form.reset();
+            },
+            onError: () =>
+              toast.error(
+                '"Ooops! Hubo un error al crear tu institución. Intenta de nuevo más tarde',
+              ),
+          },
+        );
       } else {
-        await createInstitution({
-          name: data.name,
-          address: data.address,
-          phone: data.phone,
-          email: data.email,
-        });
+        await createInstitution(
+          {
+            name: data.name,
+            address: data.address,
+            phone: data.phone,
+            email: data.email,
+          },
+          {
+            onSuccess: () => {
+              toast.success("Institución actualizada exitosamente!");
+              form.reset();
+            },
+            onError: () =>
+              toast.error(
+                '"Ooops! Hubo un error al actualizar tu institución. Intenta de nuevo más tarde',
+              ),
+          },
+        );
       }
     } catch (error) {
       console.error("Error creating institution:", error);

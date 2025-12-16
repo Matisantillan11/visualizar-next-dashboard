@@ -3,6 +3,7 @@
 import Dropzone from "@/components/ui/dropzone";
 import FormInput from "@/components/ui/form-input";
 import FormSelect from "@/components/ui/form-select";
+import { toast } from "@/components/ui/toast";
 import { useAuthors } from "@/lib/react-query/authors";
 import {
   Book,
@@ -87,7 +88,6 @@ export default function BookForm({
     event: React.FormEvent<HTMLFormElement>,
   ) => {
     event.preventDefault(); // Prevent default form submission
-    const formDataObj = new FormData(event.currentTarget);
 
     try {
       if (!bookId) {
@@ -116,13 +116,45 @@ export default function BookForm({
           bookRequestId: requestId,
         };
 
-        await createBookMutation.mutateAsync(bookData);
-      } else {
-        await updateBookMutation({
-          id: bookId,
-          ...formData,
-          animations: [],
+        await createBookMutation.mutateAsync(bookData, {
+          onSuccess: () => {
+            toast.success("Libro creado exitosamente!");
+          },
+          onError: () =>
+            toast.error(
+              '"Ooops! Hubo un error al crear tu libro. Intenta de nuevo más tarde',
+            ),
         });
+      } else {
+        const reducedAnimations = formData.animations.reduce(
+          (acc: string[], animation) => {
+            if (animation?.animationUrls?.length > 0) {
+              animation.animationUrls.forEach((url) => {
+                acc.push(url);
+              });
+            }
+
+            return acc;
+          },
+          [],
+        );
+
+        await updateBookMutation(
+          {
+            id: bookId,
+            ...formData,
+            animations: reducedAnimations,
+          },
+          {
+            onSuccess: () => {
+              toast.success("Libro actualizado exitosamente!");
+            },
+            onError: () =>
+              toast.error(
+                '"Ooops! Hubo un error al actulizar tu libro. Intenta de nuevo más tarde',
+              ),
+          },
+        );
       }
 
       router.push("/books");

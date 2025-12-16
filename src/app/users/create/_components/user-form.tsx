@@ -2,11 +2,14 @@
 
 import { InputFormField } from "@/components/ui/form/input-form-field";
 import { InputFormSelect } from "@/components/ui/form/input-form-select";
-import { useUpdateUser } from "@/lib/react-query/users/users.mutations";
+import { toast } from "@/components/ui/toast";
+import {
+  useCreateUser,
+  useUpdateUser,
+} from "@/lib/react-query/users/users.mutations";
 import { Role, User } from "@/lib/react-query/users/users.types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { userSchema } from "./form-schema";
 
@@ -25,7 +28,6 @@ export default function UserForm({
   user?: User;
 }) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm({
     defaultValues: {
@@ -43,7 +45,17 @@ export default function UserForm({
     resolver: zodResolver(userSchema),
   });
 
+  const {
+    mutateAsync: createUser,
+    isPending: isCreating,
+    error,
+    isError,
+    isSuccess,
+    data,
+  } = useCreateUser();
   const { mutateAsync: updateUser, isPending: isUpdating } = useUpdateUser();
+
+  console.log({ error, isSuccess, isError, data });
 
   const roleOptions = [
     { value: Role.ADMIN, label: "Administrador" },
@@ -54,9 +66,30 @@ export default function UserForm({
   const handleSubmit = async (data: CreateUserFormData) => {
     try {
       if (!userId) {
-        /* await createUser(data); */
+        await createUser(data, {
+          onSuccess: () => {
+            toast.success("Usuario creado exitosamente!");
+            form.reset();
+          },
+          onError: () =>
+            toast.error(
+              '"Ooops! Hubo un error al crear tu usuario. Intenta de nuevo más tarde',
+            ),
+        });
       } else {
-        await updateUser({ id: user?.id, ...data });
+        await updateUser(
+          { id: user?.id, ...data },
+          {
+            onSuccess: () => {
+              toast.success("Usuario actualizado exitosamente!");
+              form.reset();
+            },
+            onError: () =>
+              toast.error(
+                '"Ooops! Hubo un error al actualizar tu usuario. Intenta de nuevo más tarde',
+              ),
+          },
+        );
       }
     } catch (error) {
       console.error("Error creating user:", error);
@@ -114,10 +147,10 @@ export default function UserForm({
         <div className="flex gap-4">
           <button
             type="submit"
-            disabled={isLoading || isUpdating}
+            disabled={isCreating || isUpdating}
             className="flex w-full justify-center rounded-lg bg-primary p-3 font-medium text-white hover:bg-opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {isLoading || isUpdating ? (
+            {isCreating || isUpdating ? (
               <div className="flex items-center gap-2">
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
                 {userId ? "Actualizando..." : "Creando..."}
@@ -132,7 +165,7 @@ export default function UserForm({
           <button
             type="button"
             onClick={() => router.push("/users")}
-            disabled={isLoading}
+            disabled={isCreating || isUpdating}
             className="flex w-full justify-center rounded-lg border border-stroke bg-white p-3 font-medium text-dark hover:bg-gray-1 disabled:cursor-not-allowed disabled:opacity-50 dark:border-dark-3 dark:bg-gray-dark dark:text-white dark:hover:bg-dark-2"
           >
             Cancelar

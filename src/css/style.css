@@ -521,3 +521,37 @@ input[type="search"]::-webkit-search-cancel-button {
   color: #3c50e0 !important; /* Primary color or similar */
 }
 
+/*
+ * Target: The toast element itself when it's a success toast.
+ * Utility: group-[.sonner-toast-success]:!bg-[#008120] group-[.sonner-toast-success]:!text-[#F1F1F1]
+ */
+.sonner-toast-success > [data-sonner-toast][data-styled="true"] {
+  background-color: #008120 !important;
+  color: #f1f1f1 !important;
+  border-color: transparent !important; /* Added for clean integration */
+}
+
+/*
+ * Target: The toast element itself when it's an error toast.
+ * Utility: group-[.sonner-toast-error]:!bg-[#B3261E] group-[.sonner-toast-error]:!text-[#F1F1F1]
+ */
+.sonner-toast-error > [data-sonner-toast][data-styled="true"] {
+  background-color: #b3261e !important;
+  color: #f1f1f1 !important;
+  border-color: transparent !important; /* Added for clean integration */
+}
+
+/*
+ * Dark Mode Overrides (if using a dark-mode class on the <html> or <body>)
+ * The original config did not specify dark mode for success/error, but if it did, 
+ * you would need to nest these rules:
+ */
+.dark .sonner-toast-success > [data-sonner-toast][data-styled="true"] {
+  background-color: #008120 !important;
+  color: #f1f1f1 !important;
+}
+
+.dark .sonner-toast-error > [data-sonner-toast][data-styled="true"] {
+  background-color: #b3261e !important;
+  color: #f1f1f1 !important;
+}

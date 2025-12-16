@@ -2,6 +2,7 @@
 
 import { InputFormField } from "@/components/ui/form/input-form-field";
 import { InputFormSelect } from "@/components/ui/form/input-form-select";
+import { toast } from "@/components/ui/toast";
 import { useCreateCourse } from "@/lib/react-query/courses";
 import { useUpdateCourse } from "@/lib/react-query/courses/courses.mutations";
 import { useInstitutions } from "@/lib/react-query/institutions";
@@ -38,31 +39,51 @@ export default function CourseForm({
 
   const { data: institutions, isPending: loadingInstitutions } =
     useInstitutions();
-  const { mutate: createCourse, isPending, isSuccess } = useCreateCourse();
+  const { mutate: createCourse, isPending } = useCreateCourse();
 
   const { mutate: updateCourse, isPending: updatePending } = useUpdateCourse();
 
   const handleSubmit = async (data: CreateCourseFormData) => {
-    if (!courseId) {
-      try {
-        await createCourse({
-          name: data.name,
-          institutionId: data.institutionId,
-        });
-      } catch (error) {
-        console.error("Error creating course:", error);
+    try {
+      if (!courseId) {
+        await createCourse(
+          {
+            name: data.name,
+            institutionId: data.institutionId,
+          },
+          {
+            onSuccess: () => {
+              toast.success("Curso creado exitosamente!");
+              form.reset();
+            },
+            onError: () =>
+              toast.error(
+                '"Ooops! Hubo un error al crear tu curso. Intenta de nuevo más tarde',
+              ),
+          },
+        );
+      } else {
+        await updateCourse(
+          {
+            id: courseId,
+            name: data.name,
+            institutionId: data.institutionId,
+            institutionCourseId: course?.institutionCourseId,
+          },
+          {
+            onSuccess: () => {
+              toast.success("Curso actualizado exitosamente!");
+              form.reset();
+            },
+            onError: () =>
+              toast.error(
+                '"Ooops! Hubo un error al actualizar tu curso. Intenta de nuevo más tarde',
+              ),
+          },
+        );
       }
-    } else {
-      try {
-        await updateCourse({
-          id: courseId,
-          name: data.name,
-          institutionId: data.institutionId,
-          institutionCourseId: course?.institutionCourseId,
-        });
-      } catch (error) {
-        console.error("Error updating course:", error);
-      }
+    } catch (error) {
+      console.error("Error: ", error);
     }
   };
 

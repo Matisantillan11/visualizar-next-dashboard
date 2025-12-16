@@ -79,7 +79,7 @@ export function UserInfo() {
           >
             <LogOutIcon />
 
-            <span className="text-base font-medium">Log out</span>
+            <span className="text-base font-medium">Cerrar sesión</span>
           </button>
         </div>
       </DropdownContent>

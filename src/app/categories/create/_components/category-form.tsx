@@ -1,6 +1,7 @@
 "use client";
 
 import { InputFormField } from "@/components/ui/form/input-form-field";
+import { toast } from "@/components/ui/toast";
 import { useCreateCategory } from "@/lib/react-query/categories";
 import { useUpdateCategory } from "@/lib/react-query/categories/categories.mutations";
 import { Category } from "@/lib/react-query/categories/categories.types";
@@ -39,14 +40,38 @@ export default function CategoryForm({
   const onSubmit = async (data: CreateCategoryFormData) => {
     try {
       if (categoryId) {
-        await updateCategory({
-          id: categoryId,
-          name: data.name,
-        });
+        await updateCategory(
+          {
+            id: categoryId,
+            name: data.name,
+          },
+          {
+            onSuccess: () => {
+              toast.success("Categoría actualizada exitosamente!");
+              form.reset();
+            },
+            onError: () =>
+              toast.error(
+                '"Ooops! Hubo un error al actualizar tu categoría. Intenta de nuevo más tarde',
+              ),
+          },
+        );
       } else {
-        await createCategory({
-          name: data.name,
-        });
+        await createCategory(
+          {
+            name: data.name,
+          },
+          {
+            onSuccess: () => {
+              toast.success("Caategoría creada exitosamente!");
+              form.reset();
+            },
+            onError: () =>
+              toast.error(
+                '"Ooops! Hubo un error al useCreateCourse tu categoría. Intenta de nuevo más tarde',
+              ),
+          },
+        );
       }
     } catch (error) {
       console.error("Error creating category:", error);

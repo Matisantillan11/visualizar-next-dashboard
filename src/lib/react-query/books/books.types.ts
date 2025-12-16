@@ -22,7 +22,7 @@ export interface CreateBookInput {
 /**
  * Input type for updating an existing book
  */
-export interface UpdateBookInput extends Partial<CreateBookInput> {
+export interface UpdateBookInput {
   id: string;
   name?: string;
   description?: string;
