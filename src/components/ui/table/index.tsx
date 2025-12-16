@@ -84,7 +84,7 @@ export default function Table<T>({
         <div className="flex w-full flex-col items-center justify-center py-10">
           <ZapIcon className="h-12 w-12" />
           <p className="mt-4 text-body-2xlg font-bold text-dark dark:text-white">
-            No data found
+            No encontramos datos
           </p>
         </div>
       )}
