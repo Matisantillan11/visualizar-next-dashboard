@@ -59,7 +59,7 @@ export default function InstitutionForm({
           },
           {
             onSuccess: () => {
-              toast.success("Institución creada exitosamente!");
+              toast.success("Institución actualizada exitosamente!");
               form.reset({
                 address: "",
                 email: "",
@@ -69,7 +69,7 @@ export default function InstitutionForm({
             },
             onError: () =>
               toast.error(
-                '"Ooops! Hubo un error al crear tu institución. Intenta de nuevo más tarde',
+                "Ooops! Hubo un error al actualizar tu institución. Intenta de nuevo más tarde",
               ),
           },
         );
@@ -83,12 +83,12 @@ export default function InstitutionForm({
           },
           {
             onSuccess: () => {
-              toast.success("Institución actualizada exitosamente!");
+              toast.success("Institución creada exitosamente!");
               form.reset();
             },
             onError: () =>
               toast.error(
-                '"Ooops! Hubo un error al actualizar tu institución. Intenta de nuevo más tarde',
+                "Ooops! Hubo un error al crear tu institución. Intenta de nuevo más tarde",
               ),
           },
         );

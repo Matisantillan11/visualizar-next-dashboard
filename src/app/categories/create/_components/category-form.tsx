@@ -54,7 +54,7 @@ export default function CategoryForm({
             },
             onError: () =>
               toast.error(
-                '"Ooops! Hubo un error al actualizar tu categoría. Intenta de nuevo más tarde',
+                "Ooops! Hubo un error al actualizar tu categoría. Intenta de nuevo más tarde",
               ),
           },
         );
@@ -65,12 +65,12 @@ export default function CategoryForm({
           },
           {
             onSuccess: () => {
-              toast.success("Caategoría creada exitosamente!");
+              toast.success("Categoría creada exitosamente!");
               form.reset();
             },
             onError: () =>
               toast.error(
-                '"Ooops! Hubo un error al useCreateCourse tu categoría. Intenta de nuevo más tarde',
+                "Ooops! Hubo un error al crear tu categoría. Intenta de nuevo más tarde",
               ),
           },
         );

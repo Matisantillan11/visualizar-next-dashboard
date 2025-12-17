@@ -54,7 +54,7 @@ export default function AuthorForm({
           },
           {
             onSuccess: () => {
-              toast.success("Autor creado exitosamente!");
+              toast.success("Autor actualizado exitosamente!");
               form.reset({
                 biography: "",
                 name: "",
@@ -62,7 +62,7 @@ export default function AuthorForm({
             },
             onError: () =>
               toast.error(
-                '"Ooops! Hubo un error al crear tu autor. Intenta de nuevo más tarde',
+                "Ooops! Hubo un error al crear tu autor. Intenta de nuevo más tarde",
               ),
           },
         );
@@ -76,7 +76,7 @@ export default function AuthorForm({
             },
             onError: () =>
               toast.error(
-                '"Ooops! Hubo un error al actulizar tu autor. Intenta de nuevo más tarde',
+                "Ooops! Hubo un error al actulizar tu autor. Intenta de nuevo más tarde",
               ),
           },
         );

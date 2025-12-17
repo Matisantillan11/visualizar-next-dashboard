@@ -122,7 +122,7 @@ export default function BookForm({
           },
           onError: () =>
             toast.error(
-              '"Ooops! Hubo un error al crear tu libro. Intenta de nuevo más tarde',
+              "Ooops! Hubo un error al crear tu libro. Intenta de nuevo más tarde",
             ),
         });
       } else {
@@ -151,7 +151,7 @@ export default function BookForm({
             },
             onError: () =>
               toast.error(
-                '"Ooops! Hubo un error al actulizar tu libro. Intenta de nuevo más tarde',
+                "Ooops! Hubo un error al actulizar tu libro. Intenta de nuevo más tarde",
               ),
           },
         );
@@ -282,12 +282,12 @@ export default function BookForm({
       <div className="mb-6">
         <FormSelect
           name="categoryId"
-          label="Géneros"
+          label="Categoría"
           items={categoryOptions}
           placeholder={
             categories.length === 0
               ? "Cargando categorías..."
-              : "Seleccione las categorías"
+              : "Seleccione la categoría"
           }
           required
           value={formData.categoryId}

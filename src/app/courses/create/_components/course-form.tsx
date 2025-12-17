@@ -58,7 +58,7 @@ export default function CourseForm({
             },
             onError: () =>
               toast.error(
-                '"Ooops! Hubo un error al crear tu curso. Intenta de nuevo más tarde',
+                "Ooops! Hubo un error al crear tu curso. Intenta de nuevo más tarde",
               ),
           },
         );
@@ -80,7 +80,7 @@ export default function CourseForm({
             },
             onError: () =>
               toast.error(
-                '"Ooops! Hubo un error al actualizar tu curso. Intenta de nuevo más tarde',
+                "Ooops! Hubo un error al actualizar tu curso. Intenta de nuevo más tarde",
               ),
           },
         );

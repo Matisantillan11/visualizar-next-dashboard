@@ -82,7 +82,7 @@ export default function UserForm({
           },
           onError: () =>
             toast.error(
-              '"Ooops! Hubo un error al crear tu usuario. Intenta de nuevo más tarde',
+              "Ooops! Hubo un error al crear tu usuario. Intenta de nuevo más tarde",
             ),
         });
       } else {
@@ -95,7 +95,7 @@ export default function UserForm({
             },
             onError: () =>
               toast.error(
-                '"Ooops! Hubo un error al actualizar tu usuario. Intenta de nuevo más tarde',
+                "Ooops! Hubo un error al actualizar tu usuario. Intenta de nuevo más tarde",
               ),
           },
         );
