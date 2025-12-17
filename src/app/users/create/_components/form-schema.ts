@@ -6,4 +6,5 @@ export const userSchema = z.object({
   email: z.string().email("Por favor ingrese un email válido"),
   dni: z.string().min(8, "El DNI debe tener al menos 8 caracteres"),
   role: z.enum(Role),
+  courseId: z.string().min(1, "Por favor seleccione un curso"),
 });

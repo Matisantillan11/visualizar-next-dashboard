@@ -6,7 +6,7 @@ export function TableRoot({
   ...props
 }: React.HTMLAttributes<HTMLTableElement>) {
   return (
-    <div className="relative w-full overflow-auto">
+    <div className="relative min-h-[500px] w-full overflow-auto">
       <table
         className={cn("w-full caption-bottom text-sm", className)}
         {...props}

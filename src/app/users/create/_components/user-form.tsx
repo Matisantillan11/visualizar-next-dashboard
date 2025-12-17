@@ -3,6 +3,7 @@
 import { InputFormField } from "@/components/ui/form/input-form-field";
 import { InputFormSelect } from "@/components/ui/form/input-form-select";
 import { toast } from "@/components/ui/toast";
+import { useCourses } from "@/lib/react-query/courses";
 import {
   useCreateUser,
   useUpdateUser,
@@ -35,12 +36,14 @@ export default function UserForm({
       email: "",
       dni: "",
       role: "" as Role,
+      courseId: "",
     },
     values: {
       name: user?.name ?? "",
       email: user?.email ?? "",
       dni: user?.dni ?? "",
       role: user?.role ?? ("" as Role),
+      courseId: user?.courseId ?? "",
     },
     resolver: zodResolver(userSchema),
   });
@@ -54,14 +57,20 @@ export default function UserForm({
     data,
   } = useCreateUser();
   const { mutateAsync: updateUser, isPending: isUpdating } = useUpdateUser();
-
-  console.log({ error, isSuccess, isError, data });
+  const { data: courses = [], isLoading: coursesLoading } = useCourses();
 
   const roleOptions = [
     { value: Role.ADMIN, label: "Administrador" },
     { value: Role.TEACHER, label: "Profesor" },
     { value: Role.STUDENT, label: "Estudiante" },
   ];
+
+  const courseOptions = courses
+    ? courses?.map((course) => ({
+        value: course.id,
+        label: course.name,
+      }))
+    : [];
 
   const handleSubmit = async (data: CreateUserFormData) => {
     try {
@@ -144,10 +153,25 @@ export default function UserForm({
           />
         </div>
 
+        <div className="mb-6">
+          <InputFormSelect
+            form={form}
+            name="courseId"
+            label="Cursos"
+            items={courseOptions}
+            placeholder={
+              courses.length === 0
+                ? "Cargando cursos..."
+                : "Seleccione los cursos"
+            }
+            required
+          />
+        </div>
+
         <div className="flex gap-4">
           <button
             type="submit"
-            disabled={isCreating || isUpdating}
+            disabled={isCreating || isUpdating || coursesLoading}
             className="flex w-full justify-center rounded-lg bg-primary p-3 font-medium text-white hover:bg-opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isCreating || isUpdating ? (

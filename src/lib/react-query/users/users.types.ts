@@ -12,6 +12,7 @@ export type User = BaseEntity & {
   name: string;
   dni: string;
   role: Role;
+  courseId: string;
 };
 
 export type CreateUserInput = {
