@@ -1,85 +1,109 @@
-# NextAdmin - Next.js Admin Dashboard Template and Components
+<div align="center">
 
-**NextAdmin** is a Free, open-source Next.js admin dashboard toolkit featuring 200+ UI components and templates that come with pre-built elements, components, pages, high-quality design, integrations, and much more to help you create powerful admin dashboards with ease.
+<img src="./public/images/logo/logo-icon.svg" height="100px" width="auto" />
 
+# Visualizar Admin Dashboard - by Matias Santillan
 
-[![nextjs admin template](https://cdn.pimjo.com/nextadmin-2.png)](https://nextadmin.co/)
+[About](#-about) ✦ [Tech Stack](#-tech-stack) ✦ [Getting Started](#-getting-started) ✦ [Commands](#-commands) ✦ [How it Works](#-how-it-works) ✦ [License](#-license)
 
+</div>
 
-**NextAdmin** provides you with a diverse set of dashboard UI components, elements, examples and pages necessary for creating top-notch admin panels or dashboards with **powerful** features and integrations. Whether you are working on a complex web application or a basic website, **NextAdmin** has got you covered.
+## 📖 About
 
-### [✨ Visit Website](https://nextadmin.co/)
-### [🚀 Live Demo](https://demo.nextadmin.co/)
-### [📖 Docs](https://docs.nextadmin.co/)
+**Visualizar Admin Dashboard** is the back-office web application for the [Visualizar](https://github.com/Matisantillan11/visualizar) mobile app. Built as part of the same university thesis project, this dashboard gives administrators full control over the platform's data — managing users, books, authors, categories, courses, and institutions from a single, centralized interface.
 
-By leveraging the latest features of **Next.js 14** and key functionalities like **server-side rendering (SSR)**, **static site generation (SSG)**, and seamless **API route integration**, **NextAdmin** ensures optimal performance. With the added benefits of **React 18 advancements** and **TypeScript** reliability, **NextAdmin** is the ultimate choice to kickstart your **Next.js** project efficiently.
+While the mobile app focuses on delivering an immersive reading experience for students and teachers, this dashboard ensures that the content and user base behind it are properly organized and maintained.
 
-## Installation
+## 🛠 Tech Stack
 
-1. Download/fork/clone the repo and Once you're in the correct directory, it's time to install all the necessary dependencies. You can do this by typing the following command:
+| Technology                                                                                                | Purpose                                                                                                                                                                          |
+| --------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Next.js](https://nextjs.org/) (v15) + [React](https://react.dev/) (v19)                                  | Full-stack React framework. Next.js 15 with the App Router provides file-based routing, server components, and API routes — ideal for building a fast, SEO-friendly admin panel. |
+| [TypeScript](https://www.typescriptlang.org/) (v5)                                                        | Static type checking across the entire codebase, ensuring type safety from API calls to UI components.                                                                           |
+| [Tailwind CSS](https://tailwindcss.com/) (v3) + [next-themes](https://github.com/pacocoursey/next-themes) | Utility-first CSS framework with dark/light mode support. Provides a consistent, customizable design system with minimal CSS overhead.                                           |
+| [TanStack React Query](https://tanstack.com/query) (v5)                                                   | Server state management. Handles caching, background refetching, and request deduplication — keeping the dashboard responsive and in sync with the backend.                      |
+| [TanStack React Table](https://tanstack.com/table) (v8)                                                   | Headless table library for building powerful, fully customizable data tables with sorting, filtering, and pagination.                                                            |
+| [react-hook-form](https://react-hook-form.com/) + [Zod](https://zod.dev/)                                 | Form handling and validation. Provides performant, uncontrolled form management with schema-based validation for type safety at runtime.                                         |
+| [Supabase](https://supabase.com/)                                                                         | Authentication via email OTP and file storage. Supabase handles both the passwordless login flow and the storage of book covers and 3D model files.                              |
 
-```
-npm install
-```
-If you're using **Yarn** as your package manager, the command will be:
+## 🚀 Getting Started
 
-```
-yarn install
-```
+### Prerequisites
 
-2. Okay, you're almost there. Now all you need to do is start the development server. If you're using **npm**, the command is:
+- [Node.js](https://nodejs.org/) (v18 or higher)
+- [pnpm](https://pnpm.io/) (recommended package manager)
 
-```
-npm run dev
-```
-And if you're using **Yarn**, it's:
+### Installation
 
-```
-yarn dev
-```
+1. Clone the repository:
 
-And voila! You're now ready to start developing. **Happy coding**!
+   ```bash
+   git clone https://github.com/Matisantillan11/visualizar-next-dashboard.git
+   cd visualizar-next-dashboard
+   ```
 
-## Highlighted Features
-**200+ Next.js Dashboard Ul Components and Templates** - includes a variety of prebuilt **Ul elements, components, pages, and examples** crafted with a high-quality design.
-Additionally, features seamless **essential integrations and extensive functionalities**.
+2. Install dependencies:
 
-- A library of over **200** professional dashboard UI components and elements.
-- Five distinctive dashboard variations, catering to diverse use-cases.
-- A comprehensive set of essential dashboard and admin pages.
-- More than **45** **Next.js** files, ready for use.
-- Styling facilitated by **Tailwind CSS** files.
-- A design that resonates premium quality and high aesthetics.
-- A handy UI kit with assets.
-- Over ten web apps complete with examples.
-- Support for both **dark mode** and **light mode**.
-- Essential integrations including - Authentication (**NextAuth**), Database (**Postgres** with **Prisma**), and Search (**Algolia**).
-- Detailed and user-friendly documentation.
-- Customizable plugins and add-ons.
-- **TypeScript** compatibility.
-- Plus, much more!
+   ```bash
+   pnpm install
+   ```
 
-All these features and more make **NextAdmin** a robust, well-rounded solution for all your dashboard development needs.
+3. Set up environment variables:
 
-## Update Logs
+   Create a `.env.local` file in the root directory with the required variables:
 
-### Version 1.2.1 - [Mar 20, 2025]
-- Fix Peer dependency issues and NextConfig warning.
-- Updated apexcharts and react-apexhcarts to the latest version.
+   ```bash
+   NEXT_PUBLIC_API_URL=<your_api_base_url>
+   NEXT_PUBLIC_SUPABASE_URL=<your_supabase_url>
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=<your_supabase_anon_key>
+   ```
 
-### Version 1.2.0 - Major Upgrade and UI Improvements - [Jan 27, 2025]
+4. Start the development server:
 
-- Upgraded to Next.js v15 and updated dependencies
-- API integration with loading skeleton for tables and charts.
-- Improved code structure for better readability.
-- Rebuilt components like dropdown, sidebar, and all ui-elements using accessibility practices.
-- Using search-params to store dropdown selection and refetch data.
-- Semantic markups, better separation of concerns and more.
+   ```bash
+   pnpm dev
+   ```
 
-### Version 1.1.0
-- Updated Dependencies
-- Removed Unused Integrations
-- Optimized App
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### Version 1.0
-- Initial Release - [May 13, 2024]
+## 🧞 Commands
+
+| Command      | Action                                    |
+| ------------ | ----------------------------------------- |
+| `pnpm dev`   | Start the Next.js development server      |
+| `pnpm build` | Build the application for production      |
+| `pnpm start` | Start the production server               |
+| `pnpm lint`  | Run the linter with Next.js ESLint config |
+
+## 📝 How it Works
+
+### Authentication
+
+The dashboard uses a **passwordless email OTP** flow powered by Supabase — the same authentication system used by the mobile app. Administrators enter their email, receive a 6-digit verification code, and gain access to the dashboard.
+
+### Entity Management
+
+The dashboard provides full CRUD operations for every entity in the Visualizar ecosystem:
+
+- **Users** — Create, edit, and manage users across all roles (Admin, Student, Teacher, Institution). Includes fuzzy text search and role-based filtering.
+- **Books** — Manage the book catalog, upload covers and 3D model files, and review book requests submitted by teachers from the mobile app.
+- **Authors** — Maintain the author registry linked to books.
+- **Categories** — Organize books into categories for easier discovery.
+- **Courses** — Manage courses and assign books to specific courses.
+- **Institutions** — Administer the institutions that participate in the platform.
+
+### Data Architecture
+
+The dashboard uses a layered data-fetching architecture:
+
+1. **Fetcher Layer** — A base HTTP client that automatically injects authentication headers and handles token refresh on 401/403 responses.
+2. **React Query Factories** — Generic factory functions that generate type-safe query and mutation hooks for each entity, reducing boilerplate.
+3. **Per-Entity Modules** — Organized query keys, queries, and mutations for each domain entity.
+
+### File Uploads
+
+Book covers and 3D model files (FBX, GLTF/GLB, OBJ) are uploaded through an Uppy-powered interface with drag-and-drop support. Files are stored in Supabase Storage via an internal Next.js API route.
+
+## 🔑 License
+
+Created by [Matias Santillan](https://github.com/Matisantillan11) as a university thesis project.
